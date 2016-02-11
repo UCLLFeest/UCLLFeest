@@ -4,10 +4,13 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
+use AppBundle\Entity\LoginData;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AccountController extends Controller
 {
@@ -45,6 +48,34 @@ class AccountController extends Controller
         return $this->render(
             'account/register.html.twig',
             array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * @Route("/account/login", name="login")
+     */
+    public function login(Request $request)
+    {
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $form = $this->createFormBuilder(new LoginData($lastUsername))
+            ->add('username', TextType::class)
+            ->add('password', PasswordType::class)
+            ->getForm();
+
+        return $this->render(
+            'account/login.html.twig',
+            array(
+                // last username entered by the user
+                'form' => $form->createView(),
+                'error'         => $error,
+            )
         );
     }
 }

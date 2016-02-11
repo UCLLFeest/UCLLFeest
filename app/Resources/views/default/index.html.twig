@@ -3,14 +3,13 @@
 {% block body %}
     <h1>Feest</h1>
 
-    <p>
-        Welkom op de homepagina van Feest
-        Hier kunt u evenementen in uw buurt vinden, of zelf een evenement organiseren.
-    </p>
+    <p>Welkom op de homepagina van Feest</p>
+    <p>Hier kunt u evenementen in uw buurt vinden, of zelf een evenement organiseren.</p>
 
     {% if( user ) %}
         <p>Welkom terug {{ user.username }}</p>
+        <p><a href="/logout">Log uit</a></p>
     {%  else %}
-        <p>Welkom. <a href="/account/register">Registreer</a></p>
+        <p>Welkom. <a href="/account/login">Log in</a> of <a href="/account/register">Registreer</a></p>
     {% endif %}
 {% endblock %}

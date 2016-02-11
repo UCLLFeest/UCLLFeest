@@ -37,6 +37,8 @@ class AccountController extends Controller
             // ... do any other work - like send them an email, etc
             // maybe set a "flash" success message for the user
 
+            $this->addFlash('notice', 'Your registration is now complete!');
+
             return $this->redirectToRoute('homepage');
         }
 

@@ -52,6 +52,11 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
+     */
+    private $events;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -191,5 +196,38 @@ class User implements UserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Add events
+     *
+     * @param \AppBundle\Entity\Event $events
+     * @return User
+     */
+    public function addEvent(\AppBundle\Entity\Event $events)
+    {
+        $this->events[] = $events;
+
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \AppBundle\Entity\Event $events
+     */
+    public function removeEvent(\AppBundle\Entity\Event $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

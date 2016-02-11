@@ -36,6 +36,7 @@ security:
                 check_path: /account/login
                 username_parameter: form[username]
                 password_parameter: form[password]
+                csrf_token_generator: security.csrf.token_manager
 
             logout:
                 path:   /logout

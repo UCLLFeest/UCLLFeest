@@ -72,9 +72,21 @@ class AccountController extends Controller
         return $this->render(
             'account/login.html.twig',
             array(
-                // last username entered by the user
                 'form' => $form->createView(),
                 'error'         => $error,
+            )
+        );
+    }
+
+    /**
+     * @Route("/account/view", name="accountview")
+     */
+    public function view(Request $request)
+    {
+        return $this->render(
+            'account/view.html.twig',
+            array(
+                'user' => $this->getUser(),
             )
         );
     }

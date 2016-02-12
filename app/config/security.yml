@@ -43,5 +43,7 @@ security:
                 target: /
 
     access_control:
-        #Laat gebruikers inloggen ook als de website admin only is
+        #Allow users to log in
         - { path: ^/account/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #Disallow access to all other account pages
+        - { path: ^/account, roles: ROLE_USER }

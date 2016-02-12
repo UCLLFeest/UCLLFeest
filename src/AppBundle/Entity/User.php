@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -40,14 +39,6 @@ class User implements UserInterface, \Serializable
      * Is not mapped to the database!
      */
     private $plainPassword;
-
-    /**
-     * @SecurityAssert\UserPassword(
-     *     message = "Wrong value for your current password"
-     * )
-     * Is not mapped to the database!
-     */
-    private $oldPassword;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
@@ -94,16 +85,6 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
-    }
-
-    public function getOldPassword()
-    {
-        return $this->oldPassword;
-    }
-
-    public function setOldPassword($password)
-    {
-        $this->oldPassword = $password;
     }
 
     public function getRoles()

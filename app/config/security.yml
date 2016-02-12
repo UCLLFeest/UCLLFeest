@@ -9,7 +9,7 @@ security:
     providers:
         feest_db_provider:
             entity:
-                class: AppBundle:User
+                class: AppBundle\Entity\User
                 property: username
 
     firewalls:

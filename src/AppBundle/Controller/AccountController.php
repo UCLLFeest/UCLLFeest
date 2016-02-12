@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ChangePassword;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -109,8 +110,10 @@ class AccountController extends Controller
     {
         $user = $this->getUser();
 
+        $changePassword = new ChangePassword();
+
         // 1) build the form
-        $form = $this->createForm(ChangePasswordType::class, $user);
+        $form = $this->createForm(ChangePasswordType::class, $changePassword);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -118,7 +121,7 @@ class AccountController extends Controller
         {
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $this->get('security.password_encoder')
-                             ->encodePassword($user, $user->getPlainPassword());
+                             ->encodePassword($user, $changePassword->getPlainPassword());
             $user->setPassword($password);
 
             // 4) save the User!

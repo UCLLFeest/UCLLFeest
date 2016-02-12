@@ -18,21 +18,13 @@
             <td>Beschrijving</td>
         </tr>
         {% for event in events %}
-        <tr>
-            <td>{{ event.getName()}}</td>
-            <td>{{ event.getFullAdress()}}</td>
-            <td>{{ event.getPrice()}}</td>
-            <td>{{ event.getHours()}}</td>
-            <td>{{ event.getDescription()}}</td>
-            <td> <a href="{{ path('delete_event',{'id':event.getId()}) }}">Delete</a> </td>
-            <td> <a href="{{ path('update_event',{'id':event.getId()}) }}">Update</a> </td>
-        </tr>
+            <tr>
+                <td>{{ event.getName()}}</td>
+                <td>{{ event.getFullAdress()}}</td>
+                <td>{{ event.getPrice()}}</td>
+                <td>{{ event.getHours()}}</td>
+                <td>{{ event.getDescription()}}</td>
+            </tr>
         {% endfor %}
-
     </table>
-
-    <p> <a href="/events/Add_Event">Maak een nieuw evenement aan</a> </p>
-
 {% endblock %}
-
-

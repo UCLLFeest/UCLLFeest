@@ -24,14 +24,25 @@ class EventController extends Controller
      */
     public function showEvents()
     {
-        //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
-        $em =$this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        if(!$user)
+        if(!$this->getUser())
         {
             throw new Exception("Gelieve in te loggen");
         }
+        //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
+        $em =$this->getDoctrine()->getManager();
+        $user = $this->getUser();
         $event = $em->getRepository('AppBundle:Event')->findByCreator($user);
+
+        return $this->render('event/gebruiker_event_overview.html.twig',array('events'=>$event, 'user'=>$user));
+    }
+
+    /**
+     * @Route("/allEvents", name="show_all_events")
+     */
+    public function showAllEvents()
+    {
+        $em =$this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->findAll();
         return $this->render('event/event_overview.html.twig',array('events'=>$event));
     }
 
@@ -41,6 +52,10 @@ class EventController extends Controller
 
     public function deleteEvent($id)
     {
+        if(!$this->getUser())
+        {
+            throw new Exception("Gelieve in te loggen");
+        }
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
         $em =$this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
@@ -65,6 +80,10 @@ class EventController extends Controller
 
     public function addEvent(Request $request)
     {
+        if(!$this->getUser())
+        {
+            throw new Exception("Gelieve in te loggen");
+        }
         //Er wordt een form gemaakt in de vorm van EventType.
         //En wordt gekoppeld aan een Event object.
 
@@ -98,6 +117,10 @@ class EventController extends Controller
 
     public function updateEvent(Request $request, $id)
     {
+        if(!$this->getUser())
+        {
+            throw new Exception("Gelieve in te loggen");
+        }
         //Form wordt gemaakt met event dat wordt opgehaald met id.
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);

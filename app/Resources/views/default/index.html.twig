@@ -8,7 +8,7 @@
 
     {% if( app.user ) %}
         <p>Welkom terug {{ app.user.username }}</p>
-        <p><a href="/logout">Log uit</a> of <a href="/events">Mijn Events</a></p>
+        <p><a href="/logout">Log uit</a>
     {%  else %}
         <p>Welkom. <a href="/account/login">Log in</a> of <a href="/account/register">Registreer</a></p>
     {% endif %}

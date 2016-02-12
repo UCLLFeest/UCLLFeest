@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Form\FotoType;
 
 class EventType extends AbstractType
 {
@@ -30,13 +31,14 @@ class EventType extends AbstractType
                 'input' => 'string',
             ))
             ->add('description', TextType::class)
+            ->add('foto', FotoType::class)
             ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Event'
+            'data_class' => 'AppBundle\Entity\Event',
         ));
     }
 }

@@ -49,3 +49,9 @@ security:
         - { path: ^/account/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Disallow access to all other account pages
         - { path: ^/account, roles: ROLE_USER }
+        #Allow users to view all events 
+        - { path: ^/events/allEvents, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #Disallow access to change events
+        - { path: ^/events, roles: ROLE_USER }
+        
+    

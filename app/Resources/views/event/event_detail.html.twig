@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Event Detail.
+{% endblock %}
+
+{% block body %}
+<h1>Detail overview</h1>
+
+    <img src="{{ vich_uploader_asset(foto, 'file') }}" alt="{{ foto.name }}" />
+
+{% endblock %}

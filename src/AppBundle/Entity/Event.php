@@ -9,6 +9,7 @@
 //src/AppBundle/Entity/Event.php
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -26,36 +27,43 @@ class Event
 
     /**
      * @ORM\Column(type="string",length=100)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="string",length=60)
+     * @Assert\NotBlank
      */
     private $adress;
 
     /**
      * @ORM\Column(type="string",length=50)
+     * @Assert\NotBlank
      */
     private $city;
 
     /**
      * @ORM\Column(type="string",length=4)
+     * @Assert\NotBlank
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="decimal",scale=2)
+     * @Assert\NotBlank
      */
     private $price;
 
     /**
      * @ORM\Column(type="string",length=20)
+     * @Assert\NotBlank
      */
     private $hours;
 
     /**
      * @ORM\Column(type="text")
+     *
      */
     private $description;
 
@@ -64,6 +72,12 @@ class Event
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Foto", inversedBy="event")
+     * @ORM\JoinColumn(name="foto_id", referencedColumnName="id")
+     */
+    public $foto;
 
 
     /**
@@ -264,4 +278,30 @@ class Event
     {
         return $this->creator;
     }
+
+
+    /**
+     * Set foto
+     *
+     * @param \AppBundle\Entity\Foto $foto
+     * @return Event
+     */
+    public function setFoto(\AppBundle\Entity\Foto $foto = null)
+    {
+        $this->foto = $foto;
+
+        return $this;
+    }
+
+    /**
+     * Get foto
+     *
+     * @return \AppBundle\Entity\Foto 
+     */
+    public function getFoto()
+    {
+        return $this->foto;
+    }
+
+
 }

@@ -20,14 +20,10 @@ use Symfony\Component\Security\Acl\Exception\Exception;
 class EventController extends Controller
 {
     /**
-     * @Route("/events", name="show_events")
+     * @Route("/events/my_events", name="show_events")
      */
     public function showEvents()
     {
-        if(!$this->getUser())
-        {
-            throw new Exception("Gelieve in te loggen");
-        }
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
@@ -37,7 +33,7 @@ class EventController extends Controller
     }
 
     /**
-     * @Route("/allEvents", name="show_all_events")
+     * @Route("/events/allEvents", name="show_all_events")
      */
     public function showAllEvents()
     {
@@ -52,10 +48,6 @@ class EventController extends Controller
 
     public function deleteEvent($id)
     {
-        if(!$this->getUser())
-        {
-            throw new Exception("Gelieve in te loggen");
-        }
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
         $em =$this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
@@ -80,10 +72,6 @@ class EventController extends Controller
 
     public function addEvent(Request $request)
     {
-        if(!$this->getUser())
-        {
-            throw new Exception("Gelieve in te loggen");
-        }
         //Er wordt een form gemaakt in de vorm van EventType.
         //En wordt gekoppeld aan een Event object.
 
@@ -97,11 +85,15 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
+
             $user = $this->getUser();
+            $foto = $event->getFoto();
+            printf($foto->getName());
             $user->addEvent($event);
             $event->setCreator($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
+            $em->persist($foto);
             $em->flush();
             return $this->showEvents();
         }
@@ -133,6 +125,16 @@ class EventController extends Controller
         return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
     }
 
+    /**
+     * @Route("events/event_detail/{id}", name="event_detail")
+     */
+
+    public function eventDetail($id)
+    {
+        $em =$this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+        return $this->render('event/event_detail.html.twig', array('foto' => $event->getFoto()));
+    }
 
 
 

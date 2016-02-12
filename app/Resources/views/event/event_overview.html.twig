@@ -19,7 +19,7 @@
         </tr>
         {% for event in events %}
             <tr>
-                <td>{{ event.getName()}}</td>
+                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
                 <td>{{ event.getFullAdress()}}</td>
                 <td>{{ event.getPrice()}}</td>
                 <td>{{ event.getHours()}}</td>

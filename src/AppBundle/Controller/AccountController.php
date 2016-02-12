@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Form\UserType;
+use AppBundle\Form\ChangePasswordType;
 use AppBundle\Entity\User;
 use AppBundle\Entity\LoginData;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -98,6 +99,44 @@ class AccountController extends Controller
             array(
                 'user' => $this->getUser(),
             )
+        );
+    }
+
+    /**
+     * @Route("/account/editpassword", name="editpassword")
+     */
+    public function editPassword(Request $request)
+    {
+        $user = $this->getUser();
+
+        // 1) build the form
+        $form = $this->createForm(ChangePasswordType::class, $user);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $this->get('security.password_encoder')
+                             ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // ... do any other work - like send them an email, etc
+            // maybe set a "flash" success message for the user
+
+            $this->addFlash('notice', 'Your password has been changed.');
+
+            return $this->redirectToRoute('accountview');
+        }
+
+        return $this->render(
+            'account/editpassword.html.twig',
+            array('form' => $form->createView())
         );
     }
 }

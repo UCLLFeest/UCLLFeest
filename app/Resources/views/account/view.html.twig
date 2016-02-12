@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {%  block title %}
-    Account for {{ user.username }}
+    Account for {{ app.user.username }}
 {% endblock %}
 
 {% block body %}
-    <h1>Profile: {{ user.username }}</h1>
+    <h1>Profile: {{ app.user.username }}</h1>
 
     <table>
         <tr>
             <td>Email address: </td>
-            <td>{{ user.email }}</td>
+            <td>{{ app.user.email }}</td>
         </tr>
     </table>
 

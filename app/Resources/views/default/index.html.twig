@@ -6,8 +6,8 @@
     <p>Welkom op de homepagina van Feest</p>
     <p>Hier kunt u evenementen in uw buurt vinden, of zelf een evenement organiseren.</p>
 
-    {% if( user ) %}
-        <p>Welkom terug {{ user.username }}</p>
+    {% if( app.user ) %}
+        <p>Welkom terug {{ app.user.username }}</p>
         <p><a href="/logout">Log uit</a> of <a href="/events">Mijn Events</a></p>
         <p>Bekijk alle events: <a href="/allEvents">Events</a></p>
     {%  else %}

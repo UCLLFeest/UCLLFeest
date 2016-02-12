@@ -96,10 +96,7 @@ class AccountController extends Controller
     public function view(Request $request)
     {
         return $this->render(
-            'account/view.html.twig',
-            array(
-                'user' => $this->getUser(),
-            )
+            'account/view.html.twig'
         );
     }
 

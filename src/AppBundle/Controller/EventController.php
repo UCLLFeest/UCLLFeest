@@ -55,22 +55,52 @@ class EventController extends Controller
      * @Route("/events/Add_Event", name="add_event")
      */
 
-    public function AddEvent(Request $request)
+    public function addEvent(Request $request)
     {
+        //Er wordt een form gemaakt in de vorm van EventType.
+        //En wordt gekoppeld aan een Event object.
+
+
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
 
         $form->handleRequest($request);
+
+        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
         if ($form->isSubmitted() && $form->isValid()) {
+            // Als dit klopt wordt de event aangemaakt en op de DB gezet
+            // En returnt de user naar de event overview.
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
             $em->flush();
             return $this->showEvents();
         }
 
+        // De form wordt getoont
         return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
 
     }
+
+    /**
+     * @Route("events/update_event/{id}", name="update_event")
+     */
+
+    public function updateEvent(Request $request, $id)
+    {
+        //Form wordt gemaakt met event dat wordt opgehaald met id.
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+        $form = $this->createForm(EventType::class,$event);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->showEvents();
+        }
+        return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
+    }
+
+
+
 
 
 }

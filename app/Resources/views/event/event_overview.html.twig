@@ -25,6 +25,7 @@
             <td>{{ event.getHours()}}</td>
             <td>{{ event.getDescription()}}</td>
             <td> <a href="{{ path('delete_event',{'id':event.getId()}) }}">Delete</a> </td>
+            <td> <a href="{{ path('update_event',{'id':event.getId()}) }}">Update</a> </td>
         </tr>
         {% endfor %}
 

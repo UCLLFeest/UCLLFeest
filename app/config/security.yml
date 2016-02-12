@@ -43,6 +43,8 @@ security:
                 target: /
 
     access_control:
+        #Allow users to register
+        - { path: ^/account/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Allow users to log in
         - { path: ^/account/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Disallow access to all other account pages

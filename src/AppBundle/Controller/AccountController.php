@@ -19,6 +19,16 @@ class AccountController extends Controller
      */
     public function register(Request $request)
     {
+        //Disallow registration if logged in
+        $securityContext = $this->container->get('security.authorization_checker');
+
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $this->addFlash('notice', 'You are already registered.');
+
+            return $this->redirectToRoute('homepage');
+        }
+
         // 1) build the form
         $user = new User();
         $form = $this->createForm(UserType::class, $user);

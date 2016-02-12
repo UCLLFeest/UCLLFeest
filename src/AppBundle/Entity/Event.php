@@ -107,7 +107,7 @@ class Event
      */
     public function setAdress($adress)
     {
-        $this->Adress = $adress;
+        $this->adress = $adress;
 
         return $this;
     }
@@ -119,7 +119,7 @@ class Event
      */
     public function getAdress()
     {
-        return $this->Adress;
+        return $this->adress;
     }
 
     /**
@@ -130,7 +130,7 @@ class Event
      */
     public function setCity($city)
     {
-        $this->City = $city;
+        $this->city = $city;
 
         return $this;
     }
@@ -142,7 +142,7 @@ class Event
      */
     public function getCity()
     {
-        return $this->City;
+        return $this->city;
     }
 
     /**
@@ -153,7 +153,7 @@ class Event
      */
     public function setPostalCode($postalCode)
     {
-        $this->PostalCode = $postalCode;
+        $this->postalCode = $postalCode;
 
         return $this;
     }
@@ -165,7 +165,12 @@ class Event
      */
     public function getPostalCode()
     {
-        return $this->PostalCode;
+        return $this->postalCode;
+    }
+
+    public function getFullAdress()
+    {
+        return $this->getAdress() . "," . $this->getPostalCode() . " " . $this->getCity();
     }
 
     /**
@@ -176,7 +181,7 @@ class Event
      */
     public function setPrice($price)
     {
-        $this->Price = $price;
+        $this->price = $price;
 
         return $this;
     }
@@ -188,7 +193,7 @@ class Event
      */
     public function getPrice()
     {
-        return $this->Price;
+        return $this->price;
     }
 
     /**
@@ -199,7 +204,7 @@ class Event
      */
     public function setHours($hours)
     {
-        $this->Hours = $hours;
+        $this->hours = $hours;
 
         return $this;
     }
@@ -207,11 +212,11 @@ class Event
     /**
      * Get Hours
      *
-     * @return string 
+     * @return string
      */
     public function getHours()
     {
-        return $this->Hours;
+        return $this->hours;
     }
 
     /**
@@ -222,7 +227,7 @@ class Event
      */
     public function setDescription($description)
     {
-        $this->Description = $description;
+        $this->description = $description;
 
         return $this;
     }
@@ -234,7 +239,7 @@ class Event
      */
     public function getDescription()
     {
-        return $this->Description;
+        return $this->description;
     }
 
     /**

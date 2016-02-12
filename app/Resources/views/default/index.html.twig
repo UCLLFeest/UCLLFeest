@@ -8,9 +8,10 @@
 
     {% if( user ) %}
         <p>Welkom terug {{ user.username }}</p>
-        <p><a href="/logout">Log uit</a>
-            <a href="/events">Mijn Events</a></p>
+        <p><a href="/logout">Log uit</a> of <a href="/events">Mijn Events</a></p>
+        <p>Bekijk alle events: <a href="/allEvents">Events</a></p>
     {%  else %}
         <p>Welkom. <a href="/account/login">Log in</a> of <a href="/account/register">Registreer</a></p>
+        <p>Bekijk alle events: <a href="/allEvents">Events</a></p>
     {% endif %}
 {% endblock %}

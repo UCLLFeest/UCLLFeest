@@ -14,7 +14,7 @@ use AppBundle\Form\EventType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 
 class EventController extends Controller
@@ -25,7 +25,13 @@ class EventController extends Controller
     public function showEvents()
     {
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
-        $event = $this->getDoctrine()->getRepository('AppBundle:Event')->findAll();
+        $em =$this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        if(!$user)
+        {
+            throw new Exception("Gelieve in te loggen");
+        }
+        $event = $em->getRepository('AppBundle:Event')->findByCreator($user);
         return $this->render('event/event_overview.html.twig',array('events'=>$event));
     }
 
@@ -45,6 +51,8 @@ class EventController extends Controller
             );
         }
 
+        $user = $this->getUser();
+        $user->removeEvent($event);
         $em->remove($event);
         $em->flush();
 
@@ -70,6 +78,9 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
+            $user = $this->getUser();
+            $user->addEvent($event);
+            $event->setCreator($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
             $em->flush();

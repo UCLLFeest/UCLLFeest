@@ -15,7 +15,6 @@
             <td>Adres</td>
             <td>Inkom Prijs</td>
             <td>Start Uur</td>
-            <td>Beschrijving</td>
         </tr>
         {% for event in events %}
             <tr>
@@ -23,7 +22,6 @@
                 <td>{{ event.getFullAdress()}}</td>
                 <td>{{ event.getPrice()}}</td>
                 <td>{{ event.getHours()}}</td>
-                <td>{{ event.getDescription()}}</td>
             </tr>
         {% endfor %}
     </table>

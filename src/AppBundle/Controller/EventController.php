@@ -141,7 +141,7 @@ class EventController extends Controller
             $this->addFlash('notice', "Couldn't find the event");
             return $this->redirectToRoute('show_all_events');
         }
-        return $this->render('event/event_detail.html.twig', array('foto' => $event->getFoto()));
+        return $this->render('event/event_detail.html.twig', array('event' => $event));
     }
 
 

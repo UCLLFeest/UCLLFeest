@@ -8,6 +8,29 @@
 {% block body %}
 <h1>Detail overview</h1>
 
-    <img src="{{ vich_uploader_asset(foto, 'file') }}" alt="{{ foto.name }}" />
-
+    <div id="foto">
+    <img  src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}" />
+    </div>
+    <table id="table">
+        <tr>
+            <td>Naam</td>
+            <td>{{ event.name}}</td>
+        </tr>
+        <tr>
+            <td>Adres</td>
+            <td>{{ event.adress}}</td>
+        </tr>
+        <tr>
+            <td>Inkom Prijs</td>
+            <td>{{ event.price}}</td>
+        </tr>
+        <tr>
+            <td>Start Uur</td>
+            <td>{{ event.hours}}</td>
+        </tr>
+        <tr>
+            <td>Beschrijving</td>
+            <td>{{ event.description}}</td>
+        </tr>
+    </table>
 {% endblock %}

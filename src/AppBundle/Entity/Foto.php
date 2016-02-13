@@ -28,7 +28,7 @@ class Foto
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     public $name;
 
@@ -36,6 +36,7 @@ class Foto
     /**
      * @Vich\UploadableField(mapping="event_image", fileNameProperty="name")
      * @Assert\File(maxSize="6000000")
+     * @Assert\NotBlank()
      */
     private $file;
 

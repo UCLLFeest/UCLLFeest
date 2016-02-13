@@ -45,6 +45,8 @@ class Event
 
     /**
      * @ORM\Column(type="string",length=4)
+     * @Assert\Length(min = 4, max=4, minMessage = "The Postal code needs to be four numbers")
+     * @Assert\Type(type="integer")
      * @Assert\NotBlank
      */
     private $postalCode;

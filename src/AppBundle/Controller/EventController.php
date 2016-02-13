@@ -53,9 +53,8 @@ class EventController extends Controller
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if (!$event) {
-            throw $this->createNotFoundException(
-                'het Evenement is niet gevonden'
-            );
+            $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_events');
         }
 
         $user = $this->getUser();
@@ -88,7 +87,7 @@ class EventController extends Controller
 
             $user = $this->getUser();
             $foto = $event->getFoto();
-            printf($foto->getName());
+            $foto->setName($event->getName());
             $user->addEvent($event);
             $event->setCreator($user);
             $em = $this->getDoctrine()->getManager();
@@ -109,13 +108,17 @@ class EventController extends Controller
 
     public function updateEvent(Request $request, $id)
     {
-        if(!$this->getUser())
-        {
-            throw new Exception("Gelieve in te loggen");
-        }
+
         //Form wordt gemaakt met event dat wordt opgehaald met id.
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        if(!$event)
+        {
+            $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_events');
+        }
+
         $form = $this->createForm(EventType::class,$event);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -133,6 +136,11 @@ class EventController extends Controller
     {
         $em =$this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
+        if(!$event)
+        {
+            $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_all_events');
+        }
         return $this->render('event/event_detail.html.twig', array('foto' => $event->getFoto()));
     }
 

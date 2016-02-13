@@ -8,6 +8,7 @@
 
 namespace AppBundle\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,7 +26,7 @@ class EventType extends AbstractType
             ->add('name', TextType::class)
             ->add('adress', TextType::class)
             ->add('city', TextType::class)
-            ->add('postalCode', TextType::class)
+            ->add('postalCode', IntegerType::class)
             ->add('price', MoneyType::class)
             ->add('hours', TimeType::class, array(
                 'input' => 'string',

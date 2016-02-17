@@ -85,14 +85,19 @@ class EventController extends Controller
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
 
+            $em = $this->getDoctrine()->getManager();
+
             $user = $this->getUser();
             $foto = $event->getFoto();
-            $foto->setName($event->getName());
+            if($foto->getFile() !== null) {
+                $foto->setName($event->getName());
+                $em->persist($foto);
+            }
+            else
+                $event->setFoto(null);
             $user->addEvent($event);
             $event->setCreator($user);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($event);
-            $em->persist($foto);
             $em->flush();
             return $this->showEvents();
         }
@@ -122,6 +127,14 @@ class EventController extends Controller
         $form = $this->createForm(EventType::class,$event);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $foto = $event->getFoto();
+            if($foto->getFile() !== null)
+            {
+                $em->persist($foto);
+            }
+            else
+                $event->setFoto(null);
+
             $em->flush();
             return $this->showEvents();
         }

@@ -64,8 +64,7 @@ class Event
     private $hours;
 
     /**
-     * @ORM\Column(type="text")
-     *
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -76,8 +75,8 @@ class Event
     private $creator;
 
     /**
-     * @ORM\OneToOne(targetEntity="Foto", inversedBy="event")
-     * @ORM\JoinColumn(name="foto_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Foto", mappedBy="event")
+     * @ORM\JoinColumn(name="foto_id", referencedColumnName="id", nullable=true)
      */
     public $foto;
 

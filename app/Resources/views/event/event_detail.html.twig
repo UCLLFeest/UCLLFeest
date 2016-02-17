@@ -9,7 +9,11 @@
 <h1>Detail overview</h1>
 
     <div id="foto">
+    {% if event.foto != null %}
     <img  src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}" />
+    {% else %}
+    <img  src="{{ asset("question-mark.jpg", "img") }}" alt="No image provided" />
+    {% endif %}
     </div>
     <table id="table">
         <tr>

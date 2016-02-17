@@ -31,10 +31,21 @@ framework:
     fragments:       ~
     http_method_override: true
 
+    assets:
+            packages:
+                app:
+                    base_path: /bundles/app/
+                img:
+                    base_path: /bundles/app/images/
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+
+    form_themes:
+            # other form themes
+            - 'VichUploaderBundle:Form:fields.html.twig'
 
 # Doctrine Configuration
 doctrine:

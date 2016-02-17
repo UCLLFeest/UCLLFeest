@@ -31,7 +31,7 @@ class EventType extends AbstractType
             ->add('hours', TimeType::class, array(
                 'input' => 'string',
             ))
-            ->add('description', TextType::class)
+            ->add('description', TextType::class, array( "required" => false ))
             ->add('foto', FotoType::class)
             ->add('save', SubmitType::class);
     }

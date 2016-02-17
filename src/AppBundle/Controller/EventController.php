@@ -62,7 +62,8 @@ class EventController extends Controller
         $em->remove($event);
         $em->flush();
 
-        return $this->showEvents();
+        //return $this->showEvents();
+        return $this->redirectToRoute('show_events');
     }
 
     /**
@@ -97,14 +98,24 @@ class EventController extends Controller
                 $event->setFoto(null);
             $user->addEvent($event);
             $event->setCreator($user);
+
+
             $em->persist($event);
             $em->flush();
-            return $this->showEvents();
+
+
+            //idk of dit moet (Dries & Sven denken van wel)
+            $em->persist($user);
+            $em->flush();
+
+            //return $this->showEvents();
+            return $this->redirectToRoute('show_events');
         }
 
         // De form wordt getoont
-        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
 
+        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
+        //return $this->redirectToRoute('show_tickets');
     }
 
     /**
@@ -136,8 +147,11 @@ class EventController extends Controller
                 $event->setFoto(null);
 
             $em->flush();
-            return $this->showEvents();
+           // return $this->showEvents();
+            return $this->redirectToRoute('show_events');
         }
+
+
         return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
     }
 
@@ -154,7 +168,7 @@ class EventController extends Controller
             $this->addFlash('notice', "Couldn't find the event");
             return $this->redirectToRoute('show_all_events');
         }
-        return $this->render('event/event_detail.html.twig', array('event' => $event));
+        return $this->render('event/event_detail.html.twig', array('event' => $event, 'user' => $this->getUser()));
     }
 
 

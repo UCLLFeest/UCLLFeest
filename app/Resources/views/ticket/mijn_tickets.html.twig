@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Ticket Overview.
+{% endblock %}
+
+{% block body %}
+    <h1>Overview</h1>
+
+
+    <table>
+        <tr>
+            <td>Naam</td>
+            <td>Datum</td>
+            <td>Claimed</td>
+        </tr>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.event.name()}}</td>
+                <td>{{ ticket.date() | date('Y-m-d') }}</td>
+                <td>{{ ticket.claimed() ? 'Claimed':'Not Claimed' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

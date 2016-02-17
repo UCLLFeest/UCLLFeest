@@ -46,4 +46,9 @@
             <td>{{ event.capacity}}</td>
         </tr>
     </table>
+
+    {% if event.creator.id != user.id %}
+        <a href="{{ path('register_ticket',{'id': event.id}) }}">Koop ticket</a>
+    {% endif %}
+
 {% endblock %}

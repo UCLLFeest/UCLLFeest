@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {%  block title %}
-    Account for {{ app.user.username }}
+    Account for {{ user.username }}
 {% endblock %}
 
 {% block body %}
-    <h1>Profile: {{ app.user.username }}</h1>
+    <h1>Profile: {{ user.username }}</h1>
 
     <table>
         <tr>
             <td>Email address: </td>
-            <td>{{ app.user.email }}</td>
+            <td>{{ user.email }}</td>
         </tr>
         <tr>
             <td>First name: </td>
-            <td>{{ app.user.firstname }}</td>
+            <td>{{ user.firstname }}</td>
         </tr>
         <tr>
             <td>Last name: </td>
-            <td>{{ app.user.lastname }}</td>
+            <td>{{ user.lastname }}</td>
         </tr>
         <tr>
             <td>Gender: </td>
-            <td>{{ genderToString(app.user.gender) }}</td>
+            <td>{{ genderToString(user.gender) }}</td>
         </tr>
         <tr>
             <td>Birthday: </td>
-            <td>{{ app.user.birthday|date('Y-m-d') }}</td>
+            <td>{{ user.birthday|date('Y-m-d') }}</td>
         </tr>
     </table>
 
-    <a href="/account/editpassword">Edit Password</a>
+    {% if user == app.user %}
+        <a href="/account/editpassword">Edit Password</a>
+    {% endif %}
 
 {% endblock %}

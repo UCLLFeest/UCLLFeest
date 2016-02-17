@@ -91,13 +91,41 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/account/view", name="accountview")
+     * @Route("/account/view/{id}", name="accountview")
      */
-    public function view(Request $request)
+    public function view(Request $request, $id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:User');
+
+        $user = $repo->find($id);
+
+        if($user === null)
+        {
+            $this->addFlash('notice', 'That user does not exist');
+            return $this->redirectToRoute('homepage');
+        }
+
         return $this->render(
-            'account/view.html.twig'
+            'account/view.html.twig',
+            array('user' => $user)
         );
+    }
+
+    /**
+     * @Route("/account/viewall", name="viewallusers")
+     */
+    public function viewall()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('AppBundle:User');
+        $users = $repo->findAll();
+
+        return $this->render(
+            'account/viewall.html.twig',
+            array(
+                'users' => $users
+            ));
     }
 
     /**

@@ -58,15 +58,20 @@ class Event
     private $price;
 
     /**
-     * @ORM\Column(type="string",length=20)
+     * @ORM\Column(type="datetime")
      * @Assert\NotBlank
      */
-    private $hours;
+    private $date;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $capacity;
 
     /**
      * @ORM\ManyToOne(targetEntity="User",inversedBy="events")
@@ -211,28 +216,6 @@ class Event
         return $this->price;
     }
 
-    /**
-     * Set Hours
-     *
-     * @param string $hours
-     * @return Event
-     */
-    public function setHours($hours)
-    {
-        $this->hours = $hours;
-
-        return $this;
-    }
-
-    /**
-     * Get Hours
-     *
-     * @return string
-     */
-    public function getHours()
-    {
-        return $this->hours;
-    }
 
     /**
      * Set Description
@@ -305,4 +288,50 @@ class Event
     }
 
 
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Event
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set capacity
+     *
+     * @param integer $capacity
+     * @return Event
+     */
+    public function setCapacity($capacity)
+    {
+        $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    /**
+     * Get capacity
+     *
+     * @return integer 
+     */
+    public function getCapacity()
+    {
+        return $this->capacity;
+    }
 }

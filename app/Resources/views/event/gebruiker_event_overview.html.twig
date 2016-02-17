@@ -14,14 +14,16 @@
             <td>Naam</td>
             <td>Adres</td>
             <td>Inkom Prijs</td>
-            <td>Start Uur</td>
+            <td>Datum</td>
+            <td>Uur</td>
         </tr>
         {% for event in events %}
         <tr>
             <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
             <td>{{ event.getFullAdress()}}</td>
             <td>{{ event.getPrice()}}</td>
-            <td>{{ event.getHours()}}</td>
+            <td>{{ event.getDate() | date('Y-m-d') }}</td>
+            <td>{{ event.getDate() | date('H:i') }}</td>
             <td> <a href="{{ path('delete_event',{'id':event.getId()}) }}">Delete</a> </td>
             <td> <a href="{{ path('update_event',{'id':event.getId()}) }}">Update</a> </td>
         </tr>

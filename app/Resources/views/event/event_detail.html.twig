@@ -29,12 +29,21 @@
             <td>{{ event.price}}</td>
         </tr>
         <tr>
-            <td>Start Uur</td>
-            <td>{{ event.hours}}</td>
+            <td>Datum</td>
+            <td>{{ event.getDate() | date('Y-m-d') }}</td>
+        </tr>
+        <tr>
+            <td>Uur</td>
+            <td>{{ event.getDate() | date('H:i') }}</td>
         </tr>
         <tr>
             <td>Beschrijving</td>
             <td>{{ event.description}}</td>
+        </tr>
+
+        <tr>
+            <td>Capaciteit</td>
+            <td>{{ event.capacity}}</td>
         </tr>
     </table>
 {% endblock %}

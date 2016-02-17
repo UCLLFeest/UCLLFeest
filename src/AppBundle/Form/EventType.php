@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,10 +28,9 @@ class EventType extends AbstractType
             ->add('city', TextType::class)
             ->add('postalCode', IntegerType::class)
             ->add('price', MoneyType::class)
-            ->add('hours', TimeType::class, array(
-                'input' => 'string',
-            ))
+            ->add('date', DateTimeType::class)
             ->add('description', TextType::class, array( "required" => false ))
+            ->add('capacity', IntegerType::class)
             ->add('foto', FotoType::class)
             ->add('save', SubmitType::class);
     }

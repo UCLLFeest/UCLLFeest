@@ -12,6 +12,22 @@
             <td>Email address: </td>
             <td>{{ app.user.email }}</td>
         </tr>
+        <tr>
+            <td>First name: </td>
+            <td>{{ app.user.firstname }}</td>
+        </tr>
+        <tr>
+            <td>Last name: </td>
+            <td>{{ app.user.lastname }}</td>
+        </tr>
+        <tr>
+            <td>Gender: </td>
+            <td>{{ genderToString(app.user.gender) }}</td>
+        </tr>
+        <tr>
+            <td>Birthday: </td>
+            <td>{{ app.user.birthday|date('Y-m-d') }}</td>
+        </tr>
     </table>
 
     <a href="/account/editpassword">Edit Password</a>

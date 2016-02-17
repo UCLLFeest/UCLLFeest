@@ -57,6 +57,30 @@ class User implements UserInterface, \Serializable
      */
     private $events;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="date")
+     * @Assert\NotBlank()
+     */
+    private $birthday;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -229,5 +253,89 @@ class User implements UserInterface, \Serializable
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Gets the user's first name
+     * @return string first name
+     */
+    public function getFirstName()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Sets the user's first name
+     * @param string $firstname The user's first name
+     * @return User
+     */
+    public function setFirstName($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * Gets the user's last name
+     * @return string last name
+     */
+    public function getLastName()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Sets the user's last name
+     * @param string $lastname The user's last name
+     * @return User
+     */
+    public function setLastName($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Gets the user's gender
+     * @return integer gender
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Sets the user's gender
+     * @param integer $gender the user's gender
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Returns the user's birthday
+     * @return \DateTime birthday
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * Sets the user's birthday
+     * @param \DateTime $birthday
+     * @return User
+     */
+    public function setBirthday(\DateTime $birthday)
+    {
+        $this->birthday = $birthday;
+
+        return $this;
     }
 }

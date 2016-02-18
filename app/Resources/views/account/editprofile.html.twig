@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{%  block title %}
+    Account {{ user.username }}
+{% endblock %}
+
+{% block body %}
+    <h1>Edit Profile {{ user.username }}</h1>
+    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.firstname) }}
+        {{ form_row(form.lastname) }}
+        {{ form_row(form.gender) }}
+        {{ form_row(form.birthday) }}
+
+        <button type="submit">Save Changes</button>
+    {{ form_end(form) }}
+
+{% endblock %}

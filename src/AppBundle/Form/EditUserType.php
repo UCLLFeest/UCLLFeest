@@ -13,28 +13,29 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Entity\Gender;
 
-class UserType extends EditUserType
+class EditUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $builder
-            ->add('email', EmailType::class)
-            ->add('username', TextType::class)
-            ->add('plainPassword', RepeatedType::class, array(
-                    'type' => PasswordType::class,
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Repeat Password'),
-                )
-            );
+            ->add('firstname', TextType::class, array(
+                'label' => 'First name'
+            ))
+            ->add('lastname', TextType::class, array(
+                'label' => 'Last name'
+            ))
+            ->add('gender', ChoiceType::class, array(
+                'placeholder' => 'Choose an option',
+                'choices' => Gender::getPrettyMap(),
+                'choices_as_values' => true,
+            ))
+            ->add('birthday', BirthdayType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
         $resolver->setDefaults(array(
-            'validation_groups' => array('registration', 'editpassword')
+            'data_class' => 'AppBundle\Entity\User'
         ));
     }
 }

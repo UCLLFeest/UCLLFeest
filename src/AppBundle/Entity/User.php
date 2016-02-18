@@ -34,7 +34,7 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"registration", "editpassword"})
      * @Assert\Length(max=4096)
      * Is not mapped to the database!
      */

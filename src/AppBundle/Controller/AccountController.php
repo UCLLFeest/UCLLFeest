@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Form\UserType;
+use AppBundle\Form\EditUserType;
 use AppBundle\Form\ChangePasswordType;
 use AppBundle\Entity\User;
 use AppBundle\Entity\LoginData;
@@ -159,12 +160,45 @@ class AccountController extends Controller
 
             $this->addFlash('notice', 'Your password has been changed.');
 
-            return $this->redirectToRoute('accountview');
+            return $this->redirectToRoute('accountview', array('id' => $user->getId()));
         }
 
         return $this->render(
             'account/editpassword.html.twig',
             array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * @Route("/account/editprofile", name="editprofile")
+     */
+    public function editprofile(Request $request)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(EditUserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            // ... do any other work - like send them an email, etc
+            // maybe set a "flash" success message for the user
+
+            $this->addFlash('notice', 'Changes saved.');
+
+            return $this->redirectToRoute('accountview', array('id' => $user->getId()));
+        }
+
+        return $this->render(
+            'account/editprofile.html.twig',
+            array(
+                'form' => $form->createView(),
+                'user' => $user
+            )
         );
     }
 }

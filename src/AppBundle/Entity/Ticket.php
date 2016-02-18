@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\TicketRepository")
  * @ORM\Table(name="app_tickets")
  * @UniqueEntity("code")
  */

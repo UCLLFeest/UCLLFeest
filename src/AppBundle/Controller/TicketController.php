@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use Proxies\__CG__\AppBundle\Entity\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,15 +50,18 @@ class TicketController extends Controller
 
         $ticket->setEvent($event);
 
+        if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
+            //moet user ook niet gepersist worden?
+            $em->persist($ticket);
+            $em->flush();
 
-        //moet user ook niet gepersist worden?
-        $em->persist($ticket);
-        $em->flush();
+            $em->persist($user);
+            $em->flush();
 
-        $em->persist($user);
-        $em->flush();
+            //return $this->showTickets();
+        }
 
-        //return $this->showTickets();
+
         return $this->redirectToRoute('show_tickets');
 
     }

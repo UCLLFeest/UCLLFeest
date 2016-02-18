@@ -292,6 +292,12 @@ class User implements UserInterface, \Serializable
         return $this->lastname;
     }
 
+    public function getFullName()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+
     /**
      * Sets the user's last name
      * @param string $lastname The user's last name

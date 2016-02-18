@@ -8,47 +8,60 @@
 {% block body %}
 <h1>Detail overview</h1>
 
-    <div id="foto">
+<div id="foto">
     {% if event.foto != null %}
-    <img  src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}" />
+        <img src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}"/>
     {% else %}
-    <img  src="{{ asset("question-mark.jpg", "img") }}" alt="No image provided" />
+        <img src="{{ asset("question-mark.jpg", "img") }}" alt="No image provided"/>
     {% endif %}
-    </div>
-    <table id="table">
-        <tr>
-            <td>Naam</td>
-            <td>{{ event.name}}</td>
-        </tr>
-        <tr>
-            <td>Adres</td>
-            <td>{{ event.adress}}</td>
-        </tr>
-        <tr>
-            <td>Inkom Prijs</td>
-            <td>{{ event.price}}</td>
-        </tr>
-        <tr>
-            <td>Datum</td>
-            <td>{{ event.getDate() | date('Y-m-d') }}</td>
-        </tr>
-        <tr>
-            <td>Uur</td>
-            <td>{{ event.getDate() | date('H:i') }}</td>
-        </tr>
-        <tr>
-            <td>Beschrijving</td>
-            <td>{{ event.description}}</td>
-        </tr>
+</div>
+<table id="table">
+    <tr>
+        <td>Naam</td>
+        <td>{{ event.name }}</td>
+    </tr>
+    <tr>
+        <td>Adres</td>
+        <td>{{ event.adress }}</td>
+    </tr>
+    <tr>
+        <td>Inkom Prijs</td>
+        <td>{{ event.price }}</td>
+    </tr>
+    <tr>
+        <td>Datum</td>
+        <td>{{ event.getDate() | date('Y-m-d') }}</td>
+    </tr>
+    <tr>
+        <td>Uur</td>
+        <td>{{ event.getDate() | date('H:i') }}</td>
+    </tr>
+    <tr>
+        <td>Beschrijving</td>
+        <td>{{ event.description }}</td>
+    </tr>
 
-        <tr>
-            <td>Capaciteit</td>
-            <td>{{ event.capacity}}</td>
-        </tr>
-    </table>
+    <tr>
+        <td>Capaciteit</td>
+        <td>{{ event.capacity }}</td>
+    </tr>
+</table>
 
-    {% if event.creator.id != user.id %}
-        <a href="{{ path('register_ticket',{'id': event.id}) }}">Koop ticket</a>
+{% if event.creator.id != user.id %}
+    <a href="{{ path('register_ticket',{'id': event.id}) }}">Koop ticket</a>
+{% endif %}
+
+    {% if event.tickets is not empty %}
+        <table>
+            <tr>
+                <td>Attendees</td>
+            </tr>
+            {% for ticket in event.tickets %}
+                <tr>
+                    <td>{{ ticket.owner.getFullName() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 
 {% endblock %}

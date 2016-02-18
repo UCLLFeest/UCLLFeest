@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\ChangePassword;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,8 +12,8 @@ use AppBundle\Form\UserType;
 use AppBundle\Form\EditUserType;
 use AppBundle\Form\ChangePasswordType;
 use AppBundle\Entity\User;
-use AppBundle\Entity\LoginData;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use AppBundle\FormType\ChangePassword;
+use AppBundle\FormType\LoginData;
 
 class AccountController extends Controller
 {
@@ -77,10 +77,11 @@ class AccountController extends Controller
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+
         $form = $this->createFormBuilder(new LoginData($lastUsername))
-            ->add('username', TextType::class)
-            ->add('password', PasswordType::class)
-            ->getForm();
+                     ->add('username', TextType::class)
+                     ->add('password', PasswordType::class)
+                     ->getForm();
 
         return $this->render(
             'account/login.html.twig',

@@ -6,7 +6,7 @@
  * Time: 12:22
  */
 
-namespace AppBundle\Tests\Controller;
+namespace Tests\AppBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -38,7 +38,6 @@ class EventControllerTest extends WebTestCase
     public function testShowEventsMyEvents()
     {
         $client = static::createClient();
-        $client->followRedirects(true);
         $crawler = $client->request('GET','/account/login');
 
         $form = $crawler->selectButton('Login')->form();
@@ -55,7 +54,6 @@ class EventControllerTest extends WebTestCase
     public function testShowMyEventsByUsingNavigationBar()
     {
         $client = static::createClient();
-        $client->followRedirects(true);
         $crawler = $client->request('GET','/account/login');
 
         $form = $crawler->selectButton('Login')->form();
@@ -71,6 +69,16 @@ class EventControllerTest extends WebTestCase
         $crawler = $client->click($link);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Mijn Events.")')->count());
+    }
+
+    public function testDontGiveAccessToMyEventsWhenNotLoggedIn()
+    {
+        $client = static::createClient();
+        $crawler =  $crawler = $client->request('GET','/account/login');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in.")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Mijn Events.")')->count());
+
     }
 
 

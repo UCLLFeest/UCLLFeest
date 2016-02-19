@@ -14,10 +14,15 @@ class TicketRepository extends EntityRepository
 {
 
     public function findIfPersonHasTicket($event_id, $user_id) {
-        return $this->getEntityManager()->createQuery(
-            //niet native -> vandaar owner = $user_id -> vertaald naar SQL
-            "SELECT t FROM AppBundle:Ticket as t where t.owner = ". $user_id . " AND t.event = " . $event_id
-        )->getOneOrNullResult();
+
+        $parameters = array(
+            'userid' =>  $user_id,
+            'eventid' => $event_id
+        );
+
+       $query = $this->getEntityManager()->createQuery("SELECT t FROM AppBundle:Ticket as t where t.owner = :userid AND t.event = :eventid")->setParameters($parameters);
+
+        return $query->getOneOrNullResult();
     }
 
 }

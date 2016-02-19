@@ -10,13 +10,11 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="AppBundle\Entity\TicketRepository")
  * @ORM\Table(name="app_tickets")
- * @UniqueEntity("code")
  */
 class Ticket
 {
@@ -74,29 +72,6 @@ class Ticket
     }
 
     /**
-     * Set code
-     *
-     * @param \GUID $code
-     * @return Ticket
-     */
-    public function setCode(\GUID $code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return \GUID 
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
      * Set claimed
      *
      * @param boolean $claimed
@@ -125,7 +100,7 @@ class Ticket
      * @param \AppBundle\Entity\User $owner
      * @return Ticket
      */
-    public function setOwner(\AppBundle\Entity\User $owner = null)
+    public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
 
@@ -145,10 +120,10 @@ class Ticket
     /**
      * Set event
      *
-     * @param \AppBundle\Entity\Event $event
+     * @param Event $event
      * @return Ticket
      */
-    public function setEvent(\AppBundle\Entity\Event $event = null)
+    public function setEvent(Event $event = null)
     {
         $this->event = $event;
 
@@ -158,7 +133,7 @@ class Ticket
     /**
      * Get event
      *
-     * @return \AppBundle\Entity\Event 
+     * @return Event
      */
     public function getEvent()
     {

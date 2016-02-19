@@ -83,6 +83,15 @@ class AccountController extends Controller
      */
     public function login()
     {
+        $securityContext = $this->container->get('security.authorization_checker');
+
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $this->addFlash('notice', 'You are already logged in.');
+
+            return $this->redirectToRoute('homepage');
+        }
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         // get the login error if there is one

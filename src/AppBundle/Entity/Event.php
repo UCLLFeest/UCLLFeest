@@ -83,7 +83,7 @@ class Event
      * @ORM\OneToOne(targetEntity="Foto", mappedBy="event")
      * @ORM\JoinColumn(name="foto_id", referencedColumnName="id", nullable=true)
      */
-    public $foto;
+    private $foto;
 
 
     /**

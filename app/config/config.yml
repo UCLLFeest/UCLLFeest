@@ -109,8 +109,8 @@ payum:
     gateways:
         paypal:
               paypal_express_checkout_nvp:
-                  username: 'driescroonsPP-facilitator_api1.gmail.com'
-                  password: '7DZHKBG4PQCXV2D8'
-                  signature: 'A3z2F-q31tXwtO2-ip1YUJA4jQ2AAnEEzLE8Z42CcC6iUQOmsos0OMdn'
+                  username: "%paypal_user%"
+                  password: "%paypal_password%"
+                  signature: "%paypal_signature%"
                   sandbox: true
 

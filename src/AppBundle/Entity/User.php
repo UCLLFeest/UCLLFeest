@@ -41,6 +41,11 @@ class User implements UserInterface, \Serializable
     private $plainPassword;
 
     /**
+     * @ORM\Column(type="array")
+     */
+    private $roles = array('ROLE_USER');
+
+    /**
      * @ORM\Column(type="string", length=60, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
@@ -56,8 +61,6 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
      */
     private $events;
-
-
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -120,7 +123,32 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+    }
+
+    public function addRole($role)
+    {
+        $this->roles[] = $role;
+
+        return $this;
+    }
+
+    public function removeRole($role)
+    {
+        $key = array_search($role, $this->roles, true);
+
+        if($key !== false)
+        {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);  //Fixes array indices
+        }
+
+        return $this;
     }
 
     public function eraseCredentials()

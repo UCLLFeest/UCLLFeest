@@ -9,10 +9,12 @@
 namespace AppBundle\Controller;
 
 use Payum\Core\Request\GetHumanStatus;
+use AppBundle\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\Ticket;
 
 //https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples/paypal_express_checkout.md
 //http://stackoverflow.com/questions/28148887/setting-up-payum-bundle-with-symfony2-giving-error
@@ -22,21 +24,25 @@ class PaymentController extends Controller
 {
 
     /**
-     * @Route("/order", name="buy_ticket")
+     * @Route("/order/{id}", name="buy_ticket")
      */
 
-    public function prepareAction()
+    public function prepareAction($id)
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
         $gatewayName = 'paypal';
         $storage = $this->get('payum')->getStorage('AppBundle\Entity\Payment');
 
         $payment = $storage->create();
         $payment->setNumber(uniqid());
         $payment->setCurrencyCode('EUR');
-        $payment->setTotalAmount(123); // 1.23 EUR
-        $payment->setDescription('A description');
-        $payment->setClientId('5');
-        $payment->setClientEmail('driescroonspp-facilitator@gmail.com');
+        $payment->setTotalAmount($event->getPrice() * 100); // 1.23 EUR
+        $payment->setDescription($id);
+        $payment->setClientId($this->getUser()->getId());
+        $payment->setClientEmail($this->getUser()->getEmail());
 
         $storage->update($payment);
 
@@ -68,18 +74,56 @@ class PaymentController extends Controller
 
         // or Payum can fetch the model for you while executing a request (Preferred).
         $gateway->execute($status = new GetHumanStatus($token));
+        //voor details te tonen (is al opgeslagen)
+
         $payment = $status->getFirstModel();
+
+
+        //https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples/4-get-status.md statusses
+
 
         // you have order and payment status
         // so you can do whatever you want for example you can just print status and payment details.
-
-        return new JsonResponse(array(
+        /*return new JsonResponse(array(
             'status' => $status->getValue(),
             'payment' => array(
                 'total_amount' => $payment->getTotalAmount(),
                 'currency_code' => $payment->getCurrencyCode(),
                 'details' => $payment->getDetails(),
+                'clientid' => $payment->getClientID(),
+                'clientemail' => $payment->getClientEmail(),
+                'EVENTID' => $payment->getDetails()['DESC'],
             ),
-        ));
+        ));*/
+
+        if ($status->isPending() ||$status->isAuthorized()) {
+            $ticket = new Ticket();
+
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+
+            $user->addTicket($ticket);
+            $ticket->setOwner($user);
+
+
+            $event = $em->getRepository('AppBundle:Event')->find($payment->getDetails()['DESC']);
+
+            $ticket->setEvent($event);
+
+            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
+                //moet user ook niet gepersist worden?
+                $em->persist($ticket);
+                $em->flush();
+
+                $em->persist($user);
+                $em->flush();
+
+                //return $this->showTickets();
+            }
+
+
+            return $this->redirectToRoute('show_tickets');
+        }
     }
 }

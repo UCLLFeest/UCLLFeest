@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 //https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples/paypal_express_checkout.md
 //http://stackoverflow.com/questions/28148887/setting-up-payum-bundle-with-symfony2-giving-error
+//https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples/index.md
 
 class PaymentController extends Controller
 {
@@ -34,8 +35,8 @@ class PaymentController extends Controller
         $payment->setCurrencyCode('EUR');
         $payment->setTotalAmount(123); // 1.23 EUR
         $payment->setDescription('A description');
-        $payment->setClientId('anId');
-        $payment->setClientEmail('driescroonspp@gmail.com');
+        $payment->setClientId('5');
+        $payment->setClientEmail('driescroonspp-facilitator@gmail.com');
 
         $storage->update($payment);
 
@@ -49,7 +50,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * @Route("/order", name="done")
+     * @Route("/done", name="done")
      */
 
     public function doneAction(Request $request)

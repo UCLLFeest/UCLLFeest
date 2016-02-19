@@ -53,5 +53,9 @@ security:
         - { path: ^/events/allEvents, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Disallow access to change events
         - { path: ^/events, roles: ROLE_USER }
+        #Allow access to order
+        - { path: ^/order, roles: ROLE_USER }
+        #Allow access to done (order)
+        - { path: ^/done, roles: ROLE_USER }
         
     

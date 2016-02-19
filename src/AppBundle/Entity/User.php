@@ -158,6 +158,11 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function hasRole($role)
+    {
+        return $this->roles->contains($role);
+    }
+
     public function eraseCredentials()
     {
     }
@@ -268,32 +273,32 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add events
+     * Add event
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $event
      * @return User
      */
-    public function addEvent(Event $events)
+    public function addEvent(Event $event)
     {
-        $this->events[] = $events;
+        $this->events->add($event);
 
         return $this;
     }
 
     /**
-     * Remove events
+     * Remove event
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $event
      */
-    public function removeEvent(Event $events)
+    public function removeEvent(Event $event)
     {
-        $this->events->removeElement($events);
+        $this->events->removeElement($event);
     }
 
     /**
      * Get events
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getEvents()
     {
@@ -332,7 +337,20 @@ class User implements UserInterface, \Serializable
 
     public function getFullName()
     {
-        return $this->firstname . ' ' . $this->lastname;
+        $result = "";
+
+        if ($this->firstname != "")
+        {
+            $result .= $this->firstname;
+
+            if($this->lastname != "")
+                $result .= ' ';
+        }
+
+        if($this->lastname != "")
+            $result .= $this->lastname;
+
+        return $result;
     }
 
 
@@ -391,32 +409,32 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add tickets
+     * Add ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      * @return User
      */
-    public function addTicket(Ticket $tickets)
+    public function addTicket(Ticket $ticket)
     {
-        $this->tickets[] = $tickets;
+        $this->tickets->add($ticket);
 
         return $this;
     }
 
     /**
-     * Remove tickets
+     * Remove ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      */
-    public function removeTicket(Ticket $tickets)
+    public function removeTicket(Ticket $ticket)
     {
-        $this->tickets->removeElement($tickets);
+        $this->tickets->removeElement($ticket);
     }
 
     /**
      * Get tickets
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getTickets()
     {

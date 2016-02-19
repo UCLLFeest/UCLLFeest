@@ -38,24 +38,37 @@ class AccountController extends Controller
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // 3) Encode the password (you could also do this via Doctrine listener)
-            $password = $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-
-            // 4) save the User!
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $repo = $em->getRepository('AppBundle:User');
 
-            // ... do any other work - like send them an email, etc
-            // maybe set a "flash" success message for the user
+            if($repo->findOneBy(array("username" => $user->getUsername())) === null)
+            {
+                if ($repo->findOneBy(array("email" => $user->getEmail())) === null)
+                {
+                    // 3) Encode the password (you could also do this via Doctrine listener)
+                    $password = $this->get('security.password_encoder')
+                        ->encodePassword($user, $user->getPlainPassword());
+                    $user->setPassword($password);
 
-            $this->addFlash('notice', 'Your registration is now complete!');
+                    // 4) save the User!
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
 
-            return $this->redirectToRoute('homepage');
+                    // ... do any other work - like send them an email, etc
+                    // maybe set a "flash" success message for the user
+
+                    $this->addFlash('notice', 'Your registration is now complete!');
+
+                    return $this->redirectToRoute('homepage');
+                }
+                else
+                    $this->addFlash('notice', 'That email address is already in use');
+            }
+            else
+                $this->addFlash('notice', 'That username is already in use');
         }
 
         return $this->render(

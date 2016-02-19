@@ -19,6 +19,7 @@ class AccountController extends Controller
 {
     /**
      * @Route("/account/register", name="register")
+     * @param Request $request
      */
     public function register(Request $request)
     {
@@ -80,7 +81,7 @@ class AccountController extends Controller
     /**
      * @Route("/account/login", name="login")
      */
-    public function login(Request $request)
+    public function login()
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
@@ -107,8 +108,9 @@ class AccountController extends Controller
 
     /**
      * @Route("/account/view/{id}", name="accountview")
+     * * @param integer id Target user id
      */
-    public function view(Request $request, $id)
+    public function view($id)
     {
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('AppBundle:User');
@@ -185,6 +187,7 @@ class AccountController extends Controller
 
     /**
      * @Route("/account/editprofile", name="editprofile")
+     * @param Request $request
      */
     public function editprofile(Request $request)
     {

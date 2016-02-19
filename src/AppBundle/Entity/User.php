@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="app_users")
@@ -43,7 +44,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="array")
      */
-    private $roles = array('ROLE_USER');
+    private $roles;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
@@ -56,11 +57,6 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
-     */
-    private $events;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -87,6 +83,11 @@ class User implements UserInterface, \Serializable
     private $birthday;
 
     /**
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
+     */
+    private $events;
+
+    /**
      * @ORM\OneToMany(targetEntity="Ticket", mappedBy="owner")
      */
     private $tickets;
@@ -94,6 +95,13 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->isActive = true;
+
+        $this->roles = new ArrayCollection();
+
+        $this->roles->add('ROLE_USER');
+
+        $this->events = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     public function getUsername()
@@ -126,7 +134,7 @@ class User implements UserInterface, \Serializable
         return $this->roles;
     }
 
-    public function setRoles(array $roles)
+    public function setRoles(ArrayCollection $roles)
     {
         $this->roles = $roles;
     }
@@ -140,15 +148,19 @@ class User implements UserInterface, \Serializable
 
     public function removeRole($role)
     {
-        $key = array_search($role, $this->roles, true);
+        $key = $this->roles->indexOf($role);
 
         if($key !== false)
         {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);  //Fixes array indices
+            $this->roles->remove($key);
         }
 
         return $this;
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles->contains($role);
     }
 
     public function eraseCredentials()
@@ -165,7 +177,10 @@ class User implements UserInterface, \Serializable
         ));
     }
 
-    /** @see \Serializable::unserialize() */
+    /**
+     * @see \Serializable::unserialize()
+     * @param string $serialized Serialized version of this class
+     */
     public function unserialize($serialized)
     {
         list (
@@ -258,32 +273,32 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add events
+     * Add event
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $event
      * @return User
      */
-    public function addEvent(\AppBundle\Entity\Event $events)
+    public function addEvent(Event $event)
     {
-        $this->events[] = $events;
+        $this->events->add($event);
 
         return $this;
     }
 
     /**
-     * Remove events
+     * Remove event
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $event
      */
-    public function removeEvent(\AppBundle\Entity\Event $events)
+    public function removeEvent(Event $event)
     {
-        $this->events->removeElement($events);
+        $this->events->removeElement($event);
     }
 
     /**
      * Get events
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getEvents()
     {
@@ -322,7 +337,20 @@ class User implements UserInterface, \Serializable
 
     public function getFullName()
     {
-        return $this->firstname . ' ' . $this->lastname;
+        $result = "";
+
+        if ($this->firstname != "")
+        {
+            $result .= $this->firstname;
+
+            if($this->lastname != "")
+                $result .= ' ';
+        }
+
+        if($this->lastname != "")
+            $result .= $this->lastname;
+
+        return $result;
     }
 
 
@@ -381,32 +409,32 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add tickets
+     * Add ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      * @return User
      */
-    public function addTicket(\AppBundle\Entity\Ticket $tickets)
+    public function addTicket(Ticket $ticket)
     {
-        $this->tickets[] = $tickets;
+        $this->tickets->add($ticket);
 
         return $this;
     }
 
     /**
-     * Remove tickets
+     * Remove ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      */
-    public function removeTicket(\AppBundle\Entity\Ticket $tickets)
+    public function removeTicket(Ticket $ticket)
     {
-        $this->tickets->removeElement($tickets);
+        $this->tickets->removeElement($ticket);
     }
 
     /**
      * Get tickets
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getTickets()
     {

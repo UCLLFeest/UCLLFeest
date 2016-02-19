@@ -8,6 +8,7 @@
 
 //src/AppBundle/Entity/Event.php
 namespace AppBundle\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -90,6 +91,14 @@ class Event
      * @ORM\OneToMany(targetEntity="Ticket", mappedBy="event")
      */
     private $tickets;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tickets = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -248,10 +257,10 @@ class Event
     /**
      * Set creator
      *
-     * @param \AppBundle\Entity\User $creator
+     * @param User $creator
      * @return Event
      */
-    public function setCreator(\AppBundle\Entity\User $creator = null)
+    public function setCreator(User $creator = null)
     {
         $this->creator = $creator;
 
@@ -261,7 +270,7 @@ class Event
     /**
      * Get creator
      *
-     * @return \AppBundle\Entity\User 
+     * @return User
      */
     public function getCreator()
     {
@@ -272,10 +281,10 @@ class Event
     /**
      * Set foto
      *
-     * @param \AppBundle\Entity\Foto $foto
+     * @param Foto $foto
      * @return Event
      */
-    public function setFoto(\AppBundle\Entity\Foto $foto = null)
+    public function setFoto(Foto $foto = null)
     {
         $this->foto = $foto;
 
@@ -285,7 +294,7 @@ class Event
     /**
      * Get foto
      *
-     * @return \AppBundle\Entity\Foto 
+     * @return Foto
      */
     public function getFoto()
     {
@@ -339,41 +348,34 @@ class Event
     {
         return $this->capacity;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->tickets = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add tickets
+     * Add ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      * @return Event
      */
-    public function addTicket(\AppBundle\Entity\Ticket $tickets)
+    public function addTicket(Ticket $ticket)
     {
-        $this->tickets[] = $tickets;
+        $this->tickets->add($ticket);
 
         return $this;
     }
 
     /**
-     * Remove tickets
+     * Remove ticket
      *
-     * @param \AppBundle\Entity\Ticket $tickets
+     * @param Ticket $ticket
      */
-    public function removeTicket(\AppBundle\Entity\Ticket $tickets)
+    public function removeTicket(Ticket $ticket)
     {
-        $this->tickets->removeElement($tickets);
+        $this->tickets->removeElement($ticket);
     }
 
     /**
      * Get tickets
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getTickets()
     {

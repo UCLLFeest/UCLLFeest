@@ -24,13 +24,13 @@ class Foto
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
-    public $name;
+    private $name;
 
 
     /**
@@ -51,9 +51,6 @@ class Foto
      * @ORM\OneToOne(targetEntity="Event", inversedBy="foto")
      */
     private $event;
-
-
-    private $temp;
 
     /**
     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
@@ -142,7 +139,7 @@ class Foto
      * @param \AppBundle\Entity\Event $event
      * @return Foto
      */
-    public function setEvent(\AppBundle\Entity\Event $event = null)
+    public function setEvent(Event $event = null)
     {
         $this->event = $event;
 

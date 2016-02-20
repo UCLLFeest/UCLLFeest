@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Venue Detail
+{% endblock %}
+
+{% block body %}
+    <h1>Detail overview</h1>
+    <table id="table">
+        <tr>
+            <td>Naam</td>
+            <td>{{ venue.name }}</td>
+        </tr>
+        <tr>
+            <td>Adres</td>
+            <td>{{ venue.adress }}</td>
+        </tr>
+        <tr>
+            <td>Beschrijving</td>
+            <td>{{ venue.description }}</td>
+        </tr>
+
+    </table>
+
+    {% if venue.events is not empty %}
+        <table>
+            <tr>
+                <td>Events</td>
+            </tr>
+            {% for event in venue.events %}
+                <tr>
+                    <td>{{ venue.getName() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

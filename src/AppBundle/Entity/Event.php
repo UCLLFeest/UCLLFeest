@@ -93,6 +93,12 @@ class Event
     private $tickets;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Venue",inversedBy="events")
+     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id")
+     */
+    private $venue;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -380,5 +386,28 @@ class Event
     public function getTickets()
     {
         return $this->tickets;
+    }
+
+    /**
+     * Set venue
+     *
+     * @param \AppBundle\Entity\Venue $venue
+     * @return Event
+     */
+    public function setVenue(\AppBundle\Entity\Venue $venue = null)
+    {
+        $this->venue = $venue;
+
+        return $this;
+    }
+
+    /**
+     * Get venue
+     *
+     * @return \AppBundle\Entity\Venue 
+     */
+    public function getVenue()
+    {
+        return $this->venue;
     }
 }

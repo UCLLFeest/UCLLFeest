@@ -37,7 +37,7 @@ class TicketController extends Controller
 
     public function register_ticket(Request $request, $id)
     {
-        $ticket = new Ticket();
+        /*$ticket = new Ticket();
 
         $em = $this->getDoctrine()->getManager();
 
@@ -62,7 +62,7 @@ class TicketController extends Controller
         }
 
 
-        return $this->redirectToRoute('show_tickets');
+        return $this->redirectToRoute('show_tickets');*/
 
     }
 }

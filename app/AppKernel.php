@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
             new Payum\Bundle\PayumBundle\PayumBundle(),
+            new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

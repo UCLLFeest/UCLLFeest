@@ -26,7 +26,8 @@
         "payum/paypal-express-checkout-nvp": "^1.2",
         "payum/offline": "^1.2",
         "payum/payum-bundle": "^1.2",
-        "payum/payum": "^1.2"
+        "payum/payum": "^1.2",
+        "endroid/qrcode-bundle": "^1.6"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

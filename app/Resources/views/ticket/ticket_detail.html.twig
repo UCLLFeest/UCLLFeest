@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Ticket Detail
+{% endblock %}
+
+{% block body %}
+    <h1>Ticket overview</h1>
+    <table id="table">
+        <tr>
+            <td>Ticket</td>
+            <td>{{ ticket.event.name }}</td>
+        </tr>
+        <tr>
+            <td>Adres</td>
+            <td>{{ ticket.event.date | date('yy-mm-dd') }}</td>
+        </tr>
+        <tr>
+            <td>Claimed</td>
+            <td>{{ ticket.claimed ? 'Claimed':'Not Claimed' }}</td>
+        </tr>
+
+    </table>
+
+    <img src="{{ qrcode_url(url('ticket_detail', {'id': ticket.id}) , extension='png') }}" />
+
+{% endblock %}

@@ -32,6 +32,24 @@ class TicketController extends Controller
     }
 
     /**
+     * @Route("/ticket/{id}", name="ticket_detail")
+     */
+
+    public function ticketDetail($id)
+    {
+        $em =$this->getDoctrine()->getManager();
+        $ticket = $em->getRepository('AppBundle:Ticket')->find($id);
+
+        if(!$ticket)
+        {
+            $this->addFlash('notice', "Couldn't find the Ticket");
+            return $this->redirectToRoute('show_tickets');
+        }
+
+        return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
+    }
+
+    /**
      * @Route("/tickets/buy/{id}", name="register_ticket")
      */
 

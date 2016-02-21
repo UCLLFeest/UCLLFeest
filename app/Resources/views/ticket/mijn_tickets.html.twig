@@ -17,9 +17,9 @@
         </tr>
         {% for ticket in tickets %}
             <tr>
-                <td>{{ ticket.event.name()}}</td>
-                <td>{{ ticket.date() | date('Y-m-d') }}</td>
-                <td>{{ ticket.claimed() ? 'Claimed':'Not Claimed' }}</td>
+                <td><a href="{{ path('ticket_detail',{'id':ticket.getId()}) }}">{{ ticket.event.name }}</td>
+                <td>{{ ticket.date | date('Y-m-d') }}</td>
+                <td>{{ ticket.claimed ? 'Claimed':'Not Claimed' }}</td>
             </tr>
         {% endfor %}
     </table>

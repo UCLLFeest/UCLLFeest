@@ -21,6 +21,10 @@
         <td>{{ event.name }}</td>
     </tr>
     <tr>
+        <td>Managers</td>
+        <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
+    </tr>
+    <tr>
         <td>Adres</td>
         <td>{{ event.adress }}</td>
     </tr>
@@ -48,7 +52,7 @@
 </table>
 
 {% if app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
-    <a href="{{ path('register_ticket',{'id': event.id}) }}">Koop ticket</a>
+    <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
 {% endif %}
 
     {% if event.tickets is not empty %}

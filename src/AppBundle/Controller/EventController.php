@@ -169,12 +169,18 @@ class EventController extends Controller
             return $this->redirectToRoute('show_all_events');
         }
 
-        $hasTicketAlready = true;
-        if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
-            $hasTicketAlready = false;
+        if ($this->getUser()) {
+            $hasTicketAlready = true;
+            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
+                $hasTicketAlready = false;
+            }
+
+            return $this->render('event/event_detail.html.twig', array('event' => $event, 'user' => $this->getUser(), 'hasTicketAlready' => $hasTicketAlready));
+        } else {
+            return $this->render('event/event_detail.html.twig', array('event' => $event));
         }
 
-        return $this->render('event/event_detail.html.twig', array('event' => $event, 'user' => $this->getUser(), 'hasTicketAlready' => $hasTicketAlready));
+
     }
 
 

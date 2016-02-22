@@ -24,12 +24,15 @@ class EventController extends Controller
      */
     public function showEvents()
     {
-        //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
+        //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $event = $em->getRepository('AppBundle:Event')->findByCreator($user);
+        $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
 
-        return $this->render('event/gebruiker_event_overview.html.twig',array('events'=>$event, 'user'=>$user));
+        //managed events
+        $managing = $user->getManaging();
+
+        return $this->render('event/gebruiker_event_overview.html.twig',array('events'=>$events, 'managing'=>$managing, 'user'=>$user));
     }
 
     /**
@@ -54,6 +57,12 @@ class EventController extends Controller
 
         if (!$event) {
             $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_events');
+        }
+
+        //creator GEEN MANAGERS
+        if ($event->getCreator() != $this->getUser()) {
+            $this->addFlash('notice', "You're not allowed to access this page");
             return $this->redirectToRoute('show_events');
         }
 
@@ -97,7 +106,7 @@ class EventController extends Controller
             }
             else
                 $event->setFoto(null);
-            $user->addEvent($event);
+            $user->addEvent($event); //MOET DIT DAN??????
             $event->setCreator($user);
 
 
@@ -106,8 +115,8 @@ class EventController extends Controller
 
 
             //idk of dit moet (Dries & Sven denken van wel)
-            $em->persist($user);
-            $em->flush();
+            /*$em->persist($user);
+            $em->flush();*/
 
             //return $this->showEvents();
             return $this->redirectToRoute('show_events');
@@ -127,7 +136,6 @@ class EventController extends Controller
     //met venue
     public function addEventFromVenue(Request $request, $venue_id)
     {
-
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
 
@@ -146,7 +154,7 @@ class EventController extends Controller
             else
                 $event->setFoto(null);
 
-            $user->addEvent($event);
+            $user->addEvent($event); //MOET IDT DAN???????????
             $event->setCreator($user);
 
             $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
@@ -188,24 +196,28 @@ class EventController extends Controller
             return $this->redirectToRoute('show_events');
         }
 
-        $form = $this->createForm(EventType::class,$event);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null)
-            {
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+        if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
+            $form = $this->createForm(EventType::class,$event);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $foto = $event->getFoto();
+                if($foto->getFile() !== null)
+                {
+                    $em->persist($foto);
+                }
+                else
+                    $event->setFoto(null);
 
-            $em->flush();
-           // return $this->showEvents();
+                $em->flush();
+                // return $this->showEvents();
+                return $this->redirectToRoute('show_events');
+            }
+
+            return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
             return $this->redirectToRoute('show_events');
         }
-
-
-        return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
     }
 
     /**

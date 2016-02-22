@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *@ORM\Entity
+ *@ORM\Entity(repositoryClass="AppBundle\Entity\EventRepository")
  *@ORM\Table(name="app_events")
  */
 class Event
@@ -94,7 +95,7 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="Venue",inversedBy="events")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
     private $venue;
 
@@ -210,7 +211,7 @@ class Event
 
     public function getFullAdress()
     {
-        return $this->getAdress() . "," . $this->getPostalCode() . " " . $this->getCity();
+        return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
     }
 
     /**

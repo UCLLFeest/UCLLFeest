@@ -195,7 +195,7 @@ class Venue
 
     public function getFullAdress()
     {
-        return $this->getAdress() . "," . $this->getPostalCode() . " " . $this->getCity();
+        return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
     }
 
     /**

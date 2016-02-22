@@ -40,47 +40,22 @@ class TicketController extends Controller
         $em =$this->getDoctrine()->getManager();
         $ticket = $em->getRepository('AppBundle:Ticket')->find($id);
 
+
+
         if(!$ticket)
         {
             $this->addFlash('notice', "Couldn't find the Ticket");
             return $this->redirectToRoute('show_tickets');
         }
 
+        //check ipv creator manager
+        if ($ticket->getEvent()->getCreator() == $this->getUser()) {
+            $ticket->setClaimed(true);
+            $em->persist($ticket);
+            $em->flush();
+        }
+
         return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
     }
 
-    /**
-     * @Route("/tickets/buy/{id}", name="register_ticket")
-     */
-
-    public function register_ticket(Request $request, $id)
-    {
-        /*$ticket = new Ticket();
-
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getUser();
-
-        $user->addTicket($ticket);
-        $ticket->setOwner($user);
-
-        $event = $em->getRepository('AppBundle:Event')->find($id);
-
-        $ticket->setEvent($event);
-
-        if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
-            //moet user ook niet gepersist worden?
-            $em->persist($ticket);
-            $em->flush();
-
-            $em->persist($user);
-            $em->flush();
-
-            //return $this->showTickets();
-        }
-
-
-        return $this->redirectToRoute('show_tickets');*/
-
-    }
 }

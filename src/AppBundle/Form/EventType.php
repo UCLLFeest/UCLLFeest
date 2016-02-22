@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use AppBundle\Form\FotoType;
 
 class EventType extends AbstractType
@@ -29,7 +30,7 @@ class EventType extends AbstractType
             ->add('postalCode', IntegerType::class)
             ->add('price', MoneyType::class)
             ->add('date', DateTimeType::class)
-            ->add('description', TextType::class, array( "required" => false ))
+            ->add('description', TextareaType::class, array( "required" => false ))
             ->add('capacity', IntegerType::class)
             ->add('foto', FotoType::class)
             ->add('save', SubmitType::class);

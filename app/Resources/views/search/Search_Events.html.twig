@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Search Result
+{% endblock %}
+
+{% block body %}
+    <h1>Result</h1>
+
+
+    <table>
+        <tr>
+            <td>Naam</td>
+            <td>Adres</td>
+            <td>Inkom Prijs</td>
+            <td>Start</td>
+        </tr>
+        {% for event in events %}
+            <tr>
+                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                <td>{{ event.getFullAdress()}}</td>
+                <td>{{ event.getPrice()}}</td>
+                <td>{{ event.getDate() | date('Y-m-d') }}</td>
+                <td>{{ event.getDate() | date('H:i') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

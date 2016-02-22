@@ -46,4 +46,7 @@ security:
         - { path: ^/order, roles: ROLE_USER }
         #Allow access to done (order)
         - { path: ^/done, roles: ROLE_USER }
+        #Allow access to done (order)
+        - { path: ^/tickets, roles: ROLE_USER }
+        
     

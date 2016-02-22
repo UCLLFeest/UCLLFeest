@@ -64,47 +64,45 @@ class AdminController extends Controller
 
         $user = $repo->find($id);
 
-        if($user !==  null)
-        {
-			$addRole = array();
+        if($user ===  null)
+		{
+			$this->addFlash('notice', "The user with id $id does not exist");
 
-			$form = $this->createFormBuilder($addRole)
-				->add('role', TextType::class)
-				->getForm();
+			return $this->redirectToRoute("/admin/overview");
+		}
 
-			$form->handleRequest($request);
+		$addRole = array();
 
-			if ($form->isSubmitted() && $form->isValid())
+		$form = $this->createFormBuilder($addRole)
+			->add('role', TextType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid())
+		{
+			$addRole = $form->getData();
+
+			$role = $addRole['role'];
+
+			if (!$user->hasRole($role))
 			{
-				$addRole = $form->getData();
+				$this->addFlash('notice', "Role $role added");
+				$user->addRole($role);
 
-				$role = $addRole['role'];
-
-				if (!$user->hasRole($role))
-				{
-					$this->addFlash('notice', "Role $role added");
-					$user->addRole($role);
-
-					$em->persist($user);
-					$em->flush();
-				}
-				else
-					$this->addFlash('notice', "The user already has the role $role");
-
-				return $this->redirectToRoute("adminview", array("id" => $id));
+				$em->persist($user);
+				$em->flush();
 			}
+			else
+				$this->addFlash('notice', "The user already has the role $role");
 
-			return $this->render('admin/addrole.html.twig',
-				array(
-					'form' => $form->createView()
-			));
-        }
-        else
-        {
-            $this->addFlash('notice', "The user with id $id does not exist");
+			return $this->redirectToRoute("adminview", array("id" => $id));
+		}
 
-            return $this->redirectToRoute("/admin/overview");
-        }
+		return $this->render('admin/addrole.html.twig',
+			array(
+				'form' => $form->createView()
+		));
     }
 
     /**
@@ -119,31 +117,105 @@ class AdminController extends Controller
 
         $user = $repo->find($id);
 
-        if($user !==  null)
-        {
-            if($role !== User::ROLE_DEFAULT)
-            {
-                if($user->hasRole($role))
-                {
-                    $this->addFlash('notice', "Role $role removed");
-                    $user->removeRole($role);
+        if($user ===  null)
+		{
+			$this->addFlash('notice', "The user with id $id does not exist");
 
-                    $em->persist($user);
-                    $em->flush();
-                }
-                else
-                    $this->addFlash('notice', "The user has no role $role");
-            }
-            else
-                $this->addFlash('notice', User::ROLE_DEFAULT . "cannot be removed");
+			return $this->redirectToRoute("/admin/overview");
+		}
 
-            return $this->redirectToRoute("adminview", array("id" => $id));
-        }
-        else
-        {
-            $this->addFlash('notice', "The user with id $id does not exist");
+		if($role !== User::ROLE_DEFAULT)
+		{
+			if($user->hasRole($role))
+			{
+				$this->addFlash('notice', "Role $role removed");
+				$user->removeRole($role);
 
-            return $this->redirectToRoute("/admin/overview");
-        }
+				$em->persist($user);
+				$em->flush();
+			}
+			else
+				$this->addFlash('notice', "The user has no role $role");
+		}
+		else
+			$this->addFlash('notice', "Role $role cannot be removed");
+
+		return $this->redirectToRoute("adminview", array("id" => $id));
     }
+
+	/**
+	 * @Route("/admin/changerole/{id}/{role}", name="adminchangerole")
+	 * @param Request $request
+	 * @param integer $id
+	 * @param string $role
+	 */
+	public function changeRole(Request $request, $id, $role)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$repo = $em->getRepository('AppBundle:User');
+
+		$user = $repo->find($id);
+
+		if($user ===  null)
+		{
+			$this->addFlash('notice', "The user with id $id does not exist");
+
+			return $this->redirectToRoute("/admin/overview");
+		}
+
+		if($role === User::ROLE_DEFAULT)
+		{
+			$this->addFlash('notice', "Role $role cannot be changed");
+
+			return $this->redirectToRoute("adminview", array("id" => $id));
+		}
+		else if (!$user->hasRole($role))
+		{
+			$this->addFlash('notice', "The user does not have role $role");
+
+			return $this->redirectToRoute("adminview", array("id" => $id));
+		}
+
+		$changeRole = array(
+			'role' => $role
+		);
+
+		$form = $this->createFormBuilder($changeRole)
+			->add('role', TextType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid())
+		{
+			$changeRole = $form->getData();
+
+			$newRole = $changeRole['role'];
+
+			if ($newRole !== User::ROLE_DEFAULT)
+			{
+				if (!$user->hasRole($newRole))
+				{
+					$this->addFlash('notice', "Changed $role to $newRole");
+					$user->removeRole($role);
+					$user->addRole($newRole);
+
+					$em->persist($user);
+					$em->flush();
+
+					return $this->redirectToRoute("adminview", array("id" => $id));
+				}
+				else
+					$this->addFlash('notice', "The user already has role $newRole");
+			}
+			else
+				$this->addFlash('notice', "Cannot change $role to $newRole");
+		}
+
+		return $this->render("admin/changerole.html.twig",
+			array(
+				"form" => $form->createView(),
+				"role" => $role
+			));
+	}
 }

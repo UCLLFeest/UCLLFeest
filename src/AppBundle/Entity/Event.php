@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *@ORM\Entity
+ *@ORM\Entity(repositoryClass="AppBundle\Entity\EventRepository")
  *@ORM\Table(name="app_events")
  */
 class Event

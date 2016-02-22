@@ -48,6 +48,12 @@ class User extends BaseUser
     private $birthday;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Event", inversedBy="managers", indexBy="id")
+     * @ORM\JoinTable(name="app_managers")
+     */
+    private $managing;
+
+    /**
      * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
      */
     private $events;
@@ -246,5 +252,39 @@ class User extends BaseUser
     public function getTickets()
     {
         return $this->tickets;
+    }
+
+    /**
+     * Add managing
+     *
+     * @param \AppBundle\Entity\Event $managing
+     *
+     * @return User
+     */
+    public function addManaging(\AppBundle\Entity\Event $managing)
+    {
+        $this->managing[] = $managing;
+
+        return $this;
+    }
+
+    /**
+     * Remove managing
+     *
+     * @param \AppBundle\Entity\Event $managing
+     */
+    public function removeManaging(\AppBundle\Entity\Event $managing)
+    {
+        $this->managing->removeElement($managing);
+    }
+
+    /**
+     * Get managing
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getManaging()
+    {
+        return $this->managing;
     }
 }

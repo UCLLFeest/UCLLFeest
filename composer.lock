@@ -1636,16 +1636,16 @@
         },
         {
             "name": "payum/payum",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Payum/Payum.git",
-                "reference": "e3308fa183b439198b1ea26705b536fd207a82ce"
+                "reference": "46df17e470ac52dbae1019ff1e7e39cdb8b06e96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Payum/Payum/zipball/e3308fa183b439198b1ea26705b536fd207a82ce",
-                "reference": "e3308fa183b439198b1ea26705b536fd207a82ce",
+                "url": "https://api.github.com/repos/Payum/Payum/zipball/46df17e470ac52dbae1019ff1e7e39cdb8b06e96",
+                "reference": "46df17e470ac52dbae1019ff1e7e39cdb8b06e96",
                 "shasum": ""
             },
             "require": {
@@ -1683,6 +1683,7 @@
                 "phpunit/phpunit": "~4.0",
                 "propel/propel1": "~1.7",
                 "psr/log": "~1.0",
+                "sofort/sofortlib-php": "^3.0",
                 "stripe/stripe-php": "~2.0|~3.0",
                 "symfony/dependency-injection": "~2.8|~3.0",
                 "symfony/form": "~2.8|~3.0",
@@ -1704,6 +1705,7 @@
                 "paypal/rest-api-sdk-php": "0.5.* If you want to use PayPal REST API install paypal/rest-api-sdk-php:0.5.* library",
                 "propel/propel": "If you want to store models to Propel2 ORM",
                 "propel/propel1": "~1.7 If you want to store models to Propel1 ORM",
+                "sofort/sofortlib-php": "~3.0 If you want to use Sofort install sofort/sofortlib-php:^3.0 library",
                 "stripe/stripe-php": "~2.0|~3.0 If you want to use Stripe install stripe/stripe-php:~2.0|~3.0 library",
                 "symfony/dependency-injection": "~2.8|~3.0 If you want to use container aware stuff",
                 "symfony/form": "~2.8|~3.0 If you want to use forms",
@@ -1761,7 +1763,7 @@
                 "stripe checkout",
                 "stripe.js"
             ],
-            "time": "2016-02-12 18:06:49"
+            "time": "2016-02-22 12:44:25"
         },
         {
             "name": "payum/payum-bundle",

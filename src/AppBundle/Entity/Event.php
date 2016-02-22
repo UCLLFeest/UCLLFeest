@@ -82,6 +82,11 @@ class Event
     private $creator;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="managing")
+     */
+    private $managers;
+
+    /**
      * @ORM\OneToOne(targetEntity="Foto", mappedBy="event")
      * @ORM\JoinColumn(name="foto_id", referencedColumnName="id", nullable=true)
      */
@@ -410,5 +415,40 @@ class Event
     public function getVenue()
     {
         return $this->venue;
+    }
+
+
+    /**
+     * Add manager
+     *
+     * @param \AppBundle\Entity\User $manager
+     *
+     * @return Event
+     */
+    public function addManager(\AppBundle\Entity\User $manager)
+    {
+        $this->managers[] = $manager;
+
+        return $this;
+    }
+
+    /**
+     * Remove manager
+     *
+     * @param \AppBundle\Entity\User $manager
+     */
+    public function removeManager(\AppBundle\Entity\User $manager)
+    {
+        $this->managers->removeElement($manager);
+    }
+
+    /**
+     * Get managers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getManagers()
+    {
+        return $this->managers;
     }
 }

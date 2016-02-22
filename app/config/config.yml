@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator: ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -45,6 +45,7 @@ twig:
 
     form_themes:
             # other form themes
+            - 'bootstrap_3_horizontal_layout.html.twig'
             - 'VichUploaderBundle:Form:fields.html.twig'
 
 # Doctrine Configuration
@@ -82,7 +83,16 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
-        
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+
+    registration:
+        form:
+            type: AppBundle\Form\RegisterUserType
+
 #Vich configuration 
 vich_uploader:
     db_driver: orm

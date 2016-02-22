@@ -3,10 +3,10 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * @ORM\Table(name="app_users")
@@ -14,49 +14,14 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User implements UserInterface, \Serializable
+class User extends BaseUser
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank()
-     */
-    private $username;
-
-    /**
-     * @ORM\Column(type="string", length=64)
-     */
-    private $password;
-
-    /**
-     * @Assert\NotBlank(groups={"registration", "editpassword"})
-     * @Assert\Length(max=4096)
-     * Is not mapped to the database!
-     */
-    private $plainPassword;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles;
-
-    /**
-     * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -94,100 +59,14 @@ class User implements UserInterface, \Serializable
 
     public function __construct()
     {
-        $this->isActive = true;
-
-        $this->roles = new ArrayCollection();
-
-        $this->roles->add('ROLE_USER');
+        parent::__construct();
 
         $this->events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
     }
 
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function getSalt()
-    {
-        return null;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword($password)
-    {
-        $this->plainPassword = $password;
-    }
-
-    public function getRoles()
-    {
-        return $this->roles->toArray();
-    }
-
-    public function setRoles(ArrayCollection $roles)
-    {
-        $this->roles = $roles;
-    }
-
-    public function addRole($role)
-    {
-        $this->roles[] = $role;
-
-        return $this;
-    }
-
-    public function removeRole($role)
-    {
-        $key = $this->roles->indexOf($role);
-
-        if($key !== false)
-        {
-            $this->roles->remove($key);
-        }
-
-        return $this;
-    }
-
-    public function hasRole($role)
-    {
-        return $this->roles->contains($role);
-    }
-
     public function eraseCredentials()
     {
-    }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-        ));
-    }
-
-    /**
-     * @see \Serializable::unserialize()
-     * @param string $serialized Serialized version of this class
-     */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-            ) = unserialize($serialized);
     }
 
     /**
@@ -198,78 +77,6 @@ class User implements UserInterface, \Serializable
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     * @return User
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean 
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
     }
 
     /**

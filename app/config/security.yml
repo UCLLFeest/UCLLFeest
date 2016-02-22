@@ -2,15 +2,15 @@
 # http://symfony.com/doc/current/book/security.html
 security:
     encoders:
-        AppBundle\Entity\User:
-            algorithm: bcrypt
+        FOS\UserBundle\Model\UserInterface: bcrypt
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
     providers:
-        feest_db_provider:
-            entity:
-                class: AppBundle\Entity\User
-                property: username
+        fos_userbundle:
+            id: fos_user.user_provider.username
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -20,33 +20,20 @@ security:
 
         main:
             pattern: ^/
-            anonymous: ~
-            # activate different ways to authenticate
 
             http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
-            provider: feest_db_provider
 
             form_login:
-                login_path: /account/login
-                check_path: /account/login
-                username_parameter: form[username]
-                password_parameter: form[password]
+                provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-
-            logout:
-                path:   /logout
-                target: /
+            logout:       true
+            anonymous:    true
 
     access_control:
-        #Allow users to register
-        - { path: ^/account/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        #Allow users to log in
-        - { path: ^/account/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
         #Disallow access to all other account pages
         - { path: ^/account, roles: ROLE_USER }
         #Allow users to view all events 
@@ -59,6 +46,4 @@ security:
         - { path: ^/order, roles: ROLE_USER }
         #Allow access to done (order)
         - { path: ^/done, roles: ROLE_USER }
-
-        
     

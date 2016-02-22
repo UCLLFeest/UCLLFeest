@@ -1,38 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'account/accountinfo.html.twig' %}
 
-{%  block title %}
-    Account for {{ user.username }}
-{% endblock %}
-
-{% block body %}
-    <h1>Profile: {{ user.username }}</h1>
-
-    <table>
-        <tr>
-            <td>Email address: </td>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <td>First name: </td>
-            <td>{{ user.firstname }}</td>
-        </tr>
-        <tr>
-            <td>Last name: </td>
-            <td>{{ user.lastname }}</td>
-        </tr>
-        <tr>
-            <td>Gender: </td>
-            <td>{{ genderToString(user.gender) }}</td>
-        </tr>
-        <tr>
-            <td>Birthday: </td>
-            <td>{{ user.birthday|date('Y-m-d') }}</td>
-        </tr>
-    </table>
+{% block accountblock %}
 
     {% if user == app.user %}
-        <a href="/account/editprofile">Edit Profile</a>
-        <a href="/account/editpassword">Edit Password</a>
+        <p><a href="/account/editprofile">Edit Profile</a></p>
+        <p><a href="/account/editpassword">Edit Password</a></p>
     {% endif %}
 
 {% endblock %}

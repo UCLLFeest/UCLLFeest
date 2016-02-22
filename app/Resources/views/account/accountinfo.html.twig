@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{%  block title %}
+    Account for {{ user.username }}
+{% endblock %}
+
+{% block body %}
+    <h1>Profile: {{ user.username }}</h1>
+
+    <table>
+        <tr>
+            <td>Email address: </td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <td>First name: </td>
+            <td>{{ user.firstname }}</td>
+        </tr>
+        <tr>
+            <td>Last name: </td>
+            <td>{{ user.lastname }}</td>
+        </tr>
+        <tr>
+            <td>Gender: </td>
+            <td>{{ genderToString(user.gender) }}</td>
+        </tr>
+        <tr>
+            <td>Birthday: </td>
+            <td>{{ user.birthday|date('Y-m-d') }}</td>
+        </tr>
+    </table>
+
+    {% block accountblock %}
+    {% endblock %}
+
+{% endblock %}

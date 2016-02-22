@@ -1,0 +1,35 @@
+{% extends 'account/accountinfo.html.twig' %}
+
+{% block accountblock %}
+
+    <!-- TODO: open target user's settings -->
+    <p><a href="/account/editprofile">Edit Profile</a></p>
+    <p><a href="/account/editpassword">Edit Password</a></p>
+
+    <p>Roles:</p>
+
+    {% if user.roles is not empty %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+            {% for role in user.roles %}
+                <tr>
+                    <td>{{ role }}</td>
+                    <td>
+                        {% if role != constant("AppBundle\\Entity\\User::ROLE_DEFAULT") %}
+                            <a href="/admin/changerole/{{ user.id }}/{{ role }}">Change Role</a>
+                            <a href="/admin/removerole/{{ user.id }}/{{ role }}">Remove Role</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No roles defined for this user.</p>
+    {% endif %}
+
+    <a href="/admin/addrole/{{ user.id }}">Add Role</a>
+
+{% endblock %}

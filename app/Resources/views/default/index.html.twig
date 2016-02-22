@@ -12,4 +12,23 @@
     {%  else %}
         <p>Welkom. <a href="/login">Log in</a> of <a href="/register">Registreer</a></p>
     {% endif %}
+
+    <h2>Events bij u in de buurt</h2>
+    <table>
+        <tr>
+            <td>Naam</td>
+            <td>Adres</td>
+            <td>Inkom Prijs</td>
+            <td>Start</td>
+        </tr>
+        {% for event in events %}
+            <tr>
+                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                <td>{{ event.getFullAdress()}}</td>
+                <td>{{ event.getPrice()}}</td>
+                <td>{{ event.getDate() | date('Y-m-d') }}</td>
+                <td>{{ event.getDate() | date('H:i') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

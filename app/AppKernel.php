@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Payum\Bundle\PayumBundle\PayumBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new Bazinga\Bundle\GeocoderBundle\BazingaGeocoderBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

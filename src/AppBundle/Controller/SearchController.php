@@ -22,16 +22,13 @@ class SearchController extends Controller
     /**
      * @Route("/search", name="searchName")
      */
-    public function searchEventsOnName(Request$request)
+    public function searchEventsOnName(Request $request)
     {
         $search = new SearchEvents();
         $events = array();
 
-            $em = $this->getDoctrine()->getManager();
-            printf($request->query->get('Search'));
-            $events = $em->getRepository('AppBundle:Event')->findEventByName($request->query->get('Search'));
+        $em = $this->getDoctrine()->getManager();
+        $events = $em->getRepository('AppBundle:Event')->findEventByName($request->query->get('Search'));
         return $this->render('search/Search_Events.html.twig', array('events' => $events));
-
     }
-
 }

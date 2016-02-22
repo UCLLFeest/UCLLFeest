@@ -76,6 +76,16 @@ class Event
     private $capacity;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $latitude;
+
+    /**
+     * @ORM\Column(type="string",nullable=true)
+     */
+    private $longitude;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User",inversedBy="events")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
@@ -415,6 +425,54 @@ class Event
     public function getVenue()
     {
         return $this->venue;
+    }
+
+    /**
+     * Set latitude
+     *
+     * @param string $latitude
+     *
+     * @return Event
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * Get latitude
+     *
+     * @return string
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set longitude
+     *
+     * @param string $longitude
+     *
+     * @return Event
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    /**
+     * Get longitude
+     *
+     * @return string
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
     }
 
 

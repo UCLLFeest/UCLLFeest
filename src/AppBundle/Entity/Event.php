@@ -210,7 +210,7 @@ class Event
 
     public function getFullAdress()
     {
-        return $this->getAdress() . "," . $this->getPostalCode() . " " . $this->getCity();
+        return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
     }
 
     /**

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Managers
+{% endblock %}
+
+{% block body %}
+    <h1>Managers voor {{event.name}}</h1>
+    <table id="table">
+        <tr>
+            <td>Naam</td>
+            <td>Delete</td>
+        </tr>
+        {% for manager in event.managers %}
+            <tr>
+                <td>{{ manager.username }}</td>
+                <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p> <a href="{{ path('add_manager',{'event_id': event.getId()} ) }}">Voeg manager toe</a> </p>
+{% endblock %}

@@ -16,6 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class VenueType extends AbstractType
 {
@@ -26,7 +27,7 @@ class VenueType extends AbstractType
             ->add('adress', TextType::class)
             ->add('city', TextType::class)
             ->add('postalCode', IntegerType::class)
-            ->add('description', TextType::class, array( "required" => false ))
+            ->add('description', TextareaType::class, array( "required" => false ))
             ->add('save', SubmitType::class);
     }
 

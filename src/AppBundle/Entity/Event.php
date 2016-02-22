@@ -94,7 +94,7 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="Venue",inversedBy="events")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
     private $venue;
 

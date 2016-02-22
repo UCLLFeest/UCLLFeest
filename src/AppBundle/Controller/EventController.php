@@ -70,6 +70,7 @@ class EventController extends Controller
      * @Route("/events/Add_Event", name="add_event")
      */
 
+    //zonder venue
     public function addEvent(Request $request)
     {
         //Er wordt een form gemaakt in de vorm van EventType.
@@ -117,6 +118,58 @@ class EventController extends Controller
         return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
         //return $this->redirectToRoute('show_tickets');
     }
+
+
+    /**
+     * @Route("/events/add/{venue_id}", name="add_event_from_venue")
+     */
+
+    //met venue
+    public function addEventFromVenue(Request $request, $venue_id)
+    {
+
+        $event = new Event();
+        $form = $this->createForm(EventType::class, $event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+            $foto = $event->getFoto();
+            if($foto->getFile() !== null) {
+                $foto->setName($event->getName());
+                $em->persist($foto);
+            }
+            else
+                $event->setFoto(null);
+
+            $user->addEvent($event);
+            $event->setCreator($user);
+
+            $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
+            $event->setVenue($venue);
+
+
+            $em->persist($event);
+            $em->flush();
+
+            //idk of dit moet (Dries & Sven denken van wel)
+            /*$em->persist($user);
+            $em->flush();*/ //TOCH NIET WANT USER HOUD EVENTS NIET BIJ
+
+            //return $this->showEvents();
+            return $this->redirectToRoute('show_events');
+        }
+
+        // De form wordt getoont
+
+        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
+        //return $this->redirectToRoute('show_tickets');
+    }
+
 
     /**
      * @Route("events/update_event/{id}", name="update_event")

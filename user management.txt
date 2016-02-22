@@ -1,0 +1,4 @@
+Voor een user admin te maken:
+php app/console fos:user:promote <name> ROLE_ADMIN
+Voor een user super admin te maken:
+php app/console fos:user:promote <name> --super

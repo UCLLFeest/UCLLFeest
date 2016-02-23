@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use AppBundle\Form\FotoType;
 
@@ -28,11 +29,12 @@ class EventType extends AbstractType
             ->add('adress', TextType::class)
             ->add('city', TextType::class)
             ->add('postalCode', IntegerType::class)
-            ->add('price', MoneyType::class)
-            ->add('date', DateTimeType::class)
-            ->add('description', TextareaType::class, array( "required" => false ))
-            ->add('capacity', IntegerType::class)
+            ->add('price', MoneyType::class, array('required' => false))
+            ->add('date', DateTimeType::class/*, array('attr' => array('style' => 'select margin-right:10px'))*/)
+            ->add('description', TextareaType::class, array( 'required' => false, 'attr' => array('rows' => '10') ))
+            ->add('capacity', IntegerType::class, array('required' => false))
             ->add('foto', FotoType::class)
+            ->add('selling', CheckboxType::class, array('required' => false, 'label' => 'Selling Tickets?'))
             ->add('save', SubmitType::class);
     }
 

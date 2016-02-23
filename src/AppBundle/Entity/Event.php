@@ -53,11 +53,7 @@ class Event
      */
     private $postalCode;
 
-    /**
-     * @ORM\Column(type="decimal",scale=2)
-     * @Assert\NotBlank
-     */
-    private $price;
+
 
     /**
      * @ORM\Column(type="datetime")
@@ -70,10 +66,7 @@ class Event
      */
     private $description;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $capacity;
+
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -115,11 +108,27 @@ class Event
     private $venue;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $selling = false;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $capacity;
+
+    /**
+     * @ORM\Column(type="decimal",scale=2, nullable=true)
+     */
+    private $price;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->setDate(new \DateTime());
     }
 
     /**
@@ -227,6 +236,10 @@ class Event
     public function getFullAdress()
     {
         return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
+    }
+
+    public function getDateFormatted() {
+        return date_format($this->getDate(), 'd/m');
     }
 
     /**
@@ -508,5 +521,29 @@ class Event
     public function getManagers()
     {
         return $this->managers;
+    }
+
+    /**
+     * Set selling
+     *
+     * @param boolean $selling
+     *
+     * @return Event
+     */
+    public function setSelling($selling)
+    {
+        $this->selling = $selling;
+
+        return $this;
+    }
+
+    /**
+     * Get selling
+     *
+     * @return boolean
+     */
+    public function getSelling()
+    {
+        return $this->selling;
     }
 }

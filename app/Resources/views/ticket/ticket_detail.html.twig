@@ -17,6 +17,10 @@
             <td>{{ ticket.event.date | date('yy-mm-dd') }}</td>
         </tr>
         <tr>
+            <td>Naam</td>
+            <td>{{ ticket.owner.getFullName() }} ({{ticket.owner.username}})</td>
+        </tr>
+        <tr>
             <td>Claimed</td>
             <td>{{ ticket.claimed ? 'Claimed':'Not Claimed' }}</td>
         </tr>

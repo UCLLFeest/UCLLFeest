@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <td>Adres</td>
-            <td>{{ venue.adress }}</td>
+            <td>{{ venue.getFullAdress() }}</td>
         </tr>
         <tr>
             <td>Beschrijving</td>
@@ -30,7 +30,8 @@
             </tr>
             {% for event in venue.events %}
                 <tr>
-                    <td>{{ venue.getName() }}</td>
+                    <td>{{ event.getName() }}</td>
+                    <td>{{ event.getDateFormatted() }}</td>
                 </tr>
             {% endfor %}
         </table>

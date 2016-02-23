@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
+use AppBundle\Entity\Venue;
 use AppBundle\Form\EventType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -120,9 +121,8 @@ class EventController extends Controller
             $em->persist($event);
             $em->flush();
 
-
             //idk of dit moet (Dries & Sven denken van wel)
-            /*$em->persist($user);
+           /* $em->persist($user);
             $em->flush();*/
 
             //return $this->showEvents();
@@ -143,13 +143,29 @@ class EventController extends Controller
     //met venue
     public function addEventFromVenue(Request $request, $venue_id)
     {
-        $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
+        $em = $this->getDoctrine()->getManager();
+        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
 
+        if(!$venue) {
+            $this->addFlash('notice', "This venue doesn't exist");
+            return $this->redirectToRoute("add_event");
+        }
+
+        $event = new Event();
+        $event->setAdress($venue->getAdress());
+        $event->setPostalCode($venue->getPostalCode());
+        $event->setCity($venue->getCity());
+        $event->setVenue($venue);
+
+        $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
+            /*$event->setAdress($venue->getAdress());
+            $event->setPostalCode($venue->getPostalCode());
+            $event->setCity($venue->getCity());
+            $event->setVenue($venue);*/
 
             $user = $this->getUser();
             $foto = $event->getFoto();
@@ -163,8 +179,7 @@ class EventController extends Controller
             $user->addEvent($event); //MOET IDT DAN???????????
             $event->setCreator($user);
 
-            $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
-            $event->setVenue($venue);
+
 
             $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
             $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
@@ -179,7 +194,7 @@ class EventController extends Controller
 
             //idk of dit moet (Dries & Sven denken van wel)
             /*$em->persist($user);
-            $em->flush();*/ //TOCH NIET WANT USER HOUD EVENTS NIET BIJ
+            $em->flush(); */
 
             //return $this->showEvents();
             return $this->redirectToRoute('show_events');

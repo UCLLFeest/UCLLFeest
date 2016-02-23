@@ -20,38 +20,47 @@
         <td>Naam</td>
         <td>{{ event.name }}</td>
     </tr>
+
+    {% if event.managers is not empty %}
     <tr>
         <td>Managers</td>
         <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
     </tr>
+    {% endif %}
+
     <tr>
         <td>Adres</td>
         <td>{{ event.adress }}</td>
     </tr>
+
+    {% if event.price is not null %}
     <tr>
         <td>Inkom Prijs</td>
         <td>{{ event.price }}</td>
     </tr>
+    {% endif %}
+
     <tr>
         <td>Datum</td>
-        <td>{{ event.getDate() | date('Y-m-d') }}</td>
+        <td>{{ event.getDate() | date('d/m/y') }} om {{ event.getDate() | date('H:i') }}</td>
     </tr>
-    <tr>
-        <td>Uur</td>
-        <td>{{ event.getDate() | date('H:i') }}</td>
-    </tr>
+
+    {% if event.description is not null %}
     <tr>
         <td>Beschrijving</td>
         <td>{{ event.description }}</td>
     </tr>
+    {% endif %}
 
+    {% if event.capacity is not null %}
     <tr>
         <td>Capaciteit</td>
         <td>{{ event.capacity }}</td>
     </tr>
+    {% endif %}
 </table>
 
-{% if app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
+{% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
     <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
 {% endif %}
 

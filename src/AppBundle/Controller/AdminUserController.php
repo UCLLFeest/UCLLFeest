@@ -17,6 +17,7 @@ class AdminUserController extends Controller
     public function overview()
     {
         $em = $this->getDoctrine()->getManager();
+
 		/**
 		 * @var UserRepository $repo
 		 */

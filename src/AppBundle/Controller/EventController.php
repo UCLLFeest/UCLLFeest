@@ -12,6 +12,8 @@ use AppBundle\Entity\Event;
 use AppBundle\Entity\Venue;
 use AppBundle\Form\EventType;
 
+use Geocoder\Provider\GoogleMaps;
+use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,8 +98,8 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+            $curl     = new CurlHttpAdapter();
+            $geocoder = new GoogleMaps($curl);
 
           $adress =   $geocoder->geocode($event->getFullAdress());
 
@@ -181,8 +183,8 @@ class EventController extends Controller
 
 
 
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+            $curl     = new CurlHttpAdapter();
+            $geocoder = new GoogleMaps($curl);
 
             $adress =   $geocoder->geocode($event->getFullAdress());
             $event->setLatitude($adress->get(0)->getLatitude());
@@ -236,8 +238,8 @@ class EventController extends Controller
                 else
                     $event->setFoto(null);
 
-                $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-                $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+                $curl     = new CurlHttpAdapter();
+                $geocoder = new GoogleMaps($curl);
                 $adress =   $geocoder->geocode($event->getFullAdress());
                 $event->setLatitude($adress->get(0)->getLatitude());
                 $event->setLongitude($adress->get(0)->getLongitude());

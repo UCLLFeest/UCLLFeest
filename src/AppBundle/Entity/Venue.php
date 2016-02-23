@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Event;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -201,10 +202,10 @@ class Venue
     /**
      * Add events
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $events
      * @return Venue
      */
-    public function addEvent(\AppBundle\Entity\Event $events)
+    public function addEvent(Event $events)
     {
         $this->events[] = $events;
 
@@ -214,9 +215,9 @@ class Venue
     /**
      * Remove events
      *
-     * @param \AppBundle\Entity\Event $events
+     * @param Event $events
      */
-    public function removeEvent(\AppBundle\Entity\Event $events)
+    public function removeEvent(Event $events)
     {
         $this->events->removeElement($events);
     }

@@ -8,6 +8,7 @@
 
 //src/AppBundle/Entity/Event.php
 namespace AppBundle\Entity;
+use AppBundle\Entity\Venue;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -422,10 +423,10 @@ class Event
     /**
      * Set venue
      *
-     * @param \AppBundle\Entity\Venue $venue
+     * @param Venue $venue
      * @return Event
      */
-    public function setVenue(\AppBundle\Entity\Venue $venue = null)
+    public function setVenue(Venue $venue = null)
     {
         $this->venue = $venue;
 
@@ -435,7 +436,7 @@ class Event
     /**
      * Get venue
      *
-     * @return \AppBundle\Entity\Venue 
+     * @return Venue
      */
     public function getVenue()
     {

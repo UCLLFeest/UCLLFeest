@@ -41,9 +41,13 @@ class PaymentController extends Controller
             $payment->setNumber(uniqid());
             $payment->setCurrencyCode('EUR');
             $payment->setTotalAmount($event->getPrice() * 100); // 1.23 EUR
-            $payment->setDescription($id);
+            $payment->setDescription($event->getName());
             $payment->setClientId($this->getUser()->getId());
             $payment->setClientEmail($this->getUser()->getEmail());
+
+            $payment->setDetails(array(
+                'custom' => $id
+            ));
 
             $storage->update($payment);
 
@@ -78,6 +82,7 @@ class PaymentController extends Controller
         //$payment = $payum->getStorage($identity->getClass())->find($identity);
 
         // or Payum can fetch the model for you while executing a request (Preferred).
+        var_dump($status = new GetHumanStatus($token));
         $gateway->execute($status = new GetHumanStatus($token));
         //voor details te tonen (is al opgeslagen)
 
@@ -111,8 +116,10 @@ class PaymentController extends Controller
             $user->addTicket($ticket);
             $ticket->setOwner($user);
 
+            var_dump($payment->getDetails());
 
-            $event = $em->getRepository('AppBundle:Event')->find($payment->getDetails()['DESC']);
+
+            $event = $em->getRepository('AppBundle:Event')->find($payment->getDetails()['custom']);
 
             $ticket->setEvent($event);
 

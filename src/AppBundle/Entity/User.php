@@ -69,6 +69,7 @@ class User extends BaseUser
 
         $this->events = new ArrayCollection();
         $this->tickets = new ArrayCollection();
+        $this->managing = new ArrayCollection();
     }
 
     public function eraseCredentials()
@@ -261,9 +262,9 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function addManaging(\AppBundle\Entity\Event $managing)
+    public function addManaging(Event $managing)
     {
-        $this->managing[] = $managing;
+        $this->managing->add($managing);
 
         return $this;
     }
@@ -273,7 +274,7 @@ class User extends BaseUser
      *
      * @param \AppBundle\Entity\Event $managing
      */
-    public function removeManaging(\AppBundle\Entity\Event $managing)
+    public function removeManaging(Event $managing)
     {
         $this->managing->removeElement($managing);
     }

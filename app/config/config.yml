@@ -133,3 +133,7 @@ endroid_qr_code:
     background_color: { r: 255, g: 255, b: 255, a: 0 }
     label: "Feest Ticket"
     label_font_size: 16
+
+
+#geocoder configuration 
+bazinga_geocoder: ~

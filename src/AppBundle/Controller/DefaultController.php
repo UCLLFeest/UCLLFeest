@@ -14,8 +14,25 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
+
+
+        $events =  array();
+            $em = $this->getDoctrine()->getManager();
+        //TODO
+        //Hardcoded moet nog verandert worden
+            $ip =  "193.190.138.250";
+            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+            $geocoder = new \Geocoder\Provider\GeoPlugin($curl);
+            $adress =  $geocoder->geocode($ip);
+
+            $events = $em->getRepository('AppBundle:Event')->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude() );
+
+
         return $this->render(
-            'default/index.html.twig'
+            'default/index.html.twig',array('events'=>$events)
         );
+
     }
+
+
 }

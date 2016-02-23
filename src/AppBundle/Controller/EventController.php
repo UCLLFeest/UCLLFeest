@@ -95,6 +95,10 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
+            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+
+          $adress =   $geocoder->geocode($event->getFullAdress());
 
             $em = $this->getDoctrine()->getManager();
 
@@ -107,6 +111,9 @@ class EventController extends Controller
             else
                 $event->setFoto(null);
             $user->addEvent($event); //MOET DIT DAN??????
+            $event->setLatitude($adress->get(0)->getLatitude());
+            $event->setLongitude($adress->get(0)->getLongitude());
+            $user->addEvent($event);
             $event->setCreator($user);
 
 
@@ -142,7 +149,6 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
@@ -159,6 +165,13 @@ class EventController extends Controller
 
             $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
             $event->setVenue($venue);
+
+            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+
+            $adress =   $geocoder->geocode($event->getFullAdress());
+            $event->setLatitude($adress->get(0)->getLatitude());
+            $event->setLongitude($adress->get(0)->getLongitude());
 
 
             $em->persist($event);
@@ -207,6 +220,16 @@ class EventController extends Controller
                 }
                 else
                     $event->setFoto(null);
+
+                $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+                $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+                $adress =   $geocoder->geocode($event->getFullAdress());
+                $event->setLatitude($adress->get(0)->getLatitude());
+                $event->setLongitude($adress->get(0)->getLongitude());
+
+
+                $em->persist($event);
+                $em->flush();
 
                 $em->flush();
                 // return $this->showEvents();

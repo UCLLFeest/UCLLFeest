@@ -34,18 +34,17 @@ class EventRepository extends EntityRepository
             'lat' => $lat,
             'long' => $long,
         );
-        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
 
-        $query = $this->getEntityManager()->createNativeQuery("Select *, (3959 * acos(cos
-(radians($lat)) * cos(radians(latitude)) * cos(radians
-(longitude) - radians($long)) + sin(radians($lat)) * sin
-(radians(latitude)))) AS distance From app_events as j having distance < $rad order by distance desc" ,$rsm);
+            $rsm = new ResultSetMappingBuilder($this->getEntityManager());
 
-        $rsm->addRootEntityFromClassMetadata('AppBundle\Entity\Event', 'j');
+            $query = $this->getEntityManager()->createNativeQuery("Select *, (3959 * acos(cos
+            (radians(:lat)) * cos(radians(latitude)) * cos(radians
+            (longitude) - radians(:long)) + sin(radians(:lat)) * sin
+            (radians(latitude)))) AS distance From app_events as j having distance < :radius order by distance desc", $rsm)->setParameters($parameters);
 
+            $rsm->addRootEntityFromClassMetadata('AppBundle\Entity\Event', 'j');
 
-
-        return $query->getResult();
-
+            return $query->getResult();
     }
+
 }

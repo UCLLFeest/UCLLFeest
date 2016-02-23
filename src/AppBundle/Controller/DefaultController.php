@@ -18,9 +18,8 @@ class DefaultController extends Controller
 
         $events =  array();
             $em = $this->getDoctrine()->getManager();
-        //TODO
-        //Hardcoded moet nog verandert worden
-            $ip =  "193.190.138.250";
+          //  $ip =  "193.190.138.250";
+             $ip = $request->getClientIp();
             $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
             $geocoder = new \Geocoder\Provider\GeoPlugin($curl);
             $adress =  $geocoder->geocode($ip);

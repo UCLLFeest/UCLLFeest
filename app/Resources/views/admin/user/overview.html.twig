@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Admin Overview</h1>
+    <h1>Admin User Overview</h1>
 
     {% if users is not empty %}
         <table>
@@ -12,7 +12,7 @@
             {% for user in users %}
                 <tr>
                     <td>{{ user.username }}</td>
-                    <td><a href="/admin/user/view/{{ user.id }}">View Profile</a></td>
+                    <td><a href="{{ path("adminuserview", {'id': user.id}) }}">View Profile</a></td>
                 </tr>
             {% endfor %}
         </table>

@@ -3,8 +3,8 @@
 {% block accountblock %}
 
     <!-- TODO: open target user's settings -->
-    <p><a href="/account/editprofile">Edit Profile</a></p>
-    <p><a href="/account/editpassword">Edit Password</a></p>
+    <p><a href="{{ path('editprofile') }}">Edit Profile</a></p>
+    <p><a href="{{ path('editpassword') }}">Edit Password</a></p>
 
     <p>Roles:</p>
 
@@ -19,8 +19,8 @@
                     <td>{{ role }}</td>
                     <td>
                         {% if role != constant("AppBundle\\Entity\\User::ROLE_DEFAULT") %}
-                            <a href="/admin/user/changerole/{{ user.id }}/{{ role }}">Change Role</a>
-                            <a href="/admin/user/removerole/{{ user.id }}/{{ role }}">Remove Role</a>
+                            <a href="{{ path('adminuserchangerole', {'id': user.id, 'role': role}) }}">Change Role</a>
+                            <a href="{{ path('adminuserremoverole', {'id': user.id, 'role': role}) }}">Remove Role</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -30,6 +30,6 @@
         <p>No roles defined for this user.</p>
     {% endif %}
 
-    <a href="/admin/user/addrole/{{ user.id }}">Add Role</a>
+    <a href="{{ path('adminuseraddrole', { 'id': user.id}) }}">Add Role</a>
 
 {% endblock %}

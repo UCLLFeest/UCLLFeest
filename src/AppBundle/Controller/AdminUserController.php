@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,9 @@ class AdminUserController extends Controller
     public function overview()
     {
         $em = $this->getDoctrine()->getManager();
+		/**
+		 * @var UserRepository $repo
+		 */
         $repo = $em->getRepository('AppBundle:User');
 
         $users = $repo->findAll();
@@ -34,6 +38,10 @@ class AdminUserController extends Controller
     public function view($id)
     {
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var UserRepository $repo
+		 */
         $repo = $em->getRepository('AppBundle:User');
 
         $user = $repo->find($id);
@@ -62,8 +70,15 @@ class AdminUserController extends Controller
     public function addrole(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var UserRepository $repo
+		 */
         $repo = $em->getRepository('AppBundle:User');
 
+		/**
+		 * @var User $user
+		 */
         $user = $repo->find($id);
 
         if($user ===  null)
@@ -116,8 +131,15 @@ class AdminUserController extends Controller
     public function removerole($id, $role)
     {
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var UserRepository $repo
+		 */
         $repo = $em->getRepository('AppBundle:User');
 
+		/**
+		 * @var User $user
+		 */
         $user = $repo->find($id);
 
         if($user ===  null)
@@ -147,7 +169,7 @@ class AdminUserController extends Controller
     }
 
 	/**
-	 * @Route("/admin/user/changerole/{id}/{role}", name="adminchangerole")
+	 * @Route("/admin/user/changerole/{id}/{role}", name="adminuserchangerole")
 	 * @param Request $request
 	 * @param integer $id
 	 * @param string $role
@@ -155,8 +177,15 @@ class AdminUserController extends Controller
 	public function changeRole(Request $request, $id, $role)
 	{
 		$em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var UserRepository $repo
+		 */
 		$repo = $em->getRepository('AppBundle:User');
 
+		/**
+		 * @var User $user
+		 */
 		$user = $repo->find($id);
 
 		if($user ===  null)

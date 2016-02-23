@@ -2,16 +2,6 @@
 
 {% block body %}
 
-    <p>Changing role {{ role }}</p>
-    <!-- TODO: replace with list of available roles -->
-    {{ form_start(form) }}
-    {{ form_row(form.role) }}
-
-    <div class="form-group">
-        <div class="col-sm-10">
-            <button type="submit">Change</button>
-        </div>
-    </div>
-    {{ form_end(form) }}
+    {{ include('::admin/user/roleinfo.html.twig', {'headerText': 'Change Role ' ~ role, 'submitText': 'Change'}) }}
 
 {% endblock %}

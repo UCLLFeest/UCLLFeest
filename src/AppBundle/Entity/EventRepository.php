@@ -27,7 +27,7 @@ class EventRepository extends EntityRepository
 
     }
 
-    public function sortEventByLocationDistance($lat, $long)
+    public function sortEventByLocationDistance($lat, $long, $rad = 15)
     {
         $parameters = array(
             'radius' => 15,
@@ -39,7 +39,7 @@ class EventRepository extends EntityRepository
         $query = $this->getEntityManager()->createNativeQuery("Select *, (3959 * acos(cos
 (radians($lat)) * cos(radians(latitude)) * cos(radians
 (longitude) - radians($long)) + sin(radians($lat)) * sin
-(radians(latitude)))) AS distance From app_events as j having distance < 15 order by distance desc" ,$rsm);
+(radians(latitude)))) AS distance From app_events as j having distance < $rad order by distance desc" ,$rsm);
 
         $rsm->addRootEntityFromClassMetadata('AppBundle\Entity\Event', 'j');
 

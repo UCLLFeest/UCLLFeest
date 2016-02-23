@@ -25,7 +25,8 @@ class DefaultController extends Controller
             $geocoder = new \Geocoder\Provider\GeoPlugin($curl);
             $adress =  $geocoder->geocode($ip);
 
-            $events = $em->getRepository('AppBundle:Event')->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude() );
+            //ik geef hem hier efkes 50 aan om te testen
+            $events = $em->getRepository('AppBundle:Event')->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude(), 50);
 
 
         return $this->render(

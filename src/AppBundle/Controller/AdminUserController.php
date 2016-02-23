@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AdminController extends Controller
+class AdminUserController extends Controller
 {
     /**
-     * @Route("/admin/overview", name="adminoverview")
+     * @Route("/admin/user", name="adminuseroverview")
      */
     public function overview()
     {
@@ -21,15 +21,16 @@ class AdminController extends Controller
         $users = $repo->findAll();
 
         return $this->render(
-            'admin/overview.html.twig',
+            'admin/user/overview.html.twig',
             array('users' => $users)
         );
     }
 
-    /**
-     * @Route("/admin/view/{id}", name="adminview")
-     * @param integer $id
-     */
+	/**
+	 * @Route("/admin/user/view/{id}", name="adminuserview")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function view($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -39,7 +40,7 @@ class AdminController extends Controller
 
         if($user !==  null)
         {
-            return $this->render("admin/view.html.twig",
+            return $this->render("admin/user/view.html.twig",
                 array(
                     "user" => $user
             ));
@@ -48,16 +49,17 @@ class AdminController extends Controller
         {
             $this->addFlash('notice', "The user with id $id does not exist");
 
-            return $this->redirectToRoute("/admin/overview");
+            return $this->redirectToRoute("/admin/user");
         }
     }
 
-    /**
-     * @Route("/admin/addrole/{id}", name="adminaddrole")
+	/**
+	 * @Route("/admin/user/addrole/{id}", name="adminuseraddrole")
 	 * @param Request $request
-     * @param integer $id
-     */
-    public function addRole(Request $request, $id)
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+    public function addrole(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('AppBundle:User');
@@ -68,7 +70,7 @@ class AdminController extends Controller
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/overview");
+			return $this->redirectToRoute("/admin/user");
 		}
 
 		$addRole = array();
@@ -96,21 +98,22 @@ class AdminController extends Controller
 			else
 				$this->addFlash('notice', "The user already has the role $role");
 
-			return $this->redirectToRoute("adminview", array("id" => $id));
+			return $this->redirectToRoute("adminuserview", array("id" => $id));
 		}
 
-		return $this->render('admin/addrole.html.twig',
+		return $this->render('admin/user/addrole.html.twig',
 			array(
 				'form' => $form->createView()
 		));
     }
 
-    /**
-     * @Route("/admin/removerole/{id}/{role}", name="adminremoverole")
-     * @param integer $id
-     * @param string $role
-     */
-    public function removeRole($id, $role)
+	/**
+	 * @Route("/admin/user/removerole/{id}/{role}", name="adminuserremoverole")
+	 * @param integer $id
+	 * @param string $role
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+    public function removerole($id, $role)
     {
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('AppBundle:User');
@@ -121,7 +124,7 @@ class AdminController extends Controller
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/overview");
+			return $this->redirectToRoute("/admin/user");
 		}
 
 		if($role !== User::ROLE_DEFAULT)
@@ -140,11 +143,11 @@ class AdminController extends Controller
 		else
 			$this->addFlash('notice', "Role $role cannot be removed");
 
-		return $this->redirectToRoute("adminview", array("id" => $id));
+		return $this->redirectToRoute("adminuserview", array("id" => $id));
     }
 
 	/**
-	 * @Route("/admin/changerole/{id}/{role}", name="adminchangerole")
+	 * @Route("/admin/user/changerole/{id}/{role}", name="adminchangerole")
 	 * @param Request $request
 	 * @param integer $id
 	 * @param string $role
@@ -160,20 +163,20 @@ class AdminController extends Controller
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/overview");
+			return $this->redirectToRoute("/admin/user");
 		}
 
 		if($role === User::ROLE_DEFAULT)
 		{
 			$this->addFlash('notice', "Role $role cannot be changed");
 
-			return $this->redirectToRoute("adminview", array("id" => $id));
+			return $this->redirectToRoute("adminUserview", array("id" => $id));
 		}
 		else if (!$user->hasRole($role))
 		{
 			$this->addFlash('notice', "The user does not have role $role");
 
-			return $this->redirectToRoute("adminview", array("id" => $id));
+			return $this->redirectToRoute("adminUserview", array("id" => $id));
 		}
 
 		$changeRole = array(
@@ -203,7 +206,7 @@ class AdminController extends Controller
 					$em->persist($user);
 					$em->flush();
 
-					return $this->redirectToRoute("adminview", array("id" => $id));
+					return $this->redirectToRoute("adminuserview", array("id" => $id));
 				}
 				else
 					$this->addFlash('notice', "The user already has role $newRole");
@@ -212,7 +215,7 @@ class AdminController extends Controller
 				$this->addFlash('notice', "Cannot change $role to $newRole");
 		}
 
-		return $this->render("admin/changerole.html.twig",
+		return $this->render("admin/user/changerole.html.twig",
 			array(
 				"form" => $form->createView(),
 				"role" => $role

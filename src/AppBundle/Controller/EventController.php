@@ -25,14 +25,14 @@ class EventController extends Controller
     public function showEvents()
     {
         //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
-        $em =$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
 
         //managed events
         $managing = $user->getManaging();
 
-        return $this->render('event/gebruiker_event_overview.html.twig',array('events'=>$events, 'managing'=>$managing, 'user'=>$user));
+        return $this->render('event/gebruiker_event_overview.html.twig', array('events' => $events, 'managing' => $managing, 'user' => $user));
     }
 
     /**
@@ -40,9 +40,9 @@ class EventController extends Controller
      */
     public function showAllEvents()
     {
-        $em =$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->findAll();
-        return $this->render('event/event_overview.html.twig',array('events'=>$event));
+        return $this->render('event/event_overview.html.twig', array('events' => $event));
     }
 
     /**
@@ -52,7 +52,7 @@ class EventController extends Controller
     public function deleteEvent($id)
     {
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
-        $em =$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if (!$event) {
@@ -95,24 +95,14 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
 
-          $adress =   $geocoder->geocode($event->getFullAdress());
 
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+            $event = $this->setFoto($event, $em);
             $user->addEvent($event); //MOET DIT DAN??????
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
+           $event = $this->setadress($event);
             $user->addEvent($event);
             $event->setCreator($user);
 
@@ -152,26 +142,16 @@ class EventController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+            $event = $this->setFoto($event, $em);
+
 
             $user->addEvent($event); //MOET IDT DAN???????????
             $event->setCreator($user);
 
-            $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
+            $venue = $em->getRepository('AppBundle:Venue')->find($venue_id);
             $event->setVenue($venue);
 
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-            $adress =   $geocoder->geocode($event->getFullAdress());
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
+           $event = $this->setadress($event);
 
 
             $em->persist($event);
@@ -203,29 +183,19 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        if(!$event)
-        {
+        if (!$event) {
             $this->addFlash('notice', "Couldn't find the event");
             return $this->redirectToRoute('show_events');
         }
 
         if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
-            $form = $this->createForm(EventType::class,$event);
+            $form = $this->createForm(EventType::class, $event);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $foto = $event->getFoto();
-                if($foto->getFile() !== null)
-                {
-                    $em->persist($foto);
-                }
-                else
-                    $event->setFoto(null);
+                $event = $this->setFoto($event, $em);
 
-                $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-                $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-                $adress =   $geocoder->geocode($event->getFullAdress());
-                $event->setLatitude($adress->get(0)->getLatitude());
-                $event->setLongitude($adress->get(0)->getLongitude());
+
+               $event = $this->setadress($event);
 
 
                 $em->persist($event);
@@ -249,10 +219,9 @@ class EventController extends Controller
 
     public function eventDetail($id)
     {
-        $em =$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
-        if(!$event)
-        {
+        if (!$event) {
             $this->addFlash('notice', "Couldn't find the event");
             return $this->redirectToRoute('show_all_events');
         }
@@ -269,6 +238,36 @@ class EventController extends Controller
         }
 
 
+    }
+
+    private function setadress($event)
+    {
+        $curl = new \Ivory\HttpAdapter\CurlHttpAdapter();
+        $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+
+        try
+        {
+            $adress = $geocoder->geocode($event->getFullAdress());
+            $event->setLatitude($adress->get(0)->getLatitude());
+            $event->setLongitude($adress->get(0)->getLongitude());
+            return $event;
+        }catch(NoResult $e)
+        {
+            $this->addFlash('notice', "The adress could not be found");
+            $this->redirectToRoute('homepage');
+        }
+
+    }
+
+    private function setFoto($event,$em)
+    {
+        $foto = $event->getFoto();
+        if ($foto->getFile() !== null) {
+            $foto->setName($event->getName());
+            $em->persist($foto);
+        } else
+            $event->setFoto(null);
+        return $event;
     }
 
 

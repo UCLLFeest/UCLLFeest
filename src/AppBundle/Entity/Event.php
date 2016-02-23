@@ -129,6 +129,7 @@ class Event
     {
         $this->tickets = new ArrayCollection();
         $this->setDate(new \DateTime());
+        $this->managers = new ArrayCollection();
     }
 
     /**
@@ -298,6 +299,7 @@ class Event
     public function setCreator(User $creator = null)
     {
         $this->creator = $creator;
+
 
         return $this;
     }
@@ -496,9 +498,9 @@ class Event
      *
      * @return Event
      */
-    public function addManager(\AppBundle\Entity\User $manager)
+    public function addManager(User $manager)
     {
-        $this->managers[] = $manager;
+        $this->managers->add($manager);
 
         return $this;
     }
@@ -508,7 +510,7 @@ class Event
      *
      * @param \AppBundle\Entity\User $manager
      */
-    public function removeManager(\AppBundle\Entity\User $manager)
+    public function removeManager(User $manager)
     {
         $this->managers->removeElement($manager);
     }

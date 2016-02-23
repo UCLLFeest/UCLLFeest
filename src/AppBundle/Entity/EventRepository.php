@@ -27,7 +27,7 @@ class EventRepository extends EntityRepository
 
     }
 
-    public function sortEventByLocationDistance($lat, $long, $rad = 15)
+    public function sortEventByLocationDistance($lat, $long)
     {
         $parameters = array(
             'radius' => 15,

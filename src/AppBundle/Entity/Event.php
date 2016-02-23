@@ -238,6 +238,10 @@ class Event
         return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
     }
 
+    public function getDateFormatted() {
+        return date_format($this->getDate(), 'd/m');
+    }
+
     /**
      * Set Price
      *

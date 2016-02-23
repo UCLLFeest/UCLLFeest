@@ -54,8 +54,14 @@ class TicketController extends Controller
             $em->flush();
         }
 
-        return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
-    }
+        if ($ticket->getOwner() == $this->getUser()) {
+            return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
+        } else {
+            //zelfde error message anders weten mensen dat dit een geldig ticket is?
+            $this->addFlash('notice', "Couldn't find the Ticket");
+            return $this->redirectToRoute("show_tickets");
+        }
+        }
 
     /**
      * @Route("/tickets/buy/{id}", name="register_ticket")

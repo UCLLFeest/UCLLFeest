@@ -51,7 +51,7 @@
     </tr>
 </table>
 
-{% if app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
+{% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
     <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
 {% endif %}
 

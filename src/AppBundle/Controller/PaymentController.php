@@ -33,26 +33,31 @@ class PaymentController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        $gatewayName = 'paypal';
-        $storage = $this->get('payum')->getStorage('AppBundle\Entity\Payment');
+        if($event->getSelling()) {
+            $gatewayName = 'paypal';
+            $storage = $this->get('payum')->getStorage('AppBundle\Entity\Payment');
 
-        $payment = $storage->create();
-        $payment->setNumber(uniqid());
-        $payment->setCurrencyCode('EUR');
-        $payment->setTotalAmount($event->getPrice() * 100); // 1.23 EUR
-        $payment->setDescription($id);
-        $payment->setClientId($this->getUser()->getId());
-        $payment->setClientEmail($this->getUser()->getEmail());
+            $payment = $storage->create();
+            $payment->setNumber(uniqid());
+            $payment->setCurrencyCode('EUR');
+            $payment->setTotalAmount($event->getPrice() * 100); // 1.23 EUR
+            $payment->setDescription($id);
+            $payment->setClientId($this->getUser()->getId());
+            $payment->setClientEmail($this->getUser()->getEmail());
 
-        $storage->update($payment);
+            $storage->update($payment);
 
-        $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
-            $gatewayName,
-            $payment,
-            'done' // the route to redirect after capture
-        );
+            $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
+                $gatewayName,
+                $payment,
+                'done' // the route to redirect after capture
+            );
 
-        return $this->redirect($captureToken->getTargetUrl());
+            return $this->redirect($captureToken->getTargetUrl());
+        }
+
+        $this->addFlash('notice', 'This event is not selling tickets!');
+        return $this->redirectToRoute('show_tickets');
     }
 
     /**
@@ -125,5 +130,8 @@ class PaymentController extends Controller
 
             return $this->redirectToRoute('show_tickets');
         }
+
+        $this->addFlash('notice', "Woops, something went wrong");
+        return $this->redirectToRoute('show_tickets');
     }
 }

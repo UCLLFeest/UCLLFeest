@@ -27,7 +27,7 @@ class VenueType extends AbstractType
             ->add('adress', TextType::class)
             ->add('city', TextType::class)
             ->add('postalCode', IntegerType::class)
-            ->add('description', TextareaType::class, array( "required" => false ))
+            ->add('description', TextareaType::class, array( "required" => false,'attr' => array('rows' => '10') ))
             ->add('save', SubmitType::class);
     }
 

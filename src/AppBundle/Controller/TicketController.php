@@ -9,7 +9,6 @@
 namespace AppBundle\Controller;
 
 
-use Proxies\__CG__\AppBundle\Entity\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +48,7 @@ class TicketController extends Controller
         }
 
         //check ipv creator manager
-        if ($ticket->getEvent()->getCreator() == $this->getUser()) {
+        if ($ticket->getEvent()->getCreator() == $this->getUser() || $ticket->getEvent()->getManagers()->contains($this->getUser())) {
             $ticket->setClaimed(true);
             $em->persist($ticket);
             $em->flush();
@@ -58,4 +57,35 @@ class TicketController extends Controller
         return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
     }
 
+    /**
+     * @Route("/tickets/buy/{id}", name="register_ticket")
+     */
+
+    /*public function register_ticket(Request $request, $id)
+    {
+        $ticket = new Ticket();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+
+        $user->addTicket($ticket);
+        $ticket->setOwner($user);
+
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $ticket->setEvent($event);
+
+        if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
+            //moet user ook niet gepersist worden?
+            $em->persist($ticket);
+            $em->flush();
+
+            $em->persist($user);
+            $em->flush();
+
+            //return $this->showTickets();
+        }
+        return $this->redirectToRoute('show_tickets');
+    }*/
 }

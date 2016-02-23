@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Bazinga\Bundle\GeocoderBundle\BazingaGeocoderBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

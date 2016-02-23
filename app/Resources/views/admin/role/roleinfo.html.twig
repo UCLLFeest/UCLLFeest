@@ -1,0 +1,16 @@
+{% block body %}
+    <h1>{{ headerText }}</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.requiredRole) }}
+    {{ form_row(form.locked) }}
+
+    <div class="form-group">
+        <div class="col-sm-10">
+            <input type="submit" id="_submit" name="_submit" value="{{ submitText }}" />
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

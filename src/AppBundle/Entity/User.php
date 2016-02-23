@@ -17,6 +17,11 @@ use FOS\UserBundle\Entity\User as BaseUser;
 class User extends BaseUser
 {
     /**
+     * string ROLE_ADMIN This constant is used to identify the admin role
+     */
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

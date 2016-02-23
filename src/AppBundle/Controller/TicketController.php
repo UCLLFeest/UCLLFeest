@@ -54,7 +54,7 @@ class TicketController extends Controller
             $em->flush();
         }
 
-        if ($ticket->getOwner() == $this->getUser()) {
+        if ($ticket->getEvent()->getCreator() == $this->getUser() || $ticket->getEvent()->getManagers()->contains($this->getUser())) {
             return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
         } else {
             //zelfde error message anders weten mensen dat dit een geldig ticket is?

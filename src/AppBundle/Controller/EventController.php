@@ -11,20 +11,24 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Event;
 use AppBundle\Entity\Venue;
 use AppBundle\Form\EventInformationType;
+use AppBundle\Form\EventPaymentType;
+use AppBundle\Form\EventVenueType;
 
 use Geocoder\Provider\GoogleMaps;
 use Ivory\HttpAdapter\CurlHttpAdapter;
-use AppBundle\Form\EventVenueType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Exception\Exception;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 
 class EventController extends Controller
 {
     /**
-     * @Route("/events/my_events", name="show_events")
+     * @Route("/events/", name="show_events")
      */
     public function showEvents()
     {
@@ -40,7 +44,7 @@ class EventController extends Controller
     }
 
     /**
-     * @Route("/events/allEvents", name="show_all_events")
+     * @Route("/events/all", name="show_all_events")
      */
     public function showAllEvents()
     {
@@ -49,84 +53,57 @@ class EventController extends Controller
         return $this->render('event/event_overview.html.twig',array('events'=>$event));
     }
 
-    /**
-     * @Route("events/delete_event/{id}", name="delete_event")
-     */
-
-    public function deleteEvent($id)
-    {
-        //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
-        $em =$this->getDoctrine()->getManager();
-        $event = $em->getRepository('AppBundle:Event')->find($id);
-
-        if (!$event) {
-            $this->addFlash('notice', "Couldn't find the event");
-            return $this->redirectToRoute('show_events');
-        }
-
-        //creator GEEN MANAGERS
-        if ($event->getCreator() != $this->getUser()) {
-            $this->addFlash('notice', "You're not allowed to access this page");
-            return $this->redirectToRoute('show_events');
-        }
-
-        $user = $this->getUser();
-        $user->removeEvent($event);
-        $em->remove($event);
-        $em->flush();
-
-        //return $this->showEvents();
-        return $this->redirectToRoute('show_events');
-    }
 
     /**
      * @Route("/events/Add_Event", name="add_event")
      */
 
     //zonder venue
-    public function addEvent(Request $request)
-    {
-        //Er wordt een form gemaakt in de vorm van EventType.
-        //En wordt gekoppeld aan een Event object.
-
-
-        $event = new Event();
-        $form = $this->createForm(EventInformationType::class, $event);
-
-        $form->handleRequest($request);
-
-        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Als dit klopt wordt de event aangemaakt en op de DB gezet
-            // En returnt de user naar de event overview.
-            $em = $this->getDoctrine()->getManager();
-
-            $event= $this->setAdress($event);
-
-            $user = $this->getUser();
-            $event = $this->setFoto($event,$em);
-
-            $user->addEvent($event); //MOET DIT DAN??????
-            $user->addEvent($event);
-            $event->setCreator($user);
-
-
-            $em->persist($event);
-            $em->flush();
-
-            //idk of dit moet (Dries & Sven denken van wel)
-           /* $em->persist($user);
-            $em->flush();*/
-
-            //return $this->showEvents();
-            return $this->redirectToRoute('show_events');
-        }
-
-        // De form wordt getoont
-
-        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
-        //return $this->redirectToRoute('show_tickets');
-    }
+//    public function addEvent(Request $request)
+//    {
+//        //Er wordt een form gemaakt in de vorm van EventType.
+//        //En wordt gekoppeld aan een Event object.
+//
+//
+//        $event = new Event();
+//        $form = $this->createForm(EventInformationType::class, $event);
+//
+//        $form->handleRequest($request);
+//
+//        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            // Als dit klopt wordt de event aangemaakt en op de DB gezet
+//            // En returnt de user naar de event overview.
+//            $em = $this->getDoctrine()->getManager();
+//
+//
+//
+//            $user = $this->getUser();
+//
+//            $event= $this->setAdress($event);
+//            $event = $this->setFoto($event,$em);
+//
+//            $user->addEvent($event); //MOET DIT DAN??????
+//            $user->addEvent($event);
+//            $event->setCreator($user);
+//
+//
+//            $em->persist($event);
+//            $em->flush();
+//
+//            //idk of dit moet (Dries & Sven denken van wel)
+//           /* $em->persist($user);
+//            $em->flush();*/
+//
+//            //return $this->showEvents();
+//            return $this->redirectToRoute('show_events');
+//        }
+//
+//        // De form wordt getoont
+//
+//        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
+//        //return $this->redirectToRoute('show_tickets');
+//    }
 
 
     /**
@@ -134,8 +111,8 @@ class EventController extends Controller
      */
 
     //met venue
-    public function addEventFromVenue(Request $request, $venue_id)
-    {
+ //   public function addEventFromVenue(Request $request, $venue_id)
+  //  {
 //       $em = $this->getDoctrine()->getManager();
 //        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
 //
@@ -175,53 +152,53 @@ class EventController extends Controller
 //        }
 //
 //        // De form wordt getoont
-
-        //return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
-        return $this->redirectToRoute('homepage');
-    }
-
+//
+//        //return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
+//        return $this->redirectToRoute('homepage');
+//    }
+//
+//
+//    /**
+//     * @Route("events/update_event/{id}", name="update_event")
+//     */
+//
+//    public function updateEvent(Request $request, $id)
+//    {
+//
+//        //Form wordt gemaakt met event dat wordt opgehaald met id.
+//        $em = $this->getDoctrine()->getManager();
+//        $event = $em->getRepository('AppBundle:Event')->find($id);
+//
+//        if(!$event)
+//        {
+//            $this->addFlash('notice', "Couldn't find the event");
+//            return $this->redirectToRoute('show_events');
+//        }
+//
+//        if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
+//            $form = $this->createForm(EventInformationType::class,$event);
+//            $form->handleRequest($request);
+//            if ($form->isSubmitted() && $form->isValid()) {
+//               $event = $this->setFoto($event,$em);
+//                $event = $this->setAdress($event);
+//
+//                $em->persist($event);
+//                $em->flush();
+//
+//                $em->flush();
+//                // return $this->showEvents();
+//                return $this->redirectToRoute('show_events');
+//            }
+//
+//            return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
+//        } else {
+//            $this->addFlash('notice', "You're not allowed to access this page");
+//            return $this->redirectToRoute('show_events');
+//        }
+//    }
 
     /**
-     * @Route("events/update_event/{id}", name="update_event")
-     */
-
-    public function updateEvent(Request $request, $id)
-    {
-
-        //Form wordt gemaakt met event dat wordt opgehaald met id.
-        $em = $this->getDoctrine()->getManager();
-        $event = $em->getRepository('AppBundle:Event')->find($id);
-
-        if(!$event)
-        {
-            $this->addFlash('notice', "Couldn't find the event");
-            return $this->redirectToRoute('show_events');
-        }
-
-        if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
-            $form = $this->createForm(EventInformationType::class,$event);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-               $event = $this->setFoto($event,$em);
-                $event = $this->setAdress($event);
-
-                $em->persist($event);
-                $em->flush();
-
-                $em->flush();
-                // return $this->showEvents();
-                return $this->redirectToRoute('show_events');
-            }
-
-            return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
-        } else {
-            $this->addFlash('notice', "You're not allowed to access this page");
-            return $this->redirectToRoute('show_events');
-        }
-    }
-
-    /**
-     * @Route("events/event_detail/{id}", name="event_detail")
+     * @Route("events/{id}", name="event_detail")
      */
 
     public function eventDetail($id)
@@ -246,11 +223,14 @@ class EventController extends Controller
         }
     }
 
+
+    //////////ADDING
+
     /**
-     * @Route("/events/add", name="information")
+     * @Route("/events/add", name="add_event")
      */
 
-    public function information(Request $request)
+     public function add(Request $request)
     {
         //Er wordt een form gemaakt in de vorm van EventType.
         //En wordt gekoppeld aan een Event object.
@@ -264,25 +244,14 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
-            $curl = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
 
-            $adress = $geocoder->geocode($event->getFullAdress());
 
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
-            $foto = $event->getFoto();
 
-            if ($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            } else
-                $event->setFoto(null);
-
-            $user->addEvent($event);
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
+            $event= $this->setAdress($event);
+            $event = $this->setFoto($event,$em);
 
             $user->addEvent($event);
             $event->setCreator($user);
@@ -290,27 +259,35 @@ class EventController extends Controller
             $em->persist($event);
             $em->flush();
 
-            return $this->redirectToRoute('venue', array('id' => $event->getId()));
+            return $this->redirectToRoute('add_event_venue', array('id' => $event->getId()));
         }
 
         return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
-
     }
 
 
     /**
-     * @Route("/events/venue/{id}", name="venue")
+     * @Route("/events/add/venue/{id}", name="add_event_venue")
      */
 
-    public function venue(Request $request, $id)
+    public function addVenue(Request $request, $id)
     {
-
         //wat als event niet wordt meegegeven?
         //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        $form = $this->createForm(EventVenueType::class, $event);
+//        $form = $this->createForm(EventVenueType::class, $event);
+//
+//        $form->handleRequest($request);
+
+
+        $data = array();
+
+        $form = $this->createFormBuilder($data)
+            ->add('venue', IntegerType::class, array('label' => 'Venue ID'))
+            ->add('Submit', SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
 
@@ -324,21 +301,31 @@ class EventController extends Controller
             //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
             //$venue = $em->getRepository('AppBundle:Venue')->find($request->query->get('venue'));
 
-            $em->persist($event);
-            $em->flush();
+            $data = $form->getData();
 
 
-            return $this->redirectToRoute('payment', array('id' => $event->getId()));
+            $venue = $em->getRepository('AppBundle:Venue')->find($data['venue']);
+
+            if ($venue) {
+                $event->setVenue($venue);
+
+                $em->persist($event);
+                $em->flush();
+            } else {
+                $this->addFlash('notice', "Venue could not be found.");
+            }
+
+            return $this->redirectToRoute('add_payment', array('id' => $event->getId()));
         }
 
         return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
     /**
-     * @Route("/events/payment/{id}", name="payment")
+     * @Route("/events/add/payment/{id}", name="add_payment")
      */
 
-    public function payment(Request $request, $id)
+    public function addPayment(Request $request, $id)
     {
 
         //wat als event niet wordt meegegeven?
@@ -351,18 +338,172 @@ class EventController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //opgehaalde venue in event steken
-            //event in venue steken
+            $em->persist($event);
+            $em->flush();
+
+            //naar detail of naar overview?
+            return $this->redirectToRoute('show_events');
+        }
+
+        return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
+    }
+
+    //DELETINGGG
+
+    /**
+     * @Route("events/delete/{id}", name="delete_event")
+     */
+
+    public function deleteEvent($id)
+    {
+        //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
+        $em =$this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        if (!$event) {
+            $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_events');
+        }
+
+        //creator GEEN MANAGERS
+        if ($event->getCreator() != $this->getUser()) {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('show_events');
+        }
+
+        $user = $this->getUser();
+        $user->removeEvent($event);
+        $em->remove($event);
+        $em->flush();
+
+        //return $this->showEvents();
+        return $this->redirectToRoute('show_events');
+    }
+
+    ////////////////////////////////EDITTING
+
+    /**
+     * @Route("/events/edit/{id}", name="edit_event")
+     */
+
+    public function edit(Request $request, $id)
+    {
+        //Er wordt een form gemaakt in de vorm van EventType.
+        //En wordt gekoppeld aan een Event object.
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $form = $this->createForm(EventInformationType::class, $event);
+
+        $form->handleRequest($request);
+
+        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+
+            $event= $this->setAdress($event);
+            $event = $this->setFoto($event,$em);
+
+
+            $user->addEvent($event);
+
+
+            $user->addEvent($event);
+            $event->setCreator($user);
 
             $em->persist($event);
             $em->flush();
 
+            return $this->redirectToRoute('show_overview');
+        }
 
-            return $this->redirectToRoute('event_detail', array('id' => $event->getId()));
+        return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
+    }
+
+
+    /**
+     * @Route("/events/edit/venue/{id}", name="edit_event_venue")
+     */
+
+    public function editVenue(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $data = array();
+
+        $form = $this->createFormBuilder($data)
+            ->add('venue', IntegerType::class, array('label' => 'Venue ID'))
+            ->add('Submit', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //opgehaalde venue in event steken
+            //event in venue steken
+
+            //CHECKEN OF HIJ DEZE KAN VINDEN
+
+            //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
+            //$venue = $em->getRepository('AppBundle:Venue')->find($request->query->get('venue'));
+
+            $data = $form->getData();
+
+
+            $venue = $em->getRepository('AppBundle:Venue')->find($data['venue']);
+
+            if ($venue) {
+                $event->setVenue($venue);
+
+                $em->persist($event);
+                $em->flush();
+            } else {
+                $this->addFlash('notice', "Venue could not be found.");
+            }
+
+            return $this->redirectToRoute('event_overview');
         }
 
         return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
+
+
+    /**
+     * @Route("/events/edit/payment/{id}", name="edit_payment")
+     */
+
+    public function editPayment(Request $request, $id)
+    {
+
+        //wat als event niet wordt meegegeven?
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $form = $this->createForm(EventPaymentType::class, $event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->persist($event);
+            $em->flush();
+
+            return $this->redirectToRoute('show_events');
+            //return $this->redirectToRoute('event_detail', array('id' => $event->getId()));
+        }
+
+        return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
+    }
+
+
+    //////////////////////////
 
     public function setAdress($event)
     {

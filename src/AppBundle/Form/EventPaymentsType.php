@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: sven smets
- * Date: 11-2-2016
- * Time: 21:52
+ * User: croewens
+ * Date: 24/02/2016
+ * Time: 13:10
  */
 
 namespace AppBundle\Form;
@@ -18,23 +18,15 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use AppBundle\Form\FotoType;
 
-class EventType extends AbstractType
+class EventPaymentsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('adress', TextType::class)
-            ->add('city', TextType::class)
-            ->add('postalCode', IntegerType::class)
+            ->add('selling', CheckboxType::class, array(/*'required' => false,*/ 'label' => 'Selling Tickets?'))
             ->add('price', MoneyType::class, array('required' => false))
-            ->add('date', DateTimeType::class/*, array('attr' => array('style' => 'select margin-right:10px'))*/)
-            ->add('description', TextareaType::class, array( 'required' => false, 'attr' => array('rows' => '10') ))
             ->add('capacity', IntegerType::class, array('required' => false))
-            ->add('foto', FotoType::class)
-            ->add('selling', CheckboxType::class, array('required' => false, 'label' => 'Selling Tickets?'))
             ->add('save', SubmitType::class);
     }
 

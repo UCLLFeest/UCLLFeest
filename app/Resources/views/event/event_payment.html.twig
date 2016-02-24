@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{%  block title %}
+    Nieuw Evenement
+{% endblock %}
+
+{% block body %}
+    <h1>Maak een nieuw evenement</h1>
+    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.selling) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.capacity) }}
+    {{ form_end(form) }}
+{% endblock %}

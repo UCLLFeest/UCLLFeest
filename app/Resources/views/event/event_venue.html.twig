@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{%  block title %}
+    Venue
+{% endblock %}
+
+{% block body %}
+    <h1>Select a venue</h1>
+    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.venue) }}
+    {{ form_end(form) }}
+{% endblock %}

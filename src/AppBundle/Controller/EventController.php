@@ -10,8 +10,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
 use AppBundle\Entity\Venue;
-use AppBundle\Form\EventType;
+use AppBundle\Form\EventInformationType;
 
+use AppBundle\Form\EventVenueType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,7 +89,7 @@ class EventController extends Controller
 
 
         $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventInformationType::class, $event);
 
         $form->handleRequest($request);
 
@@ -143,67 +144,67 @@ class EventController extends Controller
     //met venue
     public function addEventFromVenue(Request $request, $venue_id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
+//        $em = $this->getDoctrine()->getManager();
+//        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
+//
+//        if(!$venue) {
+//            $this->addFlash('notice', "This venue doesn't exist");
+//            return $this->redirectToRoute("add_event");
+//        }
+//
+//        $event = new Event();
+//        $event->setAdress($venue->getAdress());
+//        $event->setPostalCode($venue->getPostalCode());
+//        $event->setCity($venue->getCity());
+//        $event->setVenue($venue);
+//
+//        $form = $this->createForm(EventInformationType::class, $event);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//
+//            /*$event->setAdress($venue->getAdress());
+//            $event->setPostalCode($venue->getPostalCode());
+//            $event->setCity($venue->getCity());
+//            $event->setVenue($venue);*/
+//
+//            $user = $this->getUser();
+//            $foto = $event->getFoto();
+//            if($foto->getFile() !== null) {
+//                $foto->setName($event->getName());
+//                $em->persist($foto);
+//            }
+//            else
+//                $event->setFoto(null);
+//
+//            $user->addEvent($event); //MOET IDT DAN???????????
+//            $event->setCreator($user);
+//
+//
+//
+//            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+//            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+//
+//            $adress =   $geocoder->geocode($event->getFullAdress());
+//            $event->setLatitude($adress->get(0)->getLatitude());
+//            $event->setLongitude($adress->get(0)->getLongitude());
+//
+//
+//            $em->persist($event);
+//            $em->flush();
+//
+//            //idk of dit moet (Dries & Sven denken van wel)
+//            /*$em->persist($user);
+//            $em->flush(); */
+//
+//            //return $this->showEvents();
+//            return $this->redirectToRoute('show_events');
+//        }
+//
+//        // De form wordt getoont
 
-        if(!$venue) {
-            $this->addFlash('notice', "This venue doesn't exist");
-            return $this->redirectToRoute("add_event");
-        }
-
-        $event = new Event();
-        $event->setAdress($venue->getAdress());
-        $event->setPostalCode($venue->getPostalCode());
-        $event->setCity($venue->getCity());
-        $event->setVenue($venue);
-
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            /*$event->setAdress($venue->getAdress());
-            $event->setPostalCode($venue->getPostalCode());
-            $event->setCity($venue->getCity());
-            $event->setVenue($venue);*/
-
-            $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
-
-            $user->addEvent($event); //MOET IDT DAN???????????
-            $event->setCreator($user);
-
-
-
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-            $adress =   $geocoder->geocode($event->getFullAdress());
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
-
-
-            $em->persist($event);
-            $em->flush();
-
-            //idk of dit moet (Dries & Sven denken van wel)
-            /*$em->persist($user);
-            $em->flush(); */
-
-            //return $this->showEvents();
-            return $this->redirectToRoute('show_events');
-        }
-
-        // De form wordt getoont
-
-        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
-        //return $this->redirectToRoute('show_tickets');
+        //return $this->redirectToRoute('event/add_event.html.twig', array('form' => $form->createView()));
+        return $this->redirectToRoute('homepage');
     }
 
 
@@ -225,7 +226,7 @@ class EventController extends Controller
         }
 
         if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
-            $form = $this->createForm(EventType::class,$event);
+            $form = $this->createForm(EventInformationType::class,$event);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $foto = $event->getFoto();
@@ -282,8 +283,124 @@ class EventController extends Controller
         } else {
             return $this->render('event/event_detail.html.twig', array('event' => $event));
         }
+    }
+
+    /**
+     * @Route("/events/add", name="information")
+     */
+
+    public function information(Request $request)
+    {
+        //Er wordt een form gemaakt in de vorm van EventType.
+        //En wordt gekoppeld aan een Event object.
+
+        $event = new Event();
+        $form = $this->createForm(EventInformationType::class, $event);
+
+        $form->handleRequest($request);
+
+        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Als dit klopt wordt de event aangemaakt en op de DB gezet
+            // En returnt de user naar de event overview.
+            $curl = new \Ivory\HttpAdapter\CurlHttpAdapter();
+            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+
+            $adress = $geocoder->geocode($event->getFullAdress());
+
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+            $foto = $event->getFoto();
+
+            if ($foto->getFile() !== null) {
+                $foto->setName($event->getName());
+                $em->persist($foto);
+            } else
+                $event->setFoto(null);
+
+            $user->addEvent($event);
+            $event->setLatitude($adress->get(0)->getLatitude());
+            $event->setLongitude($adress->get(0)->getLongitude());
+
+            $user->addEvent($event);
+            $event->setCreator($user);
+
+            $em->persist($event);
+            $em->flush();
+
+            return $this->redirectToRoute('venue', array('id' => $event->getId()));
+        }
+
+        return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
+
+    }
 
 
+    /**
+     * @Route("/events/venue/{id}", name="venue")
+     */
+
+    public function venue(Request $request, $id)
+    {
+
+        //wat als event niet wordt meegegeven?
+        //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $form = $this->createForm(EventVenueType::class, $event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //opgehaalde venue in event steken
+            //event in venue steken
+
+            //CHECKEN OF HIJ DEZE KAN VINDEN
+
+            //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
+            //$venue = $em->getRepository('AppBundle:Venue')->find($request->query->get('venue'));
+
+            $em->persist($event);
+            $em->flush();
+
+
+            return $this->redirectToRoute('payment', array('id' => $event->getId()));
+        }
+
+        return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/events/payment/{id}", name="payment")
+     */
+
+    public function payment(Request $request, $id)
+    {
+
+        //wat als event niet wordt meegegeven?
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+
+        $form = $this->createForm(EventPaymentType::class, $event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //opgehaalde venue in event steken
+            //event in venue steken
+
+            $em->persist($event);
+            $em->flush();
+
+
+            return $this->redirectToRoute('event_detail', array('id' => $event->getId()));
+        }
+
+        return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
 

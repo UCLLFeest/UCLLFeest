@@ -237,7 +237,20 @@ class Event
 
     public function getFullAdress()
     {
-        return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
+        $result = "";
+        if($this->getAdress() != "")
+        {
+            $result .= $this->getAdress();
+        }
+        if($this->getPostalCode() != "")
+        {
+           $result .=", ". $this->getPostalCode();
+        }
+        if($this->getCity() != "")
+        {
+            $result .=" ". $this->getCity();
+        }
+        return $result;
     }
 
     public function getDateFormatted() {

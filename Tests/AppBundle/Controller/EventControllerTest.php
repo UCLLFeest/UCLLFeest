@@ -14,6 +14,19 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class EventControllerTest extends WebTestCase
 {
 
+
+    public function login($client)
+    {
+        $crawler = $client->request('GET','/login');
+
+        $form = $crawler->selectButton('_submit')->form(array(
+            '_username'  => 'test',
+            '_password'  => 'test',
+        ));
+        $client->submit($form);
+        return $client;
+    }
+
     public function testShowEvents()
     {
         $client = static::createClient();
@@ -38,14 +51,9 @@ class EventControllerTest extends WebTestCase
     public function testShowEventsMyEvents()
     {
         $client = static::createClient();
+        $client =  $this->login($client);
 
-        $crawler = $client->request('GET','/account/login');
-
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
-
-        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
         $crawler = $client->request('GET','/events/my_events');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
@@ -55,13 +63,10 @@ class EventControllerTest extends WebTestCase
     public function testShowMyEventsByUsingNavigationBar()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
         $link = $crawler
@@ -94,15 +99,9 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEvent()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
-
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
-
-        $crawler = $client->submit($form);
+        $crawler = $client->request('GET','/login');
+        $client =  $this->login($client);
         $crawler = $client->followRedirect();
-
 
         $link = $crawler
             ->filter('a:contains("Mijn Events")')
@@ -110,7 +109,7 @@ class EventControllerTest extends WebTestCase
             ->link();
 
         $crawler = $client->click($link);
-        $count = $crawler->filter('html:contains("Delete")')->count();
+        $count = $crawler->filter('a:contains("Delete")')->count();
 
         $link = $crawler
             ->filter('a:contains("Maak een nieuw evenement aan")')
@@ -131,21 +130,17 @@ class EventControllerTest extends WebTestCase
         $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
-
-        $this->assertEquals($count+1, $crawler->filter('html:contains("Delete")')->count());
+        $this->assertEquals($count+1, $crawler->filter('a:contains("Delete")')->count());
 
     }
 
       public function testAddAnEventWithoutName()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
 
@@ -179,13 +174,10 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutAdress()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
 
@@ -219,13 +211,10 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutCity()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
 
@@ -259,14 +248,12 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
+
 
 
         $link = $crawler
@@ -299,15 +286,11 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithTooLongPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
-
 
         $link = $crawler
             ->filter('a:contains("Mijn Events")')
@@ -315,7 +298,7 @@ class EventControllerTest extends WebTestCase
             ->link();
 
         $crawler = $client->click($link);
-        $count = $crawler->filter('html:contains("Delete")')->count();
+        $count = $crawler->filter('a:contains("Delete")')->count();
 
         $link = $crawler
             ->filter('a:contains("Maak een nieuw evenement aan")')
@@ -342,13 +325,11 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithTooSmallPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
 
-        $crawler = $client->submit($form);
+        $client =  $this->login($client);
+
         $crawler = $client->followRedirect();
 
 
@@ -358,7 +339,7 @@ class EventControllerTest extends WebTestCase
             ->link();
 
         $crawler = $client->click($link);
-        $count = $crawler->filter('html:contains("Delete")')->count();
+        $count = $crawler->filter('a:contains("Delete")')->count();
 
         $link = $crawler
             ->filter('a:contains("Maak een nieuw evenement aan")')
@@ -382,18 +363,13 @@ class EventControllerTest extends WebTestCase
 
     }
 
-
-
     public function testDeleteExsistingEventWhenLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/login');
+        $crawler = $client->request('GET','/login');
 
-        $form = $crawler->selectButton('Login')->form();
-        $form['form[username]'] = 'test';
-        $form['form[password]'] = 'test';
+        $client =  $this->login($client);
 
-        $crawler = $client->submit($form);
         $crawler = $client->followRedirect();
 
 
@@ -404,7 +380,7 @@ class EventControllerTest extends WebTestCase
 
         $crawler = $client->click($link);
 
-        $count = $crawler->filter('html:contains("Delete")')->count();
+        $count = $crawler->filter('a:contains("Delete")')->count();
 
         $link = $crawler
             ->filter('a:contains("Delete")')
@@ -414,8 +390,210 @@ class EventControllerTest extends WebTestCase
         $crawler = $client->click($link);
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $this->assertEquals($count-1, $crawler->filter('html:contains("Delete")')->count());
+        $this->assertEquals($count-1, $crawler->filter('a:contains("Delete")')->count());
 
     }
+
+    public function testDontDeleteWhenNotLoggedIn()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET','/events/delete_event/0');
+
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Log in")')->count());
+    }
+
+    public function testDontDeleteWhenEventNotFound()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET','/login');
+
+        $client =  $this->login($client);
+
+        $crawler = $client->followRedirect();
+
+
+        $crawler = $client->request('GET','/events/delete_event/0');
+
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('html:contains("Log in")')->count());
+    }
+
+    public function testAddEventFromVenue()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET','/login');
+
+        $client =  $this->login($client);
+
+        $crawler = $client->followRedirect();
+
+        $crawler = $client->request('GET','/events/my_events');
+        $count = $crawler->filter('a:contains("Delete")')->count();
+
+
+        $crawler = $client->request('GET','/venues');
+        $link = $crawler
+            ->filter('td > a')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $link = $crawler->filter('a:contains("Registreer een event in deze Venue")')->link();
+        $crawler = $client->click($link);
+
+        $form = $crawler->selectButton('event[save]')->form();
+        $form['event[name]'] = 'test';
+        $form['event[adress]'] = 'test';
+        $form['event[city]'] = 'test';
+        $form['event[postalCode]'] = '1234';
+        $form['event[price]'] = '1000';
+        $form['event[description]'] = 'test';
+        $form['event[capacity]'] = '500';
+
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        $this->assertEquals($count+1, $crawler->filter('a:contains("Delete")')->count());
+    }
+
+   public function testUpdateTitleEvent()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET','/login');
+        $client =  $this->login($client);
+        $crawler = $client->followRedirect();
+
+        $link = $crawler
+            ->filter('a:contains("Mijn Events")')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+        $text = $crawler->filter('td > a')->eq(0)->text();
+
+        $link = $crawler
+            ->filter('a:contains("Update")')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $form = $crawler->selectButton('event[save]')->form();
+        $form['event[name]'] = 'aangepast';
+        $form['event[adress]'] = 'test';
+        $form['event[city]'] = 'test';
+        $form['event[postalCode]'] = '1234';
+        $form['event[price]'] = '1000';
+        $form['event[description]'] = 'test';
+        $form['event[capacity]'] = '500';
+
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        $this->assertNotEquals($text, $crawler->filter('td > a')->eq(0)->text());
+
+    }
+
+    public function testShowDetails()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET','/login');
+        $client =  $this->login($client);
+        $crawler = $client->followRedirect();
+
+        $link = $crawler
+            ->filter('a:contains("Mijn Events")')
+            ->eq(0)
+            ->link();
+        $crawler = $client->click($link);
+
+        $link = $crawler
+            ->filter('td > a')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $this->assertEquals(1, $crawler->filter('html:contains("Detail overview")')->count());
+
+
+
+
+    }
+
+    public function testUpdateEvent()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET','/login');
+        $client =  $this->login($client);
+        $crawler = $client->followRedirect();
+
+        $link = $crawler
+            ->filter('a:contains("Mijn Events")')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+
+
+        $link = $crawler
+            ->filter('td > a')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $name = $crawler->filter('td')->eq(1)->text();
+        $adress = $crawler->filter('td')->eq(3)->text();
+        $prijs = $crawler->filter('td')->eq(5)->text();
+        $description = $crawler->filter('td')->eq(9)->text();
+        $capaciteit = $crawler->filter('td')->eq(11)->text();
+
+        $crawler = $client->request('GET','/events/my_events');
+
+
+        $link = $crawler
+            ->filter('a:contains("Update")')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $form = $crawler->selectButton('event[save]')->form();
+        $form['event[name]'] = 'aangepast2';
+        $form['event[adress]'] = 'Drogenhof41';
+        $form['event[city]'] = 'Leuven';
+        $form['event[postalCode]'] = '4231';
+        $form['event[price]'] = '5';
+        $form['event[description]'] = 'aangepast';
+        $form['event[capacity]'] = '1';
+
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        $link = $crawler
+            ->filter('td > a')
+            ->eq(0)
+            ->link();
+
+        $crawler = $client->click($link);
+
+        $this->assertNotEquals($name,  $crawler->filter('td')->eq(1)->text());
+        $this->assertNotEquals($adress,  $crawler->filter('td')->eq(3)->text());
+        $this->assertNotEquals($prijs,  $crawler->filter('td')->eq(5)->text());
+        $this->assertNotEquals($description, $crawler->filter('td')->eq(9)->text());
+        $this->assertNotEquals($capaciteit, $crawler->filter('td')->eq(11)->text());
+    }
+
+
+
+
+
+
+
 
 }

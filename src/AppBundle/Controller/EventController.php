@@ -12,6 +12,8 @@ use AppBundle\Entity\Event;
 use AppBundle\Entity\Venue;
 use AppBundle\Form\EventInformationType;
 
+use Geocoder\Provider\GoogleMaps;
+use Ivory\HttpAdapter\CurlHttpAdapter;
 use AppBundle\Form\EventVenueType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -97,24 +99,14 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-          $adress =   $geocoder->geocode($event->getFullAdress());
-
             $em = $this->getDoctrine()->getManager();
 
+            $event= $this->setAdress($event);
+
             $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+            $event = $this->setFoto($event,$em);
+
             $user->addEvent($event); //MOET DIT DAN??????
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
             $user->addEvent($event);
             $event->setCreator($user);
 
@@ -144,7 +136,7 @@ class EventController extends Controller
     //met venue
     public function addEventFromVenue(Request $request, $venue_id)
     {
-//        $em = $this->getDoctrine()->getManager();
+//       $em = $this->getDoctrine()->getManager();
 //        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
 //
 //        if(!$venue) {
@@ -158,40 +150,21 @@ class EventController extends Controller
 //        $event->setCity($venue->getCity());
 //        $event->setVenue($venue);
 //
-//        $form = $this->createForm(EventInformationType::class, $event);
+//        $form = $this->createForm(EventType::class, $event);
 //        $form->handleRequest($request);
 //
 //        if ($form->isSubmitted() && $form->isValid()) {
 //
-//            /*$event->setAdress($venue->getAdress());
-//            $event->setPostalCode($venue->getPostalCode());
-//            $event->setCity($venue->getCity());
-//            $event->setVenue($venue);*/
+//              $user = $this->getUser();
+//        $event = $this->setFoto($event,$em);
 //
-//            $user = $this->getUser();
-//            $foto = $event->getFoto();
-//            if($foto->getFile() !== null) {
-//                $foto->setName($event->getName());
-//                $em->persist($foto);
-//            }
-//            else
-//                $event->setFoto(null);
+//        $user->addEvent($event); //MOET IDT DAN???????????
+//        $event->setCreator($user);
 //
-//            $user->addEvent($event); //MOET IDT DAN???????????
-//            $event->setCreator($user);
+//        $event= $this->setAdress($event);
 //
-//
-//
-//            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-//            $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-//
-//            $adress =   $geocoder->geocode($event->getFullAdress());
-//            $event->setLatitude($adress->get(0)->getLatitude());
-//            $event->setLongitude($adress->get(0)->getLongitude());
-//
-//
-//            $em->persist($event);
-//            $em->flush();
+//        $em->persist($event);
+//        $em->flush();
 //
 //            //idk of dit moet (Dries & Sven denken van wel)
 //            /*$em->persist($user);
@@ -203,7 +176,7 @@ class EventController extends Controller
 //
 //        // De form wordt getoont
 
-        //return $this->redirectToRoute('event/add_event.html.twig', array('form' => $form->createView()));
+        //return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
         return $this->redirectToRoute('homepage');
     }
 
@@ -229,20 +202,8 @@ class EventController extends Controller
             $form = $this->createForm(EventInformationType::class,$event);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $foto = $event->getFoto();
-                if($foto->getFile() !== null)
-                {
-                    $em->persist($foto);
-                }
-                else
-                    $event->setFoto(null);
-
-                $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-                $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-                $adress =   $geocoder->geocode($event->getFullAdress());
-                $event->setLatitude($adress->get(0)->getLatitude());
-                $event->setLongitude($adress->get(0)->getLongitude());
-
+               $event = $this->setFoto($event,$em);
+                $event = $this->setAdress($event);
 
                 $em->persist($event);
                 $em->flush();
@@ -401,6 +362,37 @@ class EventController extends Controller
         }
 
         return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
+    }
+
+    public function setAdress($event)
+    {
+        try
+        {
+            $curl     = new CurlHttpAdapter();
+            $geocoder = new GoogleMaps($curl);
+            $adress =   $geocoder->geocode($event->getFullAdress());
+        }catch( \Geocoder\Exception\NoResult $e){
+            $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+            return $this->redirectToRoute("add_event");
+        }
+
+        $event->setLatitude($adress->get(0)->getLatitude());
+        $event->setLongitude($adress->get(0)->getLongitude());
+
+        return $event;
+    }
+
+    public function setFoto($event,$em)
+    {
+        $foto = $event->getFoto();
+        if($foto->getFile() !== null) {
+            $foto->setName($event->getName());
+            $em->persist($foto);
+        }
+        else
+            $event->setFoto(null);
+
+        return $event;
     }
 
 

@@ -4,8 +4,9 @@ namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Event;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends WebTestCase
 {
     public function testNewUserHasRoleUser()
     {

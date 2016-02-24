@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {{ include('::admin/user/roleinfo.html.twig', {'headerText': 'Change Role ' ~ role, 'submitText': 'Change'}) }}
+
+{% endblock %}

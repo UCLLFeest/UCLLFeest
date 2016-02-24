@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Geocoder\Provider\GeoPlugin;
+use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,18 +12,16 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-
-
-        $events =  array();
             $em = $this->getDoctrine()->getManager();
           //  $ip =  "193.190.138.250";
              $ip = $request->getClientIp();
-            $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-            $geocoder = new \Geocoder\Provider\GeoPlugin($curl);
+            $curl     = new CurlHttpAdapter();
+            $geocoder = new GeoPlugin($curl);
             $adress =  $geocoder->geocode($ip);
 
             //ik geef hem hier efkes 50 aan om te testen
@@ -31,8 +31,5 @@ class DefaultController extends Controller
         return $this->render(
             'default/index.html.twig',array('events'=>$events)
         );
-
     }
-
-
 }

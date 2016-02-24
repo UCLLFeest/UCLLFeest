@@ -236,7 +236,20 @@ class Event
 
     public function getFullAdress()
     {
-        return $this->getAdress() . ", " . $this->getPostalCode() . " " . $this->getCity();
+        $result = "";
+        if($this->getAdress() != "")
+        {
+            $result .= $this->getAdress();
+        }
+        if($this->getPostalCode() != "")
+        {
+           $result .=", ". $this->getPostalCode();
+        }
+        if($this->getCity() != "")
+        {
+            $result .=" ". $this->getCity();
+        }
+        return $result;
     }
 
     public function getDateFormatted() {
@@ -422,10 +435,10 @@ class Event
     /**
      * Set venue
      *
-     * @param \AppBundle\Entity\Venue $venue
+     * @param Venue $venue
      * @return Event
      */
-    public function setVenue(\AppBundle\Entity\Venue $venue = null)
+    public function setVenue(Venue $venue = null)
     {
         $this->venue = $venue;
 
@@ -435,7 +448,7 @@ class Event
     /**
      * Get venue
      *
-     * @return \AppBundle\Entity\Venue 
+     * @return Venue
      */
     public function getVenue()
     {

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Roles Overview</h1>
+    <h1>Admin Roles Overview</h1>
 
     {% if roles is not empty %}
         <table>
@@ -25,7 +25,7 @@
                     <td>{{ role.locked ? "Yes" : "No" }}</td>
                     <td>{{ role.mandatory ? "Yes" : "No" }}</td>
                     <td>
-                        <a href="/admin/role/edit/{{ role.id }}">Edit</a>
+                        <a href="{{ path('admineditrole', {'id': role.id}) }}">Edit</a>
                         <a href="{{ path('adminremoverole', {'id': role.id }) }}">Remove</a>
                     </td>
                 </tr>
@@ -35,5 +35,5 @@
         <p>No roles to display</p>
     {% endif %}
 
-    <a href="/admin/role/add">Add Role</a>
+    <a href="{{ path('adminaddrole') }}">Add Role</a>
 {% endblock %}

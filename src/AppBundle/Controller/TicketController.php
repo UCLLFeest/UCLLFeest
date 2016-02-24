@@ -11,8 +11,6 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Ticket;
 
 class TicketController extends Controller
 {
@@ -54,7 +52,7 @@ class TicketController extends Controller
             $em->flush();
         }
 
-        if ($ticket->getOwner() == $this->getUser()) {
+        if ($ticket->getOwner() === $this->getUser() || $ticket->getEvent()->getCreator() == $this->getUser() || $ticket->getEvent()->getManagers()->contains($this->getUser())) {
             return $this->render('ticket/ticket_detail.html.twig', array('ticket' => $ticket));
         } else {
             //zelfde error message anders weten mensen dat dit een geldig ticket is?

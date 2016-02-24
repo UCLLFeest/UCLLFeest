@@ -114,6 +114,10 @@
                             <li><a href="/venues">Venues</a></li>
                             <li><a href="/tickets">Tickets</a></li>
 
+                            {% if is_granted(constant('AppBundle\\Entity\\User::ROLE_ADMIN')) %}
+                                <li><a href="/admin">Admin Panel</a></li>
+                            {% endif %}
+
 
                         </ul>
                     </div><!-- /.navbar-collapse -->

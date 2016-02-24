@@ -10,7 +10,6 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 class EventRepository extends EntityRepository
@@ -45,6 +44,7 @@ class EventRepository extends EntityRepository
             $rsm->addRootEntityFromClassMetadata('AppBundle\Entity\Event', 'j');
 
             return $query->getResult();
+
     }
 
 }

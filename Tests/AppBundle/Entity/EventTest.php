@@ -10,9 +10,8 @@ namespace Tests\AppBundle\Entity;
 
 
 use AppBundle\Entity\Event;
-use Symfony\Component\Validator\Constraints\DateTime;
-
-class EventTest extends \PHPUnit_Framework_TestCase
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+class EventTest extends WebTestCase
 {
     public function testNewEventWithoutAdress()
     {

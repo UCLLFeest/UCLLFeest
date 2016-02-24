@@ -9,7 +9,9 @@
 namespace Tests\AppBundle\Controller;
 
 
-class DefaultControllerTest extends \PHPUnit_Framework_TestCase
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class DefaultControllerTest extends WebTestCase
 {
 
 }

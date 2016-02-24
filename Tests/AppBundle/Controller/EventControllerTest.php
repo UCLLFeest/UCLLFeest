@@ -53,8 +53,6 @@ class EventControllerTest extends WebTestCase
         $client = static::createClient();
         $client =  $this->login($client);
 
-        $crawler = $client->followRedirect();
-
         $crawler = $client->request('GET','/events/my_events');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Mijn Events.")')->count());
@@ -63,8 +61,6 @@ class EventControllerTest extends WebTestCase
     public function testShowMyEventsByUsingNavigationBar()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
         $client =  $this->login($client);
 
         $crawler = $client->followRedirect();
@@ -82,7 +78,6 @@ class EventControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $crawler = $client->request('GET','/events/my_events');
-        $crawler = $client->followRedirect();
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Username")')->count());
         $this->assertEquals(0, $crawler->filter('html:contains("Mijn Events.")')->count());
@@ -99,7 +94,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEvent()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
         $client =  $this->login($client);
         $crawler = $client->followRedirect();
 
@@ -137,7 +131,6 @@ class EventControllerTest extends WebTestCase
       public function testAddAnEventWithoutName()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
 
         $client =  $this->login($client);
 
@@ -174,7 +167,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutAdress()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
 
         $client =  $this->login($client);
 
@@ -211,7 +203,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutCity()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
 
         $client =  $this->login($client);
 
@@ -248,8 +239,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithoutPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
         $client =  $this->login($client);
 
         $crawler = $client->followRedirect();
@@ -286,8 +275,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithTooLongPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
         $client =  $this->login($client);
 
         $crawler = $client->followRedirect();
@@ -298,8 +285,6 @@ class EventControllerTest extends WebTestCase
             ->link();
 
         $crawler = $client->click($link);
-        $count = $crawler->filter('a:contains("Delete")')->count();
-
         $link = $crawler
             ->filter('a:contains("Maak een nieuw evenement aan")')
             ->eq(0)
@@ -325,8 +310,6 @@ class EventControllerTest extends WebTestCase
     public function testAddAnEventWithTooSmallPostalCode()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
 
         $client =  $this->login($client);
 
@@ -339,7 +322,6 @@ class EventControllerTest extends WebTestCase
             ->link();
 
         $crawler = $client->click($link);
-        $count = $crawler->filter('a:contains("Delete")')->count();
 
         $link = $crawler
             ->filter('a:contains("Maak een nieuw evenement aan")')
@@ -366,8 +348,6 @@ class EventControllerTest extends WebTestCase
     public function testDeleteExsistingEventWhenLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
         $client =  $this->login($client);
 
         $crawler = $client->followRedirect();
@@ -407,11 +387,8 @@ class EventControllerTest extends WebTestCase
     public function testDontDeleteWhenEventNotFound()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
-
         $client =  $this->login($client);
 
-        $crawler = $client->followRedirect();
 
 
         $crawler = $client->request('GET','/events/delete_event/0');
@@ -423,11 +400,8 @@ class EventControllerTest extends WebTestCase
     public function testAddEventFromVenue()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
 
         $client =  $this->login($client);
-
-        $crawler = $client->followRedirect();
 
         $crawler = $client->request('GET','/events/my_events');
         $count = $crawler->filter('a:contains("Delete")')->count();
@@ -462,7 +436,6 @@ class EventControllerTest extends WebTestCase
    public function testUpdateTitleEvent()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
         $client =  $this->login($client);
         $crawler = $client->followRedirect();
 
@@ -500,7 +473,6 @@ class EventControllerTest extends WebTestCase
     public function testShowDetails()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
         $client =  $this->login($client);
         $crawler = $client->followRedirect();
 
@@ -527,7 +499,6 @@ class EventControllerTest extends WebTestCase
     public function testUpdateEvent()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/login');
         $client =  $this->login($client);
         $crawler = $client->followRedirect();
 

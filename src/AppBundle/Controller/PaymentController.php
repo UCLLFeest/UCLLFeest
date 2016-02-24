@@ -9,11 +9,9 @@
 namespace AppBundle\Controller;
 
 use Payum\Core\Request\GetHumanStatus;
-use AppBundle\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Ticket;
 
 //https://github.com/Payum/PayumBundle/blob/master/Resources/doc/custom_purchase_examples/paypal_express_checkout.md

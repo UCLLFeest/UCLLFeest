@@ -8,15 +8,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Event;
-use AppBundle\Entity\User;
-use AppBundle\Form\ManagerType;
+
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Acl\Exception\Exception;
-
 
 class ManagerController extends Controller
 {
@@ -89,7 +85,7 @@ class ManagerController extends Controller
      * @Route("/managers/delete/{event_id}/{username}", name="delete_manager")
      */
 
-    public function deleteManager(Request $request, $event_id, $username)
+    public function deleteManager($event_id, $username)
     {
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();

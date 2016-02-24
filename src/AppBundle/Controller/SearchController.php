@@ -16,7 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 
-
 class SearchController extends Controller
 {
     /**
@@ -24,9 +23,6 @@ class SearchController extends Controller
      */
     public function searchEventsOnName(Request $request)
     {
-        $search = new SearchEvents();
-        $events = array();
-
         $em = $this->getDoctrine()->getManager();
         $events = $em->getRepository('AppBundle:Event')->findEventByName($request->query->get('Search'));
         return $this->render('search/Search_Events.html.twig', array('events' => $events));

@@ -4,18 +4,20 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Form\EditUserType;
 use AppBundle\Form\ChangePasswordType;
-use AppBundle\Entity\User;
 use AppBundle\FormType\ChangePassword;
+use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
 {
     /**
      * @Route("/account/view/{id}", name="accountview")
-     * * @param integer $id Target user id
+     * @param integer $id Target user id
+     * @return Response|RedirectResponse
      */
     public function view($id)
     {
@@ -95,6 +97,7 @@ class AccountController extends Controller
     /**
      * @Route("/account/editprofile", name="editprofile")
      * @param Request $request
+     * @return Response|RedirectResponse
      */
     public function editprofile(Request $request)
     {

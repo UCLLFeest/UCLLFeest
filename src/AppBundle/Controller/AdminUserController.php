@@ -5,9 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminUserController extends Controller
 {
@@ -174,6 +176,7 @@ class AdminUserController extends Controller
 	 * @param Request $request
 	 * @param integer $id
 	 * @param string $role
+	 * @return Response|RedirectResponse
 	 */
 	public function changeRole(Request $request, $id, $role)
 	{

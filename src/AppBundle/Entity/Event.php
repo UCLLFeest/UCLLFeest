@@ -8,7 +8,6 @@
 
 //src/AppBundle/Entity/Event.php
 namespace AppBundle\Entity;
-use AppBundle\Entity\Venue;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;

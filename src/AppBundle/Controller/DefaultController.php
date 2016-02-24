@@ -17,7 +17,6 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $events =  array();
             $em = $this->getDoctrine()->getManager();
           //  $ip =  "193.190.138.250";
              $ip = $request->getClientIp();

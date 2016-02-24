@@ -20,8 +20,16 @@
             <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
             <td>{{ event.getFullAdress()}}</td>
             <td>{{ event.getDateFormatted() }}</td>
-            <td> <a href="{{ path('delete_event',{'id':event.getId()}) }}">Delete</a> </td>
-            <td> <a href="{{ path('update_event',{'id':event.getId()}) }}">Update</a> </td>
+            <td>
+                <a class="btn btn-default" role="button" href="{{ path('delete_event',{'id':event.getId()}) }}">
+                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
+                    <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>
@@ -41,7 +49,11 @@
                 <td>{{ event.getFullAdress()}}</td>
                 <td>{{ event.getDate() | date('Y-m-d') }}</td>
                 <td>{{ event.getDate() | date('H:i') }}</td>
-                <td> <a href="{{ path('update_event',{'id':event.getId()}) }}">Update</a> </td>
+                <td>
+                    <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
+                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     </table>

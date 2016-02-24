@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -65,7 +66,7 @@ class Venue
      */
     public function __construct()
     {
-
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -199,26 +200,26 @@ class Venue
     }
 
     /**
-     * Add events
+     * Add event
      *
-     * @param Event $events
+     * @param Event $event
      * @return Venue
      */
-    public function addEvent(Event $events)
+    public function addEvent(Event $event)
     {
-        $this->events[] = $events;
+        $this->events->add($event);
 
         return $this;
     }
 
     /**
-     * Remove events
+     * Remove event
      *
-     * @param Event $events
+     * @param Event $event
      */
-    public function removeEvent(Event $events)
+    public function removeEvent(Event $event)
     {
-        $this->events->removeElement($events);
+        $this->events->removeElement($event);
     }
 
     /**

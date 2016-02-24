@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -23,15 +24,21 @@ class TicketController extends Controller
         //alle tickets worden opgezocht en in een array doorgegeven naar de view
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $tickets = $em->getRepository('AppBundle:Ticket')->findByOwner($user);
+        /**
+         * @var TicketRepository $repo
+         */
+        $repo = $em->getRepository('AppBundle:Ticket');
+        /** @noinspection PhpUndefinedMethodInspection */
+        $tickets = $repo->findByOwner($user);
 
         return $this->render('ticket/mijn_tickets.html.twig', array('tickets' => $tickets, 'user' => $user));
     }
 
-    /**
-     * @Route("/ticket/{id}", name="ticket_detail")
-     */
-
+	/**
+	 * @Route("/ticket/{id}", name="ticket_detail")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function ticketDetail($id)
     {
         $em =$this->getDoctrine()->getManager();

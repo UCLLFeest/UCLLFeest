@@ -8,9 +8,9 @@
 
     {% if( app.user ) %}
         <p>Welkom terug {{ app.user.username }}</p>
-        <p><a href="/logout">Log uit</a>
+        <p><a href="{{ path('user_logout') }}">Log uit</a>
     {%  else %}
-        <p>Welkom. <a href="/login">Log in</a> of <a href="/register">Registreer</a></p>
+        <p>Welkom. <a href="{{ path('user_login') }}">Log in</a> of <a href="{{ path('user_register') }}">Registreer</a></p>
     {% endif %}
 
     {% if events != null %}

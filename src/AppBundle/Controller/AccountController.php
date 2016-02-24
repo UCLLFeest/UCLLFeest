@@ -56,6 +56,8 @@ class AccountController extends Controller
 
     /**
      * @Route("/account/editpassword", name="editpassword")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function editPassword(Request $request)
     {

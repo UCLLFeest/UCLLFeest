@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\EventRepository;
 use Geocoder\Provider\GeoPlugin;
 use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,15 +18,20 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-            $em = $this->getDoctrine()->getManager();
-          //  $ip =  "193.190.138.250";
-             $ip = $request->getClientIp();
-            $curl     = new CurlHttpAdapter();
-            $geocoder = new GeoPlugin($curl);
-            $adress =  $geocoder->geocode($ip);
+        $em = $this->getDoctrine()->getManager();
+        //$ip =  "193.190.138.250";
+        $ip = $request->getClientIp();
+        $curl     = new CurlHttpAdapter();
+        $geocoder = new GeoPlugin($curl);
+        $adress =  $geocoder->geocode($ip);
 
-            //ik geef hem hier efkes 50 aan om te testen
-            $events = $em->getRepository('AppBundle:Event')->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude());
+        /**
+         * @var EventRepository $repo
+         */
+        $repo = $em->getRepository('AppBundle:Event');
+
+        //ik geef hem hier efkes 50 aan om te testen
+        $events = $repo->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude());
 
 
         return $this->render(

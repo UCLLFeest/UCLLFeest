@@ -117,6 +117,7 @@ class EventControllerTest extends WebTestCase
         $form['event[adress]'] = 'test';
         $form['event[city]'] = 'test';
         $form['event[postalCode]'] = '1234';
+        $form['event[foto[file]'] = __FILE__;
         $form['event[price]'] = '1000';
         $form['event[description]'] = 'test';
         $form['event[capacity]'] = '500';
@@ -560,11 +561,23 @@ class EventControllerTest extends WebTestCase
         $this->assertNotEquals($capaciteit, $crawler->filter('td')->eq(11)->text());
     }
 
+    public function testAddEventWithAdressThatCannotBeFound()
+    {
+        $client = static::createClient();
+        $client = $this->login($client);
+        $crawler = $client->request('GET','/events/Add_Event');
 
+        $form = $crawler->selectButton('event[save]')->form();
+        $form['event[name]'] = 'jfdsmq';
+        $form['event[adress]'] = 'jfdmsdfjs';
+        $form['event[city]'] = 'jmmqdsj';
+        $form['event[postalCode]'] = '1234';
+        $form['event[price]'] = '1000';
+        $form['event[description]'] = 'test';
+        $form['event[capacity]'] = '500';
 
+        $crawler = $client->submit($form);
 
-
-
-
-
+        $this->assertEquals(1, $crawler->filter('html:contains("Couldn\'t find your adress, Please give a valid adress")')->count());
+    }
 }

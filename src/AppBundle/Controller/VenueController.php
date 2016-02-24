@@ -31,8 +31,9 @@ class VenueController extends Controller
 
     /**
      * @Route("/venues/add", name="add_venue")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-
     public function addVenue(Request $request)
     {
         $venue = new Venue();
@@ -55,8 +56,9 @@ class VenueController extends Controller
 
     /**
      * @Route("venue/{id}", name="venue_detail")
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-
     public function venueDetail($id)
     {
         $em =$this->getDoctrine()->getManager();

@@ -8,7 +8,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Payment;
+use Payum\Core\Gateway;
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,8 +27,9 @@ class PaymentController extends Controller
 
     /**
      * @Route("/order/{id}", name="buy_ticket")
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-
     public function prepareAction($id)
     {
 
@@ -33,8 +38,14 @@ class PaymentController extends Controller
 
         if($event->getSelling()) {
             $gatewayName = 'paypal';
+            /**
+             * @var StorageInterface $storage
+             */
             $storage = $this->get('payum')->getStorage('AppBundle\Entity\Payment');
 
+			/**
+			 * @var Payment $payment
+			 */
             $payment = $storage->create();
             $payment->setNumber(uniqid());
             $payment->setCurrencyCode('EUR');
@@ -49,6 +60,9 @@ class PaymentController extends Controller
 
             $storage->update($payment);
 
+            /**
+             * @var TokenInterface $captureToken
+             */
             $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
                 $gatewayName,
                 $payment,
@@ -64,12 +78,19 @@ class PaymentController extends Controller
 
     /**
      * @Route("/done", name="done")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-
     public function doneAction(Request $request)
     {
+		/**
+		 * @var TokenInterface $token
+		 */
         $token = $this->get('payum')->getHttpRequestVerifier()->verify($request);
 
+		/**
+		 * @var Gateway $gateway
+		 */
         $gateway = $this->get('payum')->getGateway($token->getGatewayName());
 
         // you can invalidate the token. The url could not be requested any more.

@@ -11,6 +11,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Event;
 use AppBundle\Form\EventType;
 
+use Doctrine\ORM\EntityManager;
+use Geocoder\Exception\NoResult;
 use Geocoder\Provider\GoogleMaps;
 use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -45,10 +47,11 @@ class EventController extends Controller
         return $this->render('event/event_overview.html.twig',array('events'=>$event));
     }
 
-    /**
-     * @Route("events/delete_event/{id}", name="delete_event")
-     */
-
+	/**
+	 * @Route("events/delete_event/{id}", name="delete_event")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
     public function deleteEvent($id)
     {
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
@@ -75,10 +78,11 @@ class EventController extends Controller
         return $this->redirectToRoute('show_events');
     }
 
-    /**
-     * @Route("/events/Add_Event", name="add_event")
-     */
-
+	/**
+	 * @Route("/events/Add_Event", name="add_event")
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     //zonder venue
     public function addEvent(Request $request)
     {
@@ -96,7 +100,9 @@ class EventController extends Controller
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
 
-
+            /**
+             * @var EntityManager $em
+             */
             $em = $this->getDoctrine()->getManager();
 
             $event= $this->setAdress($event);
@@ -127,13 +133,18 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("/events/add/{venue_id}", name="add_event_from_venue")
-     */
-
+	/**
+	 * @Route("/events/add/{venue_id}", name="add_event_from_venue")
+	 * @param Request $request
+	 * @param integer $venue_id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     //met venue
     public function addEventFromVenue(Request $request, $venue_id)
     {
+		/**
+		 * @var EntityManager $em
+		 */
         $em = $this->getDoctrine()->getManager();
         $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
 
@@ -184,15 +195,24 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("events/update_event/{id}", name="update_event")
-     */
-
+	/**
+	 * @Route("events/update_event/{id}", name="update_event")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function updateEvent(Request $request, $id)
     {
 
         //Form wordt gemaakt met event dat wordt opgehaald met id.
+		/**
+		 * @var EntityManager $em
+		 */
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if(!$event)
@@ -223,10 +243,11 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * @Route("events/event_detail/{id}", name="event_detail")
-     */
-
+	/**
+	 * @Route("events/event_detail/{id}", name="event_detail")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function eventDetail($id)
     {
         $em =$this->getDoctrine()->getManager();
@@ -251,14 +272,14 @@ class EventController extends Controller
 
     }
 
-    public function setAdress($event)
+    public function setAdress(Event $event)
     {
         try
         {
             $curl     = new CurlHttpAdapter();
             $geocoder = new GoogleMaps($curl);
             $adress =   $geocoder->geocode($event->getFullAdress());
-        }catch( \Geocoder\Exception\NoResult $e){
+        }catch(NoResult $e){
             $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
             return $this->redirectToRoute("add_event");
         }
@@ -269,7 +290,7 @@ class EventController extends Controller
         return $event;
     }
 
-    public function setFoto($event,$em)
+    public function setFoto(Event $event, EntityManager $em)
     {
         $foto = $event->getFoto();
         if($foto->getFile() !== null) {

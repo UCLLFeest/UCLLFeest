@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Entity\Gender;
 
+/** @noinspection PhpUndefinedClassInspection */
 class UserExtension extends \Twig_Extension
 {
     public function getName()

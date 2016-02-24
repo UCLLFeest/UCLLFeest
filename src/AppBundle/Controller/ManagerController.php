@@ -10,6 +10,8 @@ namespace AppBundle\Controller;
 
 
 
+use AppBundle\Entity\Event;
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,8 @@ class ManagerController extends Controller
 {
     /**
      * @Route("/managers/{id}", name="show_managers")
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function showManagersForEvent($id)
     {
@@ -40,13 +44,18 @@ class ManagerController extends Controller
 
     /**
      * @Route("/managers/add/{event_id}", name="add_manager")
+     * @param Request $request
+     * @param integer $event_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-
     public function addManager(Request $request, $event_id)
     {
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
+        /**
+         * @var Event $event
+         */
         $event = $em->getRepository('AppBundle:Event')->find($event_id);
 
         if($user != $event->getCreator()) {
@@ -56,6 +65,9 @@ class ManagerController extends Controller
             ///////
         }
 
+        /**
+         * @var User $manager
+         */
         $manager = $em->getRepository('AppBundle:User')->findOneByUsername($request->query->get('username'));
 
         if ($manager != null) {
@@ -83,13 +95,19 @@ class ManagerController extends Controller
 
     /**
      * @Route("/managers/delete/{event_id}/{username}", name="delete_manager")
+     * @param integer $event_id
+     * @param string $username
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-
     public function deleteManager($event_id, $username)
     {
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($event_id);
 
 
@@ -100,6 +118,9 @@ class ManagerController extends Controller
             ///////
         }
 
+		/**
+		 * @var User $manager
+		 */
         $manager = $em->getRepository('AppBundle:User')->findOneByUsername($username);
 
         if ($manager != null) {

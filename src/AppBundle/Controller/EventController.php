@@ -95,24 +95,16 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
-            $curl     = new CurlHttpAdapter();
-            $geocoder = new GoogleMaps($curl);
 
-          $adress =   $geocoder->geocode($event->getFullAdress());
 
             $em = $this->getDoctrine()->getManager();
 
+            $event= $this->setAdress($event);
+
             $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+            $event = $this->setFoto($event,$em);
+
             $user->addEvent($event); //MOET DIT DAN??????
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
             $user->addEvent($event);
             $event->setCreator($user);
 
@@ -167,26 +159,12 @@ class EventController extends Controller
             $event->setVenue($venue);*/
 
             $user = $this->getUser();
-            $foto = $event->getFoto();
-            if($foto->getFile() !== null) {
-                $foto->setName($event->getName());
-                $em->persist($foto);
-            }
-            else
-                $event->setFoto(null);
+            $event = $this->setFoto($event,$em);
 
             $user->addEvent($event); //MOET IDT DAN???????????
             $event->setCreator($user);
 
-
-
-            $curl     = new CurlHttpAdapter();
-            $geocoder = new GoogleMaps($curl);
-
-            $adress =   $geocoder->geocode($event->getFullAdress());
-            $event->setLatitude($adress->get(0)->getLatitude());
-            $event->setLongitude($adress->get(0)->getLongitude());
-
+            $event= $this->setAdress($event);
 
             $em->persist($event);
             $em->flush();
@@ -227,20 +205,8 @@ class EventController extends Controller
             $form = $this->createForm(EventType::class,$event);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $foto = $event->getFoto();
-                if($foto->getFile() !== null)
-                {
-                    $em->persist($foto);
-                }
-                else
-                    $event->setFoto(null);
-
-                $curl     = new CurlHttpAdapter();
-                $geocoder = new GoogleMaps($curl);
-                $adress =   $geocoder->geocode($event->getFullAdress());
-                $event->setLatitude($adress->get(0)->getLatitude());
-                $event->setLongitude($adress->get(0)->getLongitude());
-
+               $event = $this->setFoto($event,$em);
+                $event = $this->setAdress($event);
 
                 $em->persist($event);
                 $em->flush();
@@ -283,6 +249,37 @@ class EventController extends Controller
         }
 
 
+    }
+
+    public function setAdress($event)
+    {
+        try
+        {
+            $curl     = new CurlHttpAdapter();
+            $geocoder = new GoogleMaps($curl);
+            $adress =   $geocoder->geocode($event->getFullAdress());
+        }catch( \Geocoder\Exception\NoResult $e){
+            $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+            return $this->redirectToRoute("add_event");
+        }
+
+        $event->setLatitude($adress->get(0)->getLatitude());
+        $event->setLongitude($adress->get(0)->getLongitude());
+
+        return $event;
+    }
+
+    public function setFoto($event,$em)
+    {
+        $foto = $event->getFoto();
+        if($foto->getFile() !== null) {
+            $foto->setName($event->getName());
+            $em->persist($foto);
+        }
+        else
+            $event->setFoto(null);
+
+        return $event;
     }
 
 

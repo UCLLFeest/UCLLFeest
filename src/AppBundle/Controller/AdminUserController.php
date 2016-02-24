@@ -110,14 +110,10 @@ class AdminUserController extends Controller
 					'required' => true,
 					'query_builder' => function(EntityRepository $repo) use($em, $user)
 					{
-						$roles = implode(";", $user->getRoles());
-
 						$qb = $repo->createQueryBuilder('r');
 						$exp = $qb->expr();
 
-						$qb
-							->where($exp->not($exp->like('r.name', ':roles')))
-							->setParameter('roles', $roles);
+						$qb->where($exp->notIn('r.name', $user->getRoles()));
 
 						return $qb;
 					}

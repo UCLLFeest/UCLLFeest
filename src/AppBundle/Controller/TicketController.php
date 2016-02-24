@@ -28,6 +28,7 @@ class TicketController extends Controller
          * @var TicketRepository $repo
          */
         $repo = $em->getRepository('AppBundle:Ticket');
+        /** @noinspection PhpUndefinedMethodInspection */
         $tickets = $repo->findByOwner($user);
 
         return $this->render('ticket/mijn_tickets.html.twig', array('tickets' => $tickets, 'user' => $user));

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Payment;
+use AppBundle\Entity\TicketRepository;
 use Payum\Core\Gateway;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
@@ -142,7 +143,12 @@ class PaymentController extends Controller
 
             $ticket->setEvent($event);
 
-            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
+			/**
+			 * @var TicketRepository $repo
+			 */
+			$repo = $em->getRepository('AppBundle:Ticket');
+
+            if ($repo->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
                 //moet user ook niet gepersist worden?
                 $em->persist($ticket);
                 $em->flush();

@@ -9,6 +9,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
+use AppBundle\Entity\EventRepository;
+use AppBundle\Entity\TicketRepository;
 use AppBundle\Form\EventType;
 
 use Doctrine\ORM\EntityManager;
@@ -29,7 +31,13 @@ class EventController extends Controller
         //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
+
+		/**
+		 * @var EventRepository $repo
+		 */
+		$repo = $em->getRepository('AppBundle:Event');
+		/** @noinspection PhpUndefinedMethodInspection */
+		$events = $repo->findByCreator($user);
 
         //managed events
         $managing = $user->getManaging();
@@ -260,7 +268,13 @@ class EventController extends Controller
 
         if ($this->getUser()) {
             $hasTicketAlready = true;
-            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
+
+			/**
+			 * @var TicketRepository $repo
+			 */
+			$repo = $em->getRepository('AppBundle:Ticket');
+
+            if ($repo->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
                 $hasTicketAlready = false;
             }
 

@@ -3,13 +3,18 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\ORM\Query\Expr;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\Role;
 
 class AdminUserController extends Controller
 {
@@ -72,6 +77,9 @@ class AdminUserController extends Controller
 	 */
     public function addrole(Request $request, $id)
     {
+		/**
+		 * @var EntityManager $em
+		 */
         $em = $this->getDoctrine()->getManager();
 
 		/**
@@ -94,7 +102,26 @@ class AdminUserController extends Controller
 		$addRole = array();
 
 		$form = $this->createFormBuilder($addRole)
-			->add('role', TextType::class)
+			->add('role', EntityType::class,
+				array(
+					'class' => 'AppBundle:Role',
+					'choice_label' => 'name',
+					'placeholder' => 'Choose a role',
+					'required' => true,
+					'query_builder' => function(EntityRepository $repo) use($em, $user)
+					{
+						$roles = implode(";", $user->getRoles());
+
+						$qb = $repo->createQueryBuilder('r');
+						$exp = $qb->expr();
+
+						$qb
+							->where($exp->not($exp->like('r.name', ':roles')))
+							->setParameter('roles', $roles);
+
+						return $qb;
+					}
+				))
 			->getForm();
 
 		$form->handleRequest($request);
@@ -103,18 +130,23 @@ class AdminUserController extends Controller
 		{
 			$addRole = $form->getData();
 
+			/**
+			 * @var Role $role
+			 */
 			$role = $addRole['role'];
 
-			if (!$user->hasRole($role))
+			$roleName = $role->getName();
+
+			if (!$user->hasRole($roleName))
 			{
-				$this->addFlash('notice', "Role $role added");
-				$user->addRole($role);
+				$this->addFlash('notice', "Role $roleName added");
+				$user->addRole($roleName);
 
 				$em->persist($user);
 				$em->flush();
 			}
 			else
-				$this->addFlash('notice', "The user already has the role $role");
+				$this->addFlash('notice', "The user already has role $roleName");
 
 			return $this->redirectToRoute("adminuserview", array("id" => $id));
 		}

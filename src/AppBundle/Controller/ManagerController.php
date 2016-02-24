@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,10 +66,16 @@ class ManagerController extends Controller
             ///////
         }
 
+		/**
+		 * @var UserRepository $repo
+		 */
+		$repo = $em->getRepository('AppBundle:User');
+
         /**
          * @var User $manager
          */
-        $manager = $em->getRepository('AppBundle:User')->findOneByUsername($request->query->get('username'));
+		/** @noinspection PhpUndefinedMethodInspection */
+		$manager = $repo->findOneByUsername($request->query->get('username'));
 
         if ($manager != null) {
             if(!$event->getManagers()->contains($manager)) {
@@ -119,9 +126,15 @@ class ManagerController extends Controller
         }
 
 		/**
+		 * @var UserRepository $repo
+		 */
+		$repo = $em->getRepository('AppBundle:User');
+
+		/**
 		 * @var User $manager
 		 */
-        $manager = $em->getRepository('AppBundle:User')->findOneByUsername($username);
+		/** @noinspection PhpUndefinedMethodInspection */
+		$manager = $repo->findOneByUsername($username);
 
         if ($manager != null) {
             if($event->getManagers()->contains($manager)) {

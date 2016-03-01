@@ -24,7 +24,7 @@
                     <tr>
                         <td><a href="{# path('venue_detail',{'id':venue.getId()) #}">{{ venue.getName()}} ({{ venue.events|length}})</a></td>
                         <td>{{ venue.getFullAdress()}}</td>
-                        <td><a href="{{ path('add_event_venue',{'id':event.getId(), 'venue':venue.getId()}) }}"><i class="fa fa-plus"></i></a></td>
+                        <td><a href="{{ path('edit_event_venue',{'id':event.getId(), 'venue':venue.getId()}) }}"><i class="fa fa-plus"></i></a></td>
                     </tr>
                 {% endfor %}
             </table>

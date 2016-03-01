@@ -18,6 +18,7 @@ use Geocoder\Provider\GoogleMaps;
 use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -234,7 +235,7 @@ class EventController extends Controller
             $em->persist($event);
             $em->flush();
 
-            return $this->redirectToRoute('add_event_venue', array('id' => $event->getId()));
+            return $this->redirectToRoute('add_event_venues', array('id' => $event->getId()));
         }
 
         return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
@@ -242,12 +243,12 @@ class EventController extends Controller
 
 
     /**
-     * @Route("/events/add/venue/{id}", name="add_event_venue")
+     * @Route("/events/venues/{id}", name="add_event_venues")
      */
 
-    public function addVenue(Request $request, $id)
+    public function venues(Request $request, $id)
     {
-        //wat als event niet wordt meegegeven?
+        //wat als event nievt wordt meegegeven?
         //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
@@ -256,44 +257,82 @@ class EventController extends Controller
 //
 //        $form->handleRequest($request);
 
+        if ($event->getCreator() == $this->getUser()) {
 
-        $data = array();
+            $data = array();
 
-        $form = $this->createFormBuilder($data)
-            ->add('venue', IntegerType::class, array('label' => 'Venue ID'))
-            ->add('Submit', SubmitType::class)
-            ->getForm();
+            $form = $this->createFormBuilder($data)
+                ->add('venue', TextType::class, array('label' => 'Venue'))
+                ->add('Zoek', SubmitType::class)
+                ->getForm();
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+            $venues = array();
 
-            //opgehaalde venue in event steken
-            //event in venue steken
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            //CHECKEN OF HIJ DEZE KAN VINDEN
+                //opgehaalde venue in event steken
+                //event in venue steken
 
-            //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
-            //$venue = $em->getRepository('AppBundle:Venue')->find($request->query->get('venue'));
+                //CHECKEN OF HIJ DEZE KAN VINDEN
 
-            $data = $form->getData();
+                //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
+                $venue =
 
+                $data = $form->getData();
+                $venues = $em->createQuery("Select t from AppBundle:Venue as t where lower(t.name) LIKE lower(:name)")->setParameter('name', '%' . $data['venue'] . '%')->getResult();
 
-            $venue = $em->getRepository('AppBundle:Venue')->find($data['venue']);
+                /*$venue = $em->getRepository('AppBundle:Venue')->find($data['venue']);
 
-            if ($venue) {
+                if ($venue) {
+                    $event->setVenue($venue);
+
+                    $em->persist($event);
+                    $em->flush();
+                } else {
+                    $this->addFlash('notice', "Venue could not be found.");
+                }
+
+                return $this->redirectToRoute('add_payment', array('id' => $event->getId()));*/
+            }
+
+            return $this->render('event/event_venue.html.twig', array('form' => $form->createView(), 'venues' => $venues, 'event' => $event));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
+     * @Route("/events/venue/{id}/{venue}", name="add_event_venue")
+     */
+
+    public function addVenue($id, $venue)
+    {
+        //wat als event niet wordt meegegeven?
+        //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+        $venue = $em->getRepository('AppBundle:Venue')->find($venue);
+
+        if ($event->getCreator() == $this->getUser()) {
+            if ($event && $venue) {
+
                 $event->setVenue($venue);
 
                 $em->persist($event);
                 $em->flush();
-            } else {
-                $this->addFlash('notice', "Venue could not be found.");
+
+
+                return $this->redirectToRoute('add_payment', array('id' => $event->getId()));
             }
 
-            return $this->redirectToRoute('add_payment', array('id' => $event->getId()));
+            return $this->redirectToRoute('add_event_venues', array('id' => $event->getId()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -311,16 +350,21 @@ class EventController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($event->getCreator() == $this->getUser()) {
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($event);
-            $em->flush();
+                $em->persist($event);
+                $em->flush();
 
-            //naar detail of naar overview?
-            return $this->redirectToRoute('show_events');
+                //naar detail of naar overview?
+                return $this->redirectToRoute('profile');
+            }
+
+            return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
     }
 
     //DELETINGGG
@@ -372,86 +416,113 @@ class EventController extends Controller
 
         $form->handleRequest($request);
 
-        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
+            // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
+            if ($form->isSubmitted() && $form->isValid()) {
 
 
-            $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
 
-            $user = $this->getUser();
+                $user = $this->getUser();
 
-            $event= $this->setAdress($event);
-            $event = $this->setFoto($event,$em);
-
-
-            $user->addEvent($event);
+                $event= $this->setAdress($event);
+                $event = $this->setFoto($event,$em);
 
 
-            $user->addEvent($event);
-            $event->setCreator($user);
+                $user->addEvent($event);
 
-            $em->persist($event);
-            $em->flush();
 
-            return $this->redirectToRoute('show_overview');
+                $user->addEvent($event);
+                $event->setCreator($user);
+
+                $em->persist($event);
+                $em->flush();
+
+                return $this->redirectToRoute('profile');
+            }
+
+            return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_information.html.twig', array('form' => $form->createView()));
     }
 
-
     /**
-     * @Route("/events/edit/venue/{id}", name="edit_event_venue")
+     * @Route("/events/edit/venues/{id}", name="edit_event_venues")
      */
 
-    public function editVenue(Request $request, $id)
+    public function editVenues(Request $request, $id)
     {
-
+        //wat als event nievt wordt meegegeven?
+        //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
+
+//        $form = $this->createForm(EventVenueType::class, $event);
+//
+//        $form->handleRequest($request);
+
 
         $data = array();
 
         $form = $this->createFormBuilder($data)
-            ->add('venue', IntegerType::class, array('label' => 'Venue ID'))
-            ->add('Submit', SubmitType::class)
+            ->add('venue', TextType::class, array('label' => 'Venue'))
+            ->add('Zoek', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            //opgehaalde venue in event steken
-            //event in venue steken
-
-            //CHECKEN OF HIJ DEZE KAN VINDEN
-
-            //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
-            //$venue = $em->getRepository('AppBundle:Venue')->find($request->query->get('venue'));
-
-            $data = $form->getData();
+        if ($event->getCreator() == $this->getUser()) {
+            $venues = array();
 
 
-            $venue = $em->getRepository('AppBundle:Venue')->find($data['venue']);
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($venue) {
+                $data = $form->getData();
+                $venues = $em->createQuery("Select t from AppBundle:Venue as t where lower(t.name) LIKE lower(:name)")->setParameter('name', '%' . $data['venue'] . '%')->getResult();
+
+            }
+
+            return $this->render('event/event_edit_venue.html.twig', array('form' => $form->createView(), 'venues' => $venues, 'event' => $event));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
+     * @Route("/events/edit/venue/{id}/{venue}", name="edit_event_venue")
+     */
+
+    public function editVenue($id, $venue)
+    {
+        //wat als event niet wordt meegegeven?
+        //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+        $venue = $em->getRepository('AppBundle:Venue')->find($venue);
+
+        if ($event->getCreator() == $this->getUser()) {
+            if ($event && $venue) {
+
                 $event->setVenue($venue);
 
                 $em->persist($event);
                 $em->flush();
-            } else {
-                $this->addFlash('notice', "Venue could not be found.");
+
+                return $this->redirectToRoute('profile');
             }
 
-            return $this->redirectToRoute('event_overview');
+            return $this->redirectToRoute('edit_event_venues', array('id' => $event->getId()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
-
     /**
-     * @Route("/events/edit/payment/{id}", name="edit_payment")
+         * @Route("/events/edit/payment/{id}", name="edit_payment")
      */
 
     public function editPayment(Request $request, $id)
@@ -461,22 +532,26 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        $form = $this->createForm(EventPaymentsType::class, $event);
+        $form = $this->createForm(EventPaymentType::class, $event);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($event->getCreator() == $this->getUser()) {
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($event);
-            $em->flush();
+                $em->persist($event);
+                $em->flush();
 
-            return $this->redirectToRoute('show_events');
-            //return $this->redirectToRoute('event_detail', array('id' => $event->getId()));
+                //naar detail of naar overview?
+                return $this->redirectToRoute('profile');
+            }
+
+            return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
+        } else {
+            $this->addFlash('notice', "You're not allowed to access this page");
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_payment.html.twig', array('form' => $form->createView()));
     }
-
 
     //////////////////////////
 

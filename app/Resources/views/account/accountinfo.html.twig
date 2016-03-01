@@ -5,10 +5,7 @@
 {% endblock %}
 
 {% block body %}
-
     <div class="container content">
-
-
         {% block accountblock %}
         {% endblock %}
 
@@ -52,13 +49,23 @@
                                 <td>{{ event.getFullAdress()}}</td>
                                 <td>{{ event.getDateFormatted() }}</td>
                                 <td>
-                                    <a class="btn btn-default" role="button" href="{{ path('delete_event',{'id':event.getId()}) }}">
-                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                    <a href="{{ path('delete_event',{'id':event.getId()}) }}">
+                                        <i class="fa fa-times"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-default" role="button" href="{{ path('edit_event',{'id':event.getId()}) }}">
-                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('edit_event_venues',{'id':event.getId()}) }}">
+                                        <i class="fa fa-map-marker"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a  href="{{ path('edit_payment',{'id':event.getId()}) }}">
+                                        <i class="fa fa-credit-card-alt"></i>
                                     </a>
                                 </td>
                             </tr>

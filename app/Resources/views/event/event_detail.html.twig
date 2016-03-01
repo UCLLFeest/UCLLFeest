@@ -13,6 +13,9 @@
 
                 {% if app.user == event.creator %}
                 <a class="feest-button pull-right" href="{{ path('show_managers', {'id':event.getId()}) }}">Managers</a>
+                {% endif %}
+                {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
+                <a class="feest-button pull-right" href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
                 {% endif %}Event</div>
 
         </div>
@@ -71,6 +74,10 @@
                                 <td>{{ event.capacity }}</td>
                             </tr>
                         {% endif %}
+                        <tr>
+                            <td>Aangemaakt door</td>
+                            <td><a href="{{ path('accountview',{'id':event.creator.getId()}) }}">{{ event.creator.getFullName() }}</a></td>
+                        </tr>
                     </table>
                 </div>
                 <div class="col-md-6">
@@ -83,10 +90,6 @@
                     </div>
                 </div>
             </div>
-
-            {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
-                <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
-            {% endif %}
 
                 {% if event.tickets is not empty %}
                     <table>

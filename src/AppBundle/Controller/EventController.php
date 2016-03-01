@@ -9,10 +9,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
+use AppBundle\Entity\TicketRepository;
 use AppBundle\Entity\Venue;
 use AppBundle\Form\EventInformationType;
 use AppBundle\Form\EventPaymentType;
-use AppBundle\Form\EventVenueType;
 
 use Doctrine\ORM\EntityManager;
 use Geocoder\Exception\NoResult;
@@ -22,8 +22,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Acl\Exception\Exception;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
@@ -237,7 +235,13 @@ class EventController extends Controller
 			/**
 			 * @var Event $event
 			 */
-            $event= $this->setAdress($event);
+            try
+            {
+                $event= $this->setAdress($event);
+            }catch(NoResult $e){
+                $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+                return $this->redirectToRoute("add_event");
+            }
             $event = $this->setFoto($event,$em);
 
             $user->addEvent($event);
@@ -265,6 +269,10 @@ class EventController extends Controller
         //wat als event niet wordt meegegeven?
         //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
 //        $form = $this->createForm(EventVenueType::class, $event);
@@ -317,16 +325,25 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * @Route("/events/venue/{id}/{venue}", name="add_event_venue")
-     */
-
+	/**
+	 * @Route("/events/venue/{id}/{venue}", name="add_event_venue")
+	 * @param integer $id
+	 * @param integer $venue
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
     public function addVenue($id, $venue)
     {
         //wat als event niet wordt meegegeven?
         //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
+
+		/**
+		 * @var Venue $venue
+		 */
         $venue = $em->getRepository('AppBundle:Venue')->find($venue);
 
         if ($event->getCreator() == $this->getUser()) {
@@ -359,6 +376,10 @@ class EventController extends Controller
 
         //wat als event niet wordt meegegeven?
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         $form = $this->createForm(EventPaymentType::class, $event);
@@ -393,6 +414,10 @@ class EventController extends Controller
     {
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
         $em =$this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if (!$event) {
@@ -448,8 +473,12 @@ class EventController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
-
+            try{
             $event = $this->setAdress($event);
+            }catch(NoResult $e) {
+                $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+                return $this->redirectToRoute("add_event");
+            }
             $event = $this->setFoto($event, $em);
 
 
@@ -483,6 +512,10 @@ class EventController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         $data = array();
@@ -512,17 +545,26 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * @Route("/events/edit/venue/{id}/{venue}", name="edit_event_venue")
-     */
-
-    public function editVenue($id, $venue)
+	/**
+	 * @Route("/events/edit/venue/{id}/{venue}", name="edit_event_venue")
+	 * @param integer $id
+	 * @param integer $venueId
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+    public function editVenue($id, $venueId)
     {
         //wat als event niet wordt meegegeven?
         //WAT ALS REGISTRATIE VIA VENUE ZODAT DEZE AL MOET HEIRIN STAAN??
         $em = $this->getDoctrine()->getManager();
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
-        $venue = $em->getRepository('AppBundle:Venue')->find($venue);
+
+		/**
+		 * @var Venue $venue
+		 */
+        $venue = $em->getRepository('AppBundle:Venue')->find($venueId);
 
         if ($event->getCreator() == $this->getUser()) {
             if ($event && $venue) {
@@ -558,6 +600,10 @@ class EventController extends Controller
 
         //wat als event niet wordt meegegeven?
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         $form = $this->createForm(EventPaymentType::class, $event);
@@ -590,15 +636,9 @@ class EventController extends Controller
 	 */
 	public function setAdress(Event $event)
     {
-        try
-        {
             $curl     = new CurlHttpAdapter();
             $geocoder = new GoogleMaps($curl);
             $adress =   $geocoder->geocode($event->getFullAdress());
-        }catch( \Geocoder\Exception\NoResult $e){
-            $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
-            return $this->redirectToRoute("add_event");
-        }
 
         $event->setLatitude($adress->get(0)->getLatitude());
         $event->setLongitude($adress->get(0)->getLongitude());
@@ -633,6 +673,10 @@ class EventController extends Controller
     public function eventDetail($id)
     {
         $em =$this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
         if(!$event)
         {

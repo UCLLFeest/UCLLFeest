@@ -77,7 +77,7 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $admin->setEmail('test2@gmail.com');
         $admin->setPlainPassword('test');
         $admin->setRoles(array(User::ROLE_ADMIN));
-		$user->setEnabled(true);
+		$admin->setEnabled(true);
 
 		$userManager->updateUser($admin);
 
@@ -96,7 +96,7 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $superAdmin->setEmail('test3@gmail.com');
         $superAdmin->setPlainPassword('test');
         $superAdmin->setRoles(array(User::ROLE_SUPER_ADMIN));
-		$user->setEnabled(true);
+		$superAdmin->setEnabled(true);
 
 		$userManager->updateUser($superAdmin);
 

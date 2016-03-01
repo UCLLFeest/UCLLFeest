@@ -49,7 +49,7 @@ class EventRepositoryTest extends KernelTestCase
 		 */
 		$repo = $this->em->getRepository('AppBundle:Event');
 
-        $events = $repo->findEventByName(50.8776,4.7043);
+        $events = $repo->sortEventByLocationDistance(50.8776,4.7043);
         $this->assertNotCount(0,$events);
     }
 

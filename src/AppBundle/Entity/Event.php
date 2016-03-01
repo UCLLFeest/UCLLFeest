@@ -115,7 +115,7 @@ class Event
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $capacity;
+    private $capacity = 0;
 
     /**
      * @ORM\Column(type="decimal",scale=2, nullable=true)

@@ -42,7 +42,7 @@ class PaymentController extends Controller
 		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        if($event->getSelling()) {
+        if($event->getSelling() && $event->getTickets()->count() < $event->getCapacity()) {
             $gatewayName = 'paypal';
             /**
              * @var StorageInterface $storage
@@ -107,7 +107,7 @@ class PaymentController extends Controller
         //$payment = $payum->getStorage($identity->getClass())->find($identity);
 
         // or Payum can fetch the model for you while executing a request (Preferred).
-        var_dump($status = new GetHumanStatus($token));
+        //var_dump($status = new GetHumanStatus($token));
         $gateway->execute($status = new GetHumanStatus($token));
         //voor details te tonen (is al opgeslagen)
 
@@ -141,7 +141,6 @@ class PaymentController extends Controller
             $user->addTicket($ticket);
             $ticket->setOwner($user);
 
-            var_dump($payment->getDetails());
 
 			/**
 			 * @var Event $event

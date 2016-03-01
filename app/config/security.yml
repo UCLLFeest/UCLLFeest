@@ -50,6 +50,9 @@ security:
         - { path: ^/done, roles: ROLE_USER }
         #Allow access to done (order)
         - { path: ^/tickets, roles: ROLE_USER }
+        #Allow access to venue adding
         - { path: ^/venues/add, roles: ROLE_USER }
+        #Allow access to venue adding
+        - { path: ^/dashboard, roles: ROLE_USER }
         
     

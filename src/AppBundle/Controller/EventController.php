@@ -9,17 +9,17 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
-use AppBundle\Entity\Venue;
+use AppBundle\Entity\TicketRepository;
 use AppBundle\Form\EventInformationType;
 use AppBundle\Form\EventPaymentType;
-use AppBundle\Form\EventVenueType;
 
+use Doctrine\ORM\EntityManager;
+use Geocoder\Exception\NoResult;
 use Geocoder\Provider\GoogleMaps;
 use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -201,15 +201,19 @@ class EventController extends Controller
 
     //////////ADDING
 
-    /**
-     * @Route("/events/add", name="add_event")
-     */
-
+	/**
+	 * @Route("/events/add", name="add_event")
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
      public function add(Request $request)
     {
         //Er wordt een form gemaakt in de vorm van EventType.
         //En wordt gekoppeld aan een Event object.
 
+		/**
+		 * @var Event $event
+		 */
         $event = new Event();
         $form = $this->createForm(EventInformationType::class, $event);
 
@@ -220,13 +224,18 @@ class EventController extends Controller
             // Als dit klopt wordt de event aangemaakt en op de DB gezet
             // En returnt de user naar de event overview.
 
-
+			/**
+			 * @var EntityManager $em
+			 */
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
 
+			/**
+			 * @var Event $event
+			 */
             $event= $this->setAdress($event);
-            $event = $this->setFoto($event,$em);
+            $event = $this->setFoto($event, $em);
 
             $user->addEvent($event);
             $event->setCreator($user);
@@ -241,10 +250,12 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("/events/add/venue/{id}", name="add_event_venue")
-     */
-
+	/**
+	 * @Route("/events/add/venue/{id}", name="add_event_venue")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function addVenue(Request $request, $id)
     {
         //wat als event niet wordt meegegeven?
@@ -296,10 +307,12 @@ class EventController extends Controller
         return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
-    /**
-     * @Route("/events/add/payment/{id}", name="add_payment")
-     */
-
+	/**
+	 * @Route("/events/add/payment/{id}", name="add_payment")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function addPayment(Request $request, $id)
     {
 
@@ -325,10 +338,11 @@ class EventController extends Controller
 
     //DELETINGGG
 
-    /**
-     * @Route("events/delete/{id}", name="delete_event")
-     */
-
+	/**
+	 * @Route("events/delete/{id}", name="delete_event")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
     public function deleteEvent($id)
     {
         //De entitymanager wordt aangemaakt en verwijdert het evenement dat wordt gevonden met de id
@@ -357,15 +371,21 @@ class EventController extends Controller
 
     ////////////////////////////////EDITTING
 
-    /**
-     * @Route("/events/edit/{id}", name="edit_event")
-     */
-
+	/**
+	 * @Route("/events/edit/{id}", name="edit_event")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function edit(Request $request, $id)
     {
         //Er wordt een form gemaakt in de vorm van EventType.
         //En wordt gekoppeld aan een Event object.
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         $form = $this->createForm(EventInformationType::class, $event);
@@ -375,13 +395,15 @@ class EventController extends Controller
         // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
         if ($form->isSubmitted() && $form->isValid()) {
 
-
+			/**
+			 * @var EntityManager $em
+			 */
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
 
-            $event= $this->setAdress($event);
-            $event = $this->setFoto($event,$em);
+            $event = $this->setAdress($event);
+            $event = $this->setFoto($event, $em);
 
 
             $user->addEvent($event);
@@ -400,10 +422,12 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("/events/edit/venue/{id}", name="edit_event_venue")
-     */
-
+	/**
+	 * @Route("/events/edit/venue/{id}", name="edit_event_venue")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function editVenue(Request $request, $id)
     {
 
@@ -450,10 +474,12 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("/events/edit/payment/{id}", name="edit_payment")
-     */
-
+	/**
+	 * @Route("/events/edit/payment/{id}", name="edit_payment")
+	 * @param Request $request
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function editPayment(Request $request, $id)
     {
 
@@ -461,7 +487,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        $form = $this->createForm(EventPaymentsType::class, $event);
+        $form = $this->createForm(EventPaymentType::class, $event);
 
         $form->handleRequest($request);
 
@@ -480,14 +506,18 @@ class EventController extends Controller
 
     //////////////////////////
 
-    public function setAdress($event)
+	/**
+	 * @param Event $event
+	 * @return Event|\Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	public function setAdress(Event $event)
     {
         try
         {
             $curl     = new CurlHttpAdapter();
             $geocoder = new GoogleMaps($curl);
             $adress =   $geocoder->geocode($event->getFullAdress());
-        }catch( \Geocoder\Exception\NoResult $e){
+        }catch( NoResult $e){
             $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
             return $this->redirectToRoute("add_event");
         }
@@ -498,7 +528,12 @@ class EventController extends Controller
         return $event;
     }
 
-    public function setFoto($event,$em)
+	/**
+	 * @param Event $event
+	 * @param EntityManager $em
+	 * @return Event
+	 */
+	public function setFoto(Event $event, EntityManager $em)
     {
         $foto = $event->getFoto();
         if($foto->getFile() !== null) {
@@ -512,10 +547,11 @@ class EventController extends Controller
     }
 
 
-    /**
-     * @Route("events/{id}", name="event_detail")
-     */
-
+	/**
+	 * @Route("events/{id}", name="event_detail")
+	 * @param integer $id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function eventDetail($id)
     {
         $em =$this->getDoctrine()->getManager();
@@ -528,7 +564,13 @@ class EventController extends Controller
 
         if ($this->getUser()) {
             $hasTicketAlready = true;
-            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
+
+			/**
+			 * @var TicketRepository $repo
+			 */
+			$repo = $em->getRepository('AppBundle:Ticket');
+
+            if ($repo->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
                 $hasTicketAlready = false;
             }
 

@@ -13,8 +13,28 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use AppBundle\Entity\User;
-class LoadTestUsers implements FixtureInterface
+use FOS\UserBundle\Doctrine\UserManager;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
 {
+	/**
+	 * @var ContainerInterface
+	 */
+	private $container;
+
+	/**
+	 * Sets the container.
+	 *
+	 * @param ContainerInterface|null $container A ContainerInterface instance or null
+	 */
+	public function setContainer(ContainerInterface $container = null)
+	{
+		$this->container = $container;
+	}
+
     /**
      * Load data fixtures with the passed EntityManager
      *
@@ -22,40 +42,54 @@ class LoadTestUsers implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $user = new User();
+		/**
+		 * @var UserManagerInterface $userManager
+		 */
+		$userManager = $this->container->get('fos_user.user_manager');
+
+		/**
+		 * @var User $user
+		 */
+        $user = $userManager->createUser();
         $user->setFirstName("test");
         $user->setLastName("test");
         $user->setGender(0);
         $user->setBirthday(new \DateTime());
         $user->setUsername('user');
         $user->setEmail('test@gmail.com');
-        $user->setPassword('test');
+        $user->setPlainPassword('test');
+
+		$userManager->updateUser($user);
 
         $manager->persist($user);
         $manager->flush();
 
-        $admin = new User();
+		$admin = $userManager->createUser();
         $admin->setFirstName("test");
         $admin->setLastName("test");
         $admin->setGender(0);
         $admin->setBirthday(new \DateTime());
         $admin->setUsername('admin');
         $admin->setEmail('test2@gmail.com');
-        $admin->setPassword('test');
+        $admin->setPlainPassword('test');
         $admin->setRoles(array(User::ROLE_ADMIN));
+
+		$userManager->updateUser($admin);
 
         $manager->persist($admin);
         $manager->flush();
 
-        $superAdmin = new User();
+		$superAdmin = $userManager->createUser();
         $superAdmin->setFirstName("test");
         $superAdmin->setLastName("test");
         $superAdmin->setGender(0);
         $superAdmin->setBirthday(new \DateTime());
         $superAdmin->setUsername('super');
         $superAdmin->setEmail('test3@gmail.com');
-        $superAdmin->setPassword('test');
+        $superAdmin->setPlainPassword('test');
         $superAdmin->setRoles(array(User::ROLE_SUPER_ADMIN));
+
+		$userManager->updateUser($superAdmin);
 
         $manager->persist($superAdmin);
         $manager->flush();

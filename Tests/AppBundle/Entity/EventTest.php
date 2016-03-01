@@ -16,10 +16,29 @@ use AppBundle\Entity\Venue;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class EventTest extends WebTestCase
 {
+    /**
+     * @var Event
+     */
     private $event;
+
+	/**
+	 * @var User
+	 */
     private $user;
+
+	/**
+	 * @var Ticket
+	 */
     private $ticket;
+
+	/**
+	 * @var Venue
+	 */
     private $venue;
+
+	/**
+	 * @var User
+	 */
     private $manager;
 
 

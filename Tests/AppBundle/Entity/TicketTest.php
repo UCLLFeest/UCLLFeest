@@ -15,9 +15,19 @@ use AppBundle\Entity\User;
 
 class TicketTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @var Ticket
+     */
     private $ticket;
+
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var Event
+     */
     private $event;
 
     protected function setUp()

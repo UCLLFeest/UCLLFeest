@@ -13,6 +13,9 @@ use AppBundle\FormType\ChangePassword;
 
 class ChangePasswordTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ChangePassword
+     */
     private $changePassword;
 
     /**

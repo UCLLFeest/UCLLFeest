@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Event;
 use AppBundle\Entity\Payment;
 use AppBundle\Entity\TicketRepository;
 use Payum\Core\Gateway;
@@ -35,6 +36,10 @@ class PaymentController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if($event->getSelling()) {
@@ -138,7 +143,9 @@ class PaymentController extends Controller
 
             var_dump($payment->getDetails());
 
-
+			/**
+			 * @var Event $event
+			 */
             $event = $em->getRepository('AppBundle:Event')->find($payment->getDetails()['custom']);
 
             $ticket->setEvent($event);

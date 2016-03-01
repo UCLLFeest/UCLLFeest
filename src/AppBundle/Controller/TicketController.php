@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Ticket;
 use AppBundle\Entity\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -42,9 +43,11 @@ class TicketController extends Controller
     public function ticketDetail($id)
     {
         $em =$this->getDoctrine()->getManager();
+
+        /**
+         * @var Ticket $ticket
+         */
         $ticket = $em->getRepository('AppBundle:Ticket')->find($id);
-
-
 
         if(!$ticket)
         {

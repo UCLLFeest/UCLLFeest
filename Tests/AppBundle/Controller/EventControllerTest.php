@@ -122,7 +122,7 @@ class EventControllerTest extends WebTestCase
         $form['event[description]'] = 'test';
         $form['event[capacity]'] = '500';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
         $crawler = $client->followRedirect();
 
         $this->assertEquals($count+1, $crawler->filter('a:contains("Delete")')->count());
@@ -428,7 +428,7 @@ class EventControllerTest extends WebTestCase
         $form['event[description]'] = 'test';
         $form['event[capacity]'] = '500';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
         $crawler = $client->followRedirect();
 
         $this->assertEquals($count+1, $crawler->filter('a:contains("Delete")')->count());
@@ -464,7 +464,7 @@ class EventControllerTest extends WebTestCase
         $form['event[description]'] = 'test';
         $form['event[capacity]'] = '500';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
         $crawler = $client->followRedirect();
 
         $this->assertNotEquals($text, $crawler->filter('td > a')->eq(0)->text());
@@ -544,7 +544,7 @@ class EventControllerTest extends WebTestCase
         $form['event[description]'] = 'aangepast';
         $form['event[capacity]'] = '1';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
         $crawler = $client->followRedirect();
 
         $link = $crawler

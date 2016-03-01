@@ -81,7 +81,7 @@ class AdminUserController extends Controller
         {
             $this->addFlash('notice', "The user with id $id does not exist");
 
-            return $this->redirectToRoute("/admin/user");
+            return $this->redirectToRoute("adminuseroverview");
         }
     }
 
@@ -204,7 +204,7 @@ class AdminUserController extends Controller
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/user");
+			return $this->redirectToRoute("adminuseroverview");
 		}
 
 		if($role !== User::ROLE_DEFAULT)
@@ -251,20 +251,20 @@ class AdminUserController extends Controller
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/user");
+			return $this->redirectToRoute("adminuseroverview");
 		}
 
 		if($role === User::ROLE_DEFAULT)
 		{
 			$this->addFlash('notice', "Role $role cannot be changed");
 
-			return $this->redirectToRoute("adminUserview", array("id" => $id));
+			return $this->redirectToRoute("adminuserview", array("id" => $id));
 		}
 		else if (!$user->hasRole($role))
 		{
 			$this->addFlash('notice', "The user does not have role $role");
 
-			return $this->redirectToRoute("adminUserview", array("id" => $id));
+			return $this->redirectToRoute("adminuserview", array("id" => $id));
 		}
 
 		$changeRole = array(

@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\RoleRepository;
 use AppBundle\Entity\UserRepository;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,13 +52,29 @@ class AdminUserController extends Controller
 		 */
         $repo = $em->getRepository('AppBundle:User');
 
+		/**
+		 * @var User $user
+		 */
         $user = $repo->find($id);
 
         if($user !==  null)
         {
+			/**
+			 * @var RoleRepository $roleRepo
+			 */
+			$roleRepo = $em->getRepository('AppBundle:Role');
+
+			/**
+			 * @var User $admin
+			 */
+			$admin = $this->getUser();
+
+			$qb = $roleRepo->getUnassignedRolesQuery($admin, $user);
+
             return $this->render("admin/user/view.html.twig",
                 array(
-                    "user" => $user
+                    "user" => $user,
+					'rolesLeft' => !empty($qb->getQuery()->getArrayResult())
             ));
         }
         else
@@ -83,20 +99,36 @@ class AdminUserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 		/**
-		 * @var UserRepository $repo
+		 * @var UserRepository $userRepo
 		 */
-        $repo = $em->getRepository('AppBundle:User');
+        $userRepo = $em->getRepository('AppBundle:User');
 
 		/**
 		 * @var User $user
 		 */
-        $user = $repo->find($id);
+        $user = $userRepo->find($id);
 
         if($user ===  null)
 		{
 			$this->addFlash('notice', "The user with id $id does not exist");
 
-			return $this->redirectToRoute("/admin/user");
+			return $this->redirectToRoute("adminuseroverview");
+		}
+
+		/**
+		 * @var RoleRepository $roleRepo
+		 */
+		$roleRepo = $em->getRepository('AppBundle:Role');
+
+		$qb = $roleRepo->getUnassignedRolesQuery($this->getUser(), $user);
+
+		$result = $qb->getQuery()->getArrayResult();
+
+		if(empty($result))
+		{
+			$this->addFlash('notice', "There are no roles left to add to the user");
+
+			return $this->redirectToRoute("adminuserview", array('id' => $id));
 		}
 
 		$addRole = array();
@@ -108,13 +140,8 @@ class AdminUserController extends Controller
 					'choice_label' => 'name',
 					'placeholder' => 'Choose a role',
 					'required' => true,
-					'query_builder' => function(EntityRepository $repo) use($em, $user)
+					'query_builder' => function() use($qb)
 					{
-						$qb = $repo->createQueryBuilder('r');
-						$exp = $qb->expr();
-
-						$qb->where($exp->notIn('r.name', $user->getRoles()));
-
 						return $qb;
 					}
 				))

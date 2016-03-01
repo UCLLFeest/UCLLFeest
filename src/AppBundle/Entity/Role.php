@@ -91,14 +91,9 @@ class Role
 	 */
 	public function setRequiredRole($role)
 	{
-		//Disallow setting itself as required role
-		if($this !== $role)
+		if($role === null || $role instanceof Role)
 		{
-			//Don't allow circular references
-			if($role === null || ($role instanceof Role && $role->getRequiredRole() !== $this))
-			{
-				$this->requiredRole = $role;
-			}
+			$this->requiredRole = $role;
 		}
 
 		return $this;

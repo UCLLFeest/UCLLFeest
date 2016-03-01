@@ -58,12 +58,16 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $user->setUsername('user');
         $user->setEmail('test@gmail.com');
         $user->setPlainPassword('test');
+		$user->setEnabled(true);
 
 		$userManager->updateUser($user);
 
         $manager->persist($user);
         $manager->flush();
 
+		/**
+		 * @var User $admin
+		 */
 		$admin = $userManager->createUser();
         $admin->setFirstName("test");
         $admin->setLastName("test");
@@ -73,12 +77,16 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $admin->setEmail('test2@gmail.com');
         $admin->setPlainPassword('test');
         $admin->setRoles(array(User::ROLE_ADMIN));
+		$user->setEnabled(true);
 
 		$userManager->updateUser($admin);
 
         $manager->persist($admin);
         $manager->flush();
 
+		/**
+		 * @var User $superAdmin
+		 */
 		$superAdmin = $userManager->createUser();
         $superAdmin->setFirstName("test");
         $superAdmin->setLastName("test");
@@ -88,6 +96,7 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $superAdmin->setEmail('test3@gmail.com');
         $superAdmin->setPlainPassword('test');
         $superAdmin->setRoles(array(User::ROLE_SUPER_ADMIN));
+		$user->setEnabled(true);
 
 		$userManager->updateUser($superAdmin);
 

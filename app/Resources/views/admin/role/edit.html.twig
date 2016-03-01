@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ include('::admin/role/roleinfo.html.twig', {'form': form, 'headerText': 'Edit Role', 'submitText': 'Save'}) }}
-
+    <div class="container content">
+        {{ include('::admin/role/roleinfo.html.twig', {'form': form, 'headerText': 'Edit Role', 'submitText': 'Save'}) }}
+    </div>
 {% endblock %}

@@ -5,14 +5,16 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Add a venue</h1>
-    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+    <div class="container content">
+        <div class="title">Add a venue</div>
+        {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
-    {{ form_start(form) }}
+        {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.adress) }}
         {{ form_row(form.city) }}
         {{ form_row(form.postalCode) }}
         {{ form_row(form.description) }}
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

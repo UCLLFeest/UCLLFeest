@@ -126,11 +126,11 @@ payum:
 
 endroid_qr_code:
     size: 100
-    padding: 10
+    padding: 0
     extension: gif
     error_correction_level: high
     foreground_color: { r: 0, g: 0, b: 0, a: 0 }
-    background_color: { r: 255, g: 255, b: 255, a: 0 }
+    background_color: { r: 230, g: 230, b: 230, a: 0 }
     label: "Feest Ticket"
     label_font_size: 16
 

@@ -5,21 +5,26 @@
 {% endblock %}
 
 {% block body %}
-    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-        {{ form_errors(form) }}
-        {{ form_row(form.username) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.firstname) }}
-        {{ form_row(form.lastname) }}
-        {{ form_row(form.birthday) }}
-        {{ form_row(form.gender) }}
-        {{ form_row(form.plainPassword.first) }}
-        {{ form_row(form.plainPassword.second) }}
 
-        {{ form_row(form._token) }}
+    <div class="container content">
+        <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" >
+            {{ form_errors(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+            {{ form_row(form.birthday) }}
+            {{ form_row(form.gender) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
 
-        <div>
-            <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
-        </div>
-    </form>
+            {{ form_row(form._token) }}
+
+            <div>
+                <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+            </div>
+        </form>
+    </div>
+
+
 {% endblock body %}

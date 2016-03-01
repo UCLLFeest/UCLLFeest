@@ -6,20 +6,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Overview</h1>
+    <div class="container content">
+        <div class="title">Overview</div>
 
-
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Adres</td>
-        </tr>
-        {% for venue in venues %}
+        <table class="table">
             <tr>
-                <td><a href="{{ path('venue_detail',{'id':venue.getId()}) }}">{{ venue.getName()}}</td>
-                <td>{{ venue.getFullAdress()}}</td>
+                <td>Naam</td>
+                <td>Adres</td>
             </tr>
-        {% endfor %}
-    </table>
-    <p> <a href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a> </p>
+            {% for venue in venues %}
+                <tr>
+                    <td><a href="{{ path('venue_detail',{'id':venue.getId()}) }}">{{ venue.getName()}}</td>
+                    <td>{{ venue.getFullAdress()}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p> <a href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a> </p>
+    </div>
 {% endblock %}

@@ -6,21 +6,24 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Overview</h1>
 
+    <div class="container content">
+        <div class="title">Mijn Tickets</div>
 
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Datum</td>
-            <td>Claimed</td>
-        </tr>
-        {% for ticket in tickets %}
+        <table class="table">
             <tr>
-                <td><a href="{{ path('ticket_detail',{'id':ticket.getId()}) }}">{{ ticket.event.name }}</td>
-                <td>{{ ticket.date | date('Y-m-d') }}</td>
-                <td>{{ ticket.claimed ? 'Claimed':'Not Claimed' }}</td>
+                <td>Naam</td>
+                <td>Datum</td>
+                <td>Geldigheid</td>
             </tr>
-        {% endfor %}
-    </table>
+            {% for ticket in tickets %}
+                <tr>
+                    <td><a href="{{ path('ticket_detail',{'id':ticket.getId()}) }}">{{ ticket.event.name }}</td>
+                    <td>{{ ticket.event.getDateFormatted() }}</td>
+                    <td>{{ ticket.claimed ? 'Geldig':'Ongeldig' }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
 {% endblock %}

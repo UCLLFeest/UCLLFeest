@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Admin Overview</h1>
+    <div class="container content">
+        <div class="title">Admin Overview</div>
+        <p><a href="{{ path('adminuseroverview') }}">User Overview</a></p>
+        <p><a href="{{ path('adminroleoverview') }}">Role Overview</a></p>
+    </div>
 
-    <p><a href="{{ path('adminuseroverview') }}">User Overview</a></p>
-    <p><a href="{{ path('adminroleoverview') }}">Role Overview</a></p>
 {% endblock %}

@@ -37,7 +37,7 @@ security:
         #Disallow access to all other account pages
         - { path: ^/account, roles: ROLE_USER }
         #Allow users to view all events 
-        - { path: ^/events/allEvents, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/events/all, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Allow access to event detail
         - { path: ^/events/event_detail/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #Disallow access to change events
@@ -48,5 +48,6 @@ security:
         - { path: ^/done, roles: ROLE_USER }
         #Allow access to done (order)
         - { path: ^/tickets, roles: ROLE_USER }
+        - { path: ^/venues/add, roles: ROLE_USER }
         
     

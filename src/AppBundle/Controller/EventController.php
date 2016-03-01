@@ -197,31 +197,6 @@ class EventController extends Controller
 //        }
 //    }
 
-    /**
-     * @Route("events/{id}", name="event_detail")
-     */
-
-    public function eventDetail($id)
-    {
-        $em =$this->getDoctrine()->getManager();
-        $event = $em->getRepository('AppBundle:Event')->find($id);
-        if(!$event)
-        {
-            $this->addFlash('notice', "Couldn't find the event");
-            return $this->redirectToRoute('show_all_events');
-        }
-
-        if ($this->getUser()) {
-            $hasTicketAlready = true;
-            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
-                $hasTicketAlready = false;
-            }
-
-            return $this->render('event/event_detail.html.twig', array('event' => $event, 'user' => $this->getUser(), 'hasTicketAlready' => $hasTicketAlready));
-        } else {
-            return $this->render('event/event_detail.html.twig', array('event' => $event));
-        }
-    }
 
 
     //////////ADDING
@@ -486,7 +461,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
-        $form = $this->createForm(EventPaymentType::class, $event);
+        $form = $this->createForm(EventPaymentsType::class, $event);
 
         $form->handleRequest($request);
 
@@ -534,6 +509,33 @@ class EventController extends Controller
             $event->setFoto(null);
 
         return $event;
+    }
+
+
+    /**
+     * @Route("events/{id}", name="event_detail")
+     */
+
+    public function eventDetail($id)
+    {
+        $em =$this->getDoctrine()->getManager();
+        $event = $em->getRepository('AppBundle:Event')->find($id);
+        if(!$event)
+        {
+            $this->addFlash('notice', "Couldn't find the event");
+            return $this->redirectToRoute('show_all_events');
+        }
+
+        if ($this->getUser()) {
+            $hasTicketAlready = true;
+            if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $this->getUser()->getId()) == null) {
+                $hasTicketAlready = false;
+            }
+
+            return $this->render('event/event_detail.html.twig', array('event' => $event, 'user' => $this->getUser(), 'hasTicketAlready' => $hasTicketAlready));
+        } else {
+            return $this->render('event/event_detail.html.twig', array('event' => $event));
+        }
     }
 
 

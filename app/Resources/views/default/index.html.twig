@@ -1,33 +1,42 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Feest</h1>
+    <div class="container-fluid">
+        {% if not( app.user ) %}
+            <div id="home-head">
+                <h1 id="home-headline">
+                    Feesten makkelijk gemaakt
+                </h1>
+                <h2 id="home-subline">
+                    Kostenloos online tickets kopen &amp; verkopen
+                </h2>
+            </div>
 
-    <p>Welkom op de homepagina van Feest</p>
-    <p>Hier kunt u evenementen in uw buurt vinden, of zelf een evenement organiseren.</p>
-
-    {% if( app.user ) %}
-        <p>Welkom terug {{ app.user.username }}</p>
-        <p><a href="{{ path('user_logout') }}">Log uit</a>
-    {%  else %}
-        <p>Welkom. <a href="{{ path('user_login') }}">Log in</a> of <a href="{{ path('user_register') }}">Registreer</a></p>
-    {% endif %}
-
-    {% if events != null %}
-    <h2>Events bij u in de buurt</h2>
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Adres</td>
-            <td>Datum</td>
-        </tr>
-        {% for event in events %}
-            <tr>
-                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
-                <td>{{ event.getFullAdress()}}</td>
-                <td>{{ event.getDateFormatted() }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+            <div id="home-separator-bar">
+                <div id="home-start-cto">
+                    <b>Ben jij organisator?</b> In slechts enkele minuten kan je tickets beginnen verkopen! <a class="feest-button" href="{{ path('user_register') }}">Registreer</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="container content">
+        {% if events is not empty %}
+        <div class="title">Events bij u in de buurt</div>
+            <div class="row">
+            {% for event in events %}
+                <div class="col-md-3 col-sm-4 col-xs-12">
+                    <a href="{{ path('event_detail',{'id':event.getId()}) }}" class="list-event">
+                        <div class="list-event-img" style="background-image: url('{% if event.foto != null %}{{ vich_uploader_asset(event.foto, 'file') }}{% else %}{{ asset("question-mark.jpg", "img") }}{% endif %}')">
+                        </div>
+                        <div class="list-event-info">
+                            <div class="list-event-name">{{ event.getName()}}</div>
+                            <div class="list-event-location pull-right">{{ event.getCity() }}</div>
+                            <div class="list-event-date">{{ event.getDateFormatted() }}</div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

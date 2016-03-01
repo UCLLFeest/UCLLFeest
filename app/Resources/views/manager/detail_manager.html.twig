@@ -5,18 +5,22 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Managers voor {{event.name}}</h1>
-    <table id="table">
-        <tr>
-            <td>Naam</td>
-            <td>Delete</td>
-        </tr>
-        {% for manager in event.managers %}
+    <div class="container content">
+        {% if event.managers is not empty %}
+        <div class="title">Managers voor {{event.name}}</div>
+        <table class="table">
             <tr>
-                <td>{{ manager.username }}</td>
-                <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}">Delete</a></td>
+                <td>Naam</td>
+                <td>Delete</td>
             </tr>
-        {% endfor %}
-    </table>
-    <p> <a href="{{ path('add_manager',{'event_id': event.getId()} ) }}">Voeg manager toe</a> </p>
+            {% for manager in event.managers %}
+                <tr>
+                    <td>{{ manager.username }}</td>
+                    <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        <p> <a class="feest-button" href="{{ path('add_manager',{'event_id': event.getId()} ) }}">Voeg manager toe</a> </p>
+    </div>
 {% endblock %}

@@ -39,7 +39,7 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/account/viewall", name="viewallusers")
+     * @Route("/account/all", name="viewallusers")
      */
     public function viewall()
     {
@@ -53,6 +53,26 @@ class AccountController extends Controller
                 'users' => $users
             ));
     }
+
+    /**
+     * @Route("/account/profile", name="profile")
+     */
+    public function profile()
+    {
+        $user = $this->getUser();
+
+        if($user === null)
+        {
+            $this->addFlash('notice', 'That user does not exist');
+            return $this->redirectToRoute('homepage');
+        }
+
+        return $this->render(
+            'account/view.html.twig',
+            array('user' => $user)
+        );
+    }
+
 
     /**
      * @Route("/account/editpassword", name="editpassword")

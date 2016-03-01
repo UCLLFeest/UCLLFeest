@@ -292,7 +292,6 @@ class EventController extends Controller
                 //CHECKEN OF HIJ DEZE KAN VINDEN
 
                 //eventvenuetype onnodig & twig moet gewoon een form zijn met een post
-                $venue =
 
                 $data = $form->getData();
                 $venues = $em->createQuery("Select t from AppBundle:Venue as t where lower(t.name) LIKE lower(:name)")->setParameter('name', '%' . $data['venue'] . '%')->getResult();

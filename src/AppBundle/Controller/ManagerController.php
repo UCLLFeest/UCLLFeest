@@ -31,6 +31,10 @@ class ManagerController extends Controller
         //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if($user != $event->getCreator()) {

@@ -13,6 +13,9 @@ use AppBundle\Twig\UserExtension;
 
 class UserExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var UserExtension
+     */
     private $userExtension;
 
     /**

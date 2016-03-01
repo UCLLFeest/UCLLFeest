@@ -9,6 +9,7 @@
 namespace Tests\AppBundle\Entity;
 
 
+use AppBundle\Entity\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class EventRepositoryTest extends KernelTestCase
@@ -32,17 +33,23 @@ class EventRepositoryTest extends KernelTestCase
 
     public function testfindEventByName()
     {
-        $events = $this->em
-            ->getRepository('AppBundle:Event')
-            ->findEventByName('test');
+        /**
+         * @var EventRepository $repo
+         */
+        $repo = $this->em->getRepository('AppBundle:Event');
+
+        $events = $repo->findEventByName('test');
         $this->assertNotCount(0,$events);
     }
 
     public function sortEventByLocationDistance()
     {
-        $events = $this->em
-            ->getRepository('AppBundle:Event')
-            ->findEventByName(50.8776,4.7043);
+		/**
+		 * @var EventRepository $repo
+		 */
+		$repo = $this->em->getRepository('AppBundle:Event');
+
+        $events = $repo->sortEventByLocationDistance(50.8776,4.7043);
         $this->assertNotCount(0,$events);
     }
 

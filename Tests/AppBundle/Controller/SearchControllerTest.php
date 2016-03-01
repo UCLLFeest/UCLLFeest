@@ -10,10 +10,11 @@ namespace Tests\AppBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 class SearchControllerTest extends WebTestCase
 {
-    public function login($client)
+    public function login(Client $client)
     {
         $crawler = $client->request('GET','/login');
 

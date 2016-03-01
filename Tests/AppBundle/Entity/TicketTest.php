@@ -12,13 +12,22 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Event;
 use AppBundle\Entity\Ticket;
 use AppBundle\Entity\User;
-use Symfony\Component\Validator\Constraints\Date;
 
 class TicketTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @var Ticket
+     */
     private $ticket;
+
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var Event
+     */
     private $event;
 
     protected function setUp()

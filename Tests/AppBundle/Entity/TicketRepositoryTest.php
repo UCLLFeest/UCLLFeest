@@ -7,6 +7,7 @@
  */
 
 namespace Tests\AppBundle\Entity;
+use AppBundle\Entity\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 
@@ -30,9 +31,12 @@ class TicketRepositoryTest extends KernelTestCase
 
     public function testFindIfPersonHasTicket()
     {
-        $tickets = $this->em
-            ->getRepository('AppBundle:Ticket')
-            ->findIfPersonHasTicket(1,1);
+        /**
+         * @var TicketRepository $repo
+         */
+        $repo = $this->em->getRepository('AppBundle:Ticket');
+
+        $tickets = $repo->findIfPersonHasTicket(1,1);
         $this->assertNotCount(0,$tickets);
     }
 

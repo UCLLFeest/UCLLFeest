@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,6 +23,10 @@ class AccountController extends Controller
     public function view($id)
     {
         $em = $this->getDoctrine()->getManager();
+
+        /**
+         * @var UserRepository $repo
+         */
         $repo = $em->getRepository('AppBundle:User');
 
         $user = $repo->find($id);
@@ -44,6 +49,10 @@ class AccountController extends Controller
     public function viewall()
     {
         $em = $this->getDoctrine()->getManager();
+
+		/**
+		 * @var UserRepository $repo
+		 */
         $repo = $em->getRepository('AppBundle:User');
         $users = $repo->findAll();
 

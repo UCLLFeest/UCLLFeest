@@ -15,9 +15,17 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class VenueTest extends WebTestCase
 {
+    /**
+     * @var Venue
+     */
 
     private $venue;
+
+    /**
+     * @var Event
+     */
     private $event;
+
     protected function setUp()
     {
         $this->venue = new Venue();

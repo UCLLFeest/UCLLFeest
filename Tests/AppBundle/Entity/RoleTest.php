@@ -13,8 +13,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RoleTest extends WebTestCase
 {
-
+    /**
+     * @var Role
+     */
     private $role;
+
+	/**
+	 * @var Role
+	 */
     private $required;
 
     /**
@@ -42,7 +48,7 @@ class RoleTest extends WebTestCase
     public function testSetRequiredRoleWithSameRole()
     {
         $this->role->setRequiredRole($this->role);
-        $this->assertEquals(null, $this->role->getRequiredRole());
+        $this->assertEquals($this->role, $this->role->getRequiredRole());
     }
 
     public function testSetLocked()

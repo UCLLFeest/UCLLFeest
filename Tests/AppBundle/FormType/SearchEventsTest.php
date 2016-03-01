@@ -13,7 +13,9 @@ use AppBundle\FormType\SearchEvents;
 
 class SearchEventsTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @var SearchEvents
+     */
     private $searchEvents;
 
     /**

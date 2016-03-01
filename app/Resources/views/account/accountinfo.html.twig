@@ -1,36 +1,119 @@
 {% extends 'base.html.twig' %}
 
 {%  block title %}
-    Account for {{ user.username }}
+    Account: {{ user.username }}
 {% endblock %}
 
 {% block body %}
-    <h1>Profile: {{ user.username }}</h1>
 
-    <table>
-        <tr>
-            <td>Email address: </td>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <td>First name: </td>
-            <td>{{ user.firstname }}</td>
-        </tr>
-        <tr>
-            <td>Last name: </td>
-            <td>{{ user.lastname }}</td>
-        </tr>
-        <tr>
-            <td>Gender: </td>
-            <td>{{ genderToString(user.gender) }}</td>
-        </tr>
-        <tr>
-            <td>Birthday: </td>
-            <td>{{ user.birthday|date('Y-m-d') }}</td>
-        </tr>
-    </table>
+    <div class="container content">
 
-    {% block accountblock %}
-    {% endblock %}
+
+        {% block accountblock %}
+        {% endblock %}
+
+        <div class="title">Profile: {{ user.username }}</div>
+        <table class="table">
+            <tr>
+                <td>Email address: </td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td>First name: </td>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <td>Last name: </td>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <td>Gender: </td>
+                <td>{{ genderToString(user.gender) }}</td>
+            </tr>
+            <tr>
+                <td>Birthday: </td>
+                <td>{{ user.birthday|date('Y-m-d') }}</td>
+            </tr>
+        </table>
+
+        {% if app.user == user %}
+            <div class="container content">
+                {% if(user.events is not empty) %}
+                    <div class="title">Mijn events</div>
+                    <table class="table">
+                        <tr>
+                            <td>Naam</td>
+                            <td>Adres</td>
+                            <td>Datum</td>
+                        </tr>
+                        {% for event in user.events %}
+                            <tr>
+                                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                                <td>{{ event.getFullAdress()}}</td>
+                                <td>{{ event.getDateFormatted() }}</td>
+                                <td>
+                                    <a class="btn btn-default" role="button" href="{{ path('delete_event',{'id':event.getId()}) }}">
+                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-default" role="button" href="{{ path('edit_event',{'id':event.getId()}) }}">
+                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+
+                <a class="feest-button" href="{{ path('add_event') }}">Maak een nieuw evenement aan</a>
+
+                {% if(user.managing is not empty) %}
+                    <div class="title">Managed events</div>
+                    <table class="table">
+                        <tr>
+                            <td>Naam</td>
+                            <td>Adres</td>
+                            <td>Datum</td>
+                            <td>Uur</td>
+                        </tr>
+                        {% for event in user.managing %}
+                            <tr>
+                                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                                <td>{{ event.getFullAdress()}}</td>
+                                <td>{{ event.getDate() | date('Y-m-d') }}</td>
+                                <td>{{ event.getDate() | date('H:i') }}</td>
+                                <td>
+                                    <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
+                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+        {% else %}
+            {% if user.events is not empty %}
+                <div class="title">Events</div>
+                <div class="row">
+                    {% for event in user.events %}
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            <a href="{{ path('event_detail',{'id':event.getId()}) }}" class="list-event">
+                                <div class="list-event-img" style="background-image: url('{% if event.foto != null %}{{ vich_uploader_asset(event.foto, 'file') }}{% else %}{{ asset("question-mark.jpg", "img") }}{% endif %}')">
+                                </div>
+                                <div class="list-event-info">
+                                    <div class="list-event-name">{{ event.getName()}}</div>
+                                    <div class="list-event-location pull-right">{{ event.getCity() }}</div>
+                                    <div class="list-event-date">{{ event.getDateFormatted() }}</div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
 
 {% endblock %}

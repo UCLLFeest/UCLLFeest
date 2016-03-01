@@ -1,39 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Admin Roles Overview</h1>
+    <div class="container content">
+        <div class="title">Admin Roles</div>
 
-    {% if roles is not empty %}
-        <table>
-            <tr>
-                <th>Role name</th>
-                <th>Role required to use this role</th>
-                <th>Locked</th>
-                <th>Mandatory</th>
-                <th></th>
-            </tr>
-            {% for role in roles %}
+        {% if roles is not empty %}
+            <table class="table">
                 <tr>
-                    <td>{{ role.name }}</td>
-                    <td>
-                        {% if role.requiredRole %}
-                            {{ role.requiredRole.name }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
-                    <td>{{ role.locked ? "Yes" : "No" }}</td>
-                    <td>{{ role.mandatory ? "Yes" : "No" }}</td>
-                    <td>
-                        <a href="{{ path('admineditrole', {'id': role.id}) }}">Edit</a>
-                        <a href="{{ path('adminremoverole', {'id': role.id }) }}">Remove</a>
-                    </td>
+                    <th>Role name</th>
+                    <th>Role required to use this role</th>
+                    <th>Locked</th>
+                    <th>Mandatory</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No roles to display</p>
-    {% endif %}
+                {% for role in roles %}
+                    <tr>
+                        <td>{{ role.name }}</td>
+                        <td>
+                            {% if role.requiredRole %}
+                                {{ role.requiredRole.name }}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                        <td>{{ role.locked ? "Yes" : "No" }}</td>
+                        <td>{{ role.mandatory ? "Yes" : "No" }}</td>
+                        <td>
+                            <a href="{{ path('admineditrole', {'id': role.id}) }}">Edit</a>
+                            <a href="{{ path('adminremoverole', {'id': role.id }) }}">Remove</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No roles to display</p>
+        {% endif %}
 
-    <a href="{{ path('adminaddrole') }}">Add Role</a>
+        <a href="{{ path('adminaddrole') }}">Add Role</a>
+    </div>
 {% endblock %}

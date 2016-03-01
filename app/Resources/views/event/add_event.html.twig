@@ -5,19 +5,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Maak een nieuw evenement</h1>
-    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+    <div class="container content">
+        <div class="title">Nieuw event</div>
+        {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.adress) }}
-        {{ form_row(form.city) }}
-        {{ form_row(form.postalCode) }}
-        {{ form_row(form.date) }}
-        {{ form_widget(form.foto.file) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.selling) }}
-        {{ form_row(form.price) }}
-        {{ form_row(form.capacity) }}
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.adress) }}
+            {{ form_row(form.city) }}
+            {{ form_row(form.postalCode) }}
+            {{ form_row(form.date) }}
+            {{ form_widget(form.foto.file) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.selling) }}
+            {{ form_row(form.price) }}
+            {{ form_row(form.capacity) }}
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

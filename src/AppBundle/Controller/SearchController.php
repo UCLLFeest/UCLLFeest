@@ -31,7 +31,7 @@ class SearchController extends Controller
          */
         $repo = $em->getRepository('AppBundle:Event');
 
-        $events = $repo->findEventByName($request->query->get('Search'));
+        $events = $repo->findEventByName($request->query->get('search'));
         return $this->render('search/Search_Events.html.twig', array('events' => $events));
     }
 }

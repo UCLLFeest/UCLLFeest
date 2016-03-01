@@ -6,6 +6,9 @@
 
         <!-- Nodig voor Bootstrap 3 CSS in forms -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Open+Sans:400,600,700,800,300' rel='stylesheet' type='text/css'>
+
 
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
@@ -18,12 +21,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <div id="container">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
+        <div id="container-fluid">
+            <nav class="navbar navbar-fixed-top">
+                <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -33,41 +36,18 @@
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse navigation" id="collapse">
                         <ul class="nav navbar-nav">
-                            {% if app.user %}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/account/view/{{ app.user.id }}">View</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a href="{{ path('user_logout') }}">Log Out</a></li>
-                                    </ul>
-                                </li>
-                            {% else %}
-                                <li><a href="{{ path('user_login') }}">Log In</a></li>
-                                <li><a href="{{ path('user_register') }}">Register</a></li>
-                            {% endif %}
-                            <li>
-                                <form class="navbar-form" method="post" action="{{ path('searchName')}}" role="search" name="SearchForm">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Search" name="Search" id="Search">
-                                    </div>
-                                    <button type="submit" class="btn btn-default">Submit</button>
-                                </form>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ path('show_all_events') }}">View</a></li>
-                                {% if app.user %}
-                                    <li><a href="{{ path('show_events') }}">Mijn Events</a></li>
-                                {% endif %}
-                                </ul>
-                            </li>
+                            <li><a href="{{ path('show_all_events') }}">Events</a></li>
                             <li><a href="{{ path('show_venues') }}">Venues</a></li>
                             <li><a href="{{ path('show_tickets') }}">Tickets</a></li>
-
+                            {% if app.user %}
+                                <li><a href="{{ path('profile') }}">Account</a></li>
+                                <li><a href="{{ path('user_logout') }}">Log Out</a></li>
+                            {% else %}
+                                <li><a href="{{ path('user_login') }}">Log In</a></li>
+                                <li><a href="{{ path('user_register') }}">Registreer</a></li>
+                            {% endif %}
                             {% if is_granted(constant('AppBundle\\Entity\\User::ROLE_ADMIN')) %}
                                 <li><a href="{{ path('adminoverview') }}">Admin Panel</a></li>
                             {% endif %}
@@ -77,6 +57,19 @@
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
+
+            <div class="container-fluid">
+                <div class="search">
+                    <div class="container">
+                        <div class="search-icon pull-left">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <form method="post" action="{{ path('searchName')}}" class="search-form" role="search" _lpchecked="1">
+                            <input placeholder="Zoek op een feest, iets leuk!" class="search-input" id="search" name="search" type="text" autocomplete="off">
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             {% for flash_message in app.session.flashbag.get('notice') %}
                 <div class="flash-notice">
@@ -89,8 +82,15 @@
 
         {% block javascripts %}{% endblock %}
 
-            <footer>
-                <p>Feest</p>
-            </footer>
+        <div class="container-fluid footer">
+            <div class="container">
+                <div class="pull-right"><a href="#"><dotted>UCLL 2016</dotted></a></div>
+                <div class="footer-nav">
+                    <ul>
+                        <li><a href="#"><span class="logo">Feest</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

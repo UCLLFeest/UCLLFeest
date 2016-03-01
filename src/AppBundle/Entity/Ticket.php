@@ -162,4 +162,9 @@ class Ticket
     {
         return $this->date;
     }
+
+    public function getDateFormatted() {
+        return date_format($this->getDate(), 'd/m');
+    }
 }
+

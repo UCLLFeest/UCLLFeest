@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Select a venue</h1>
-    {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+    <div class="container content">
+        <div class="title">Selecteer een venue</div>
+        {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
-    {{ form_start(form) }}
+        {{ form_start(form) }}
         {{ form_row(form.venue) }}
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
+
 {% endblock %}

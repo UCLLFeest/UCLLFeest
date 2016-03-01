@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Add a manager</h1>
-    <form class="navbar-form" action="{{ path('add_manager', {'event_id': event.getId()})}}" role="form">
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="username" name="username" id="username">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+    <div class="container content">
+        <div class="title">Add a manager</div>
+        <form class="navbar-form" action="{{ path('add_manager', {'event_id': event.getId()})}}" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="username" name="username" id="username">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
 {% endblock %}

@@ -6,59 +6,63 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Overview</h1>
 
-    <h3>Mijn Events</h3>
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Adres</td>
-            <td>Datum</td>
-        </tr>
-        {% for event in events %}
-        <tr>
-            <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
-            <td>{{ event.getFullAdress()}}</td>
-            <td>{{ event.getDateFormatted() }}</td>
-            <td>
-                <a class="btn btn-default" role="button" href="{{ path('delete_event',{'id':event.getId()}) }}">
-                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                </a>
-            </td>
-            <td>
-                <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
-                    <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <p> <a href="{{ path('add_event') }}">Maak een nieuw evenement aan</a> </p>
-
-    <h3>Managed Events</h3>
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Adres</td>
-            <td>Datum</td>
-            <td>Uur</td>
-        </tr>
-        {% for event in managing %}
+    <div class="container content">
+        {% if(events is not empty) %}
+        <div class="title">Mijn events</div>
+        <table class="table">
             <tr>
-                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
-                <td>{{ event.getFullAdress()}}</td>
-                <td>{{ event.getDate() | date('Y-m-d') }}</td>
-                <td>{{ event.getDate() | date('H:i') }}</td>
-                <td>
-                    <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
-                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
-                    </a>
-                </td>
+                <td>Naam</td>
+                <td>Adres</td>
+                <td>Datum</td>
             </tr>
-        {% endfor %}
-    </table>
+            {% for event in events %}
+                <tr>
+                    <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                    <td>{{ event.getFullAdress()}}</td>
+                    <td>{{ event.getDateFormatted() }}</td>
+                    <td>
+                        <a class="btn btn-default" role="button" href="{{ path('delete_event',{'id':event.getId()}) }}">
+                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-default" role="button" href="{{ path('edit_event',{'id':event.getId()}) }}">
+                            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
 
+         <a href="{{ path('add_event') }}">Maak een nieuw evenement aan</a>
 
+        {% if(managing is not empty) %}
+        <div class="title">Managed events</div>
+        <table class="table">
+            <tr>
+                <td>Naam</td>
+                <td>Adres</td>
+                <td>Datum</td>
+                <td>Uur</td>
+            </tr>
+            {% for event in managing %}
+                <tr>
+                    <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                    <td>{{ event.getFullAdress()}}</td>
+                    <td>{{ event.getDate() | date('Y-m-d') }}</td>
+                    <td>{{ event.getDate() | date('H:i') }}</td>
+                    <td>
+                        <a class="btn btn-default" role="button" href="{{ path('edit_event',{'id':event.getId()}) }}">
+                            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
 
 {% endblock %}
 

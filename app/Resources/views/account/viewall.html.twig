@@ -1,26 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {%  block title %}
-    All Users
+    Users
 {% endblock %}
 
 {% block body %}
-    <h1>All Users</h1>
-
-    {% if users is not empty %}
-        <table>
+    <div class="container content">
+        <div class="title">Users</div>
+        <table class="events-table">
+            <thead>
             <tr>
-                <th>Username</th>
-                <th></th>
+                <td>#</td>
+                <td class="events-table-middle">Username</td>
+                <td></td>
             </tr>
+            </thead>
+            <tbody>
             {% for user in users %}
                 <tr>
-                    <td>{{ user.username }}</td>
-                    <td><a href="/account/view/{{ user.id }}">View Profile</a></td>
+                    <td class="events-table-index">{{ user.id }}</td>
+                    <td class="events-table-middle">{{ user.username }}</a></td>
+                    <td><a href="{{ path('accountview',{'id':user.getId()}) }}">Profile</a></td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
-    {% else %}
-        <p>No users to display</p>
-    {% endif %}
+    </div>
+
 {% endblock %}

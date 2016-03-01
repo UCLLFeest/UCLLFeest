@@ -3,8 +3,8 @@
 {% block accountblock %}
 
     {% if user == app.user %}
-        <p><a href="{{ path('editprofile') }}">Edit Profile</a></p>
-        <p><a href="{{ path('editpassword') }}">Edit Password</a></p>
+        <a class="feest-button pull-right" href="{{ path('editprofile') }}">Edit Profile</a>
+        <a class="feest-button pull-right" href="{{ path('editpassword') }}">Edit Password</a>
     {% endif %}
 
 {% endblock %}

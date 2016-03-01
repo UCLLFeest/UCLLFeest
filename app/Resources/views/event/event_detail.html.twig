@@ -2,79 +2,105 @@
 
 
 {% block title %}
-    Event Detail.
+    Event: {{ event.name }}
 {% endblock %}
 
 {% block body %}
-<h1>Detail overview</h1>
+        <div class="container content">
+            <div class="title"> {% if (app.user == event.creator or app.user in  event.managers) %}
+                    <a class="feest-button pull-right" href="{{ path('edit_event', {'id':event.getId()}) }}">Edit</a>
+                {% endif %}
 
-<div id="foto">
-    {% if event.foto != null %}
-        <img src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}"/>
-    {% else %}
-        <img src="{{ asset("question-mark.jpg", "img") }}" alt="No image provided"/>
-    {% endif %}
-</div>
-<table id="table">
-    <tr>
-        <td>Naam</td>
-        <td>{{ event.name }}</td>
-    </tr>
+                {% if app.user == event.creator %}
+                <a class="feest-button pull-right" href="{{ path('show_managers', {'id':event.getId()}) }}">Managers</a>
+                {% endif %}Event</div>
 
-    {% if event.managers is not empty %}
-    <tr>
-        <td>Managers</td>
-        <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
-    </tr>
-    {% endif %}
+        </div>
 
-    <tr>
-        <td>Adres</td>
-        <td>{{ event.adress }}</td>
-    </tr>
+        <div class="container-fluid">
+            <iframe
+                    width="100%"
+                    frameborder="0" style="border:0"
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBR88GCXIhqHsGVKXFAf8zNZNFbqi-J6TE&q={{ event.getFullAdress()|replace({' ': '+'}) }}" allowfullscreen>
+            </iframe>
+        </div>
 
-    {% if event.price is not null %}
-    <tr>
-        <td>Inkom Prijs</td>
-        <td>{{ event.price }}</td>
-    </tr>
-    {% endif %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table">
+                        <tr>
+                            <td>Naam</td>
+                            <td>{{ event.name }}</td>
+                        </tr>
 
-    <tr>
-        <td>Datum</td>
-        <td>{{ event.getDate() | date('d/m/y') }} om {{ event.getDate() | date('H:i') }}</td>
-    </tr>
+                        {% if event.managers is not empty %}
+                            <tr>
+                                <td>Managers</td>
+                                <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
+                            </tr>
+                        {% endif %}
 
-    {% if event.description is not null %}
-    <tr>
-        <td>Beschrijving</td>
-        <td>{{ event.description }}</td>
-    </tr>
-    {% endif %}
+                        <tr>
+                            <td>Adres</td>
+                            <td>{{ event.adress }}</td>
+                        </tr>
 
-    {% if event.capacity is not null %}
-    <tr>
-        <td>Capaciteit</td>
-        <td>{{ event.capacity }}</td>
-    </tr>
-    {% endif %}
-</table>
+                        {% if event.price is not null %}
+                            <tr>
+                                <td>Inkom Prijs</td>
+                                <td>{{ event.price }}</td>
+                            </tr>
+                        {% endif %}
 
-{% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
-    <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
-{% endif %}
+                        <tr>
+                            <td>Datum</td>
+                            <td>{{ event.getDate() | date('d/m/y') }} om {{ event.getDate() | date('H:i') }}</td>
+                        </tr>
 
-    {% if event.tickets is not empty %}
-        <table>
-            <tr>
-                <td>Attendees</td>
-            </tr>
-            {% for ticket in event.tickets %}
-                <tr>
-                    <td>{{ ticket.owner.getFullName() }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+                        {% if event.description is not null %}
+                            <tr>
+                                <td>Beschrijving</td>
+                                <td>{{ event.description }}</td>
+                            </tr>
+                        {% endif %}
+
+                        {% if event.capacity is not null %}
+                            <tr>
+                                <td>Capaciteit</td>
+                                <td>{{ event.capacity }}</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <div id="foto">
+                        {% if event.foto != null %}
+                            <img class="event-detail-img" src="{{ vich_uploader_asset(event.foto, 'file') }}" alt="{{ event.foto.name }}"/>
+                        {% else %}
+                            <img class="event-detail-img" src="{{ asset("question-mark.jpg", "img") }}" alt="No image provided"/>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false %}
+                <a href="{{ path('buy_ticket',{'id': event.id}) }}">Koop ticket</a>
+            {% endif %}
+
+                {% if event.tickets is not empty %}
+                    <table>
+                        <tr>
+                            <td>Attendees</td>
+                        </tr>
+                        {% for ticket in event.tickets %}
+                            <tr>
+                                <td>{{ ticket.owner.getFullName() }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+
+        </div>
 
 {% endblock %}

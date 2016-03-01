@@ -6,24 +6,26 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Result</h1>
-
-
-    <table>
-        <tr>
-            <td>Naam</td>
-            <td>Adres</td>
-            <td>Inkom Prijs</td>
-            <td>Start</td>
-        </tr>
-        {% for event in events %}
-            <tr>
-                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
-                <td>{{ event.getFullAdress()}}</td>
-                <td>{{ event.getPrice()}}</td>
-                <td>{{ event.getDate() | date('Y-m-d') }}</td>
-                <td>{{ event.getDate() | date('H:i') }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="container content">
+        {% if events is not empty %}
+            <div class="title">Zoekresultaat</div>
+            <div class="row">
+                {% for event in events %}
+                    <div class="col-md-3 col-sm-4 col-xs-12">
+                        <a href="{{ path('event_detail',{'id':event.getId()}) }}" class="list-event">
+                            <div class="list-event-img" style="background-image: url('{% if event.foto != null %}{{ vich_uploader_asset(event.foto, 'file') }}{% else %}{{ asset("question-mark.jpg", "img") }}{% endif %}')">
+                            </div>
+                            <div class="list-event-info">
+                                <div class="list-event-name">{{ event.getName()}}</div>
+                                <div class="list-event-location pull-right">{{ event.getCity() }}</div>
+                                <div class="list-event-date">{{ event.getDateFormatted() }}</div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="title">Geen resultaten gevonden</div>
+        {% endif %}
+    </div>
 {% endblock %}

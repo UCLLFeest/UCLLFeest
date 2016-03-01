@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container content">
+        <div class="title">Dashboard</div>
+        <div class="row dashboard-stat">
+            <div class="col-md-6">
+                <div class="col-md-12 dashboard-stats">
+                    {{ totaalprijs }}
+                </div>
+                <div class="col-md-12 dashboard-info">
+                    Totaal saldo
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12 dashboard-stats">
+                    {{ totaaltickets }}
+                </div>
+                <div class="col-md-12 dashboard-info">
+                    Totaal Tickets
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="title">Event Dashboarden</div>
+                <table class="table">
+                    <tr>
+                        <td>Naam</td>
+                        <td>Datum</td>
+                    </tr>
+                    {% for event in events %}
+                        <tr>
+                            <td><a href="{{ path('dashboard_event',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                            <td>{{ event.getDateFormatted() }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="title">Tickets verkocht</div>
+                <table class="table">
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.owner.getFullName()}} gaat naar {{ ticket.event.name}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+{% endblock %}

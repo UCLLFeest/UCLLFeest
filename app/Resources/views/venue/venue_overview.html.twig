@@ -7,7 +7,8 @@
 
 {% block body %}
     <div class="container content">
-        <div class="title">Overview</div>
+        {% if venues is not empty %}
+        <div class="title">Venues</div>
 
         <table class="table">
             <tr>
@@ -16,11 +17,12 @@
             </tr>
             {% for venue in venues %}
                 <tr>
-                    <td><a href="{{ path('venue_detail',{'id':venue.getId()}) }}">{{ venue.getName()}}</td>
+                    <td><a href="{{ path('venue_detail',{'id':venue.getId()}) }}">{{ venue.getName()}}</a></td>
                     <td>{{ venue.getFullAdress()}}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p> <a href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a> </p>
+            {% endif %}
+        <p> <a class="feest-button" href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a> </p>
     </div>
 {% endblock %}

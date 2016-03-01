@@ -235,7 +235,13 @@ class EventController extends Controller
 			/**
 			 * @var Event $event
 			 */
-            $event= $this->setAdress($event);
+            try
+            {
+                $event= $this->setAdress($event);
+            }catch(NoResult $e){
+                $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+                return $this->redirectToRoute("add_event");
+            }
             $event = $this->setFoto($event,$em);
 
             $user->addEvent($event);
@@ -467,8 +473,12 @@ class EventController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $user = $this->getUser();
-
+            try{
             $event = $this->setAdress($event);
+            }catch(NoResult $e) {
+                $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
+                return $this->redirectToRoute("add_event");
+            }
             $event = $this->setFoto($event, $em);
 
 
@@ -626,15 +636,9 @@ class EventController extends Controller
 	 */
 	public function setAdress(Event $event)
     {
-        try
-        {
             $curl     = new CurlHttpAdapter();
             $geocoder = new GoogleMaps($curl);
             $adress =   $geocoder->geocode($event->getFullAdress());
-        }catch(NoResult $e){
-            $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
-            return $this->redirectToRoute("add_event");
-        }
 
         $event->setLatitude($adress->get(0)->getLatitude());
         $event->setLongitude($adress->get(0)->getLongitude());

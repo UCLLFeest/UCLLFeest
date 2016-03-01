@@ -92,8 +92,6 @@ fos_user:
     registration:
         form:
             type: AppBundle\Form\RegisterUserType
-        confirmation:
-            enabled: true
 
 #Vich configuration 
 vich_uploader:

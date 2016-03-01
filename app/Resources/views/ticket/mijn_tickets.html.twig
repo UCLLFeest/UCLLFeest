@@ -9,7 +9,7 @@
 
     <div class="container content">
         <div class="title">Mijn Tickets</div>
-
+        {% if tickets is not empty %}
         <table class="table">
             <tr>
                 <td>Naam</td>
@@ -24,6 +24,9 @@
                 </tr>
             {% endfor %}
         </table>
+        {% else %}
+            <p>U heeft nog geen tickets.</p>
+        {% endif %}
     </div>
 
 {% endblock %}

@@ -114,7 +114,6 @@ payum:
 
     storages:
         AppBundle\Entity\Payment: { doctrine: orm }
-        AppBundle\Entity\Payment: { doctrine: orm }
 
     gateways:
         paypal:

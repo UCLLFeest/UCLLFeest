@@ -454,11 +454,11 @@ class EventController extends Controller
             $event = $this->setFoto($event, $em);
 
 
-            $user->addEvent($event);
+           /* $user->addEvent($event);
 
 
             $user->addEvent($event);
-            $event->setCreator($user);
+            $event->setCreator($user);*/
 
             $em->persist($event);
             $em->flush();
@@ -541,8 +541,6 @@ class EventController extends Controller
             $this->addFlash('notice', "You're not allowed to access this page");
             return $this->redirectToRoute('homepage');
         }
-
-        return $this->render('event/event_venue.html.twig', array('form' => $form->createView()));
     }
 
 

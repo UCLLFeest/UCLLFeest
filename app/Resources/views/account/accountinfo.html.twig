@@ -82,17 +82,15 @@
                             <td>Naam</td>
                             <td>Adres</td>
                             <td>Datum</td>
-                            <td>Uur</td>
                         </tr>
                         {% for event in user.managing %}
                             <tr>
                                 <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
                                 <td>{{ event.getFullAdress()}}</td>
-                                <td>{{ event.getDate() | date('Y-m-d') }}</td>
-                                <td>{{ event.getDate() | date('H:i') }}</td>
+                                <td>{{ event.getDateFormatted() }}</td>
                                 <td>
-                                    <a class="btn btn-default" role="button" href="{{ path('update_event',{'id':event.getId()}) }}">
-                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}">
+                                        <i class="fa fa-pencil"></i>
                                     </a>
                                 </td>
                             </tr>

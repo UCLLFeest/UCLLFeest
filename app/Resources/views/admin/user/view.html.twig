@@ -30,6 +30,8 @@
         <p>No roles defined for this user.</p>
     {% endif %}
 
-    <a href="{{ path('adminuseraddrole', { 'id': user.id}) }}">Add Role</a>
+    {% if rolesLeft %}
+        <a href="{{ path('adminuseraddrole', { 'id': user.id}) }}">Add Role</a>
+    {% endif %}
 
 {% endblock %}

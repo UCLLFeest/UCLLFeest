@@ -26,6 +26,12 @@ class LoadRoleData implements FixtureInterface
 
 		$manager->flush();
 
+		$superAdmin->setRequiredRole($superAdmin);
+
+		$manager->persist($superAdmin);
+
+		$manager->flush();
+
 		$adminRole = new Role();
 		$adminRole->setName(User::ROLE_ADMIN);
 		$adminRole->setRequiredRole($superAdmin);

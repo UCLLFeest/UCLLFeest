@@ -92,7 +92,7 @@ class ManagerController extends Controller
 
                 $em->flush();
 
-                $this->addFlash('notice', "Inserted");
+                $this->addFlash('notice', "Gebruiker toegevoegd als manager");
                 return $this->redirectToRoute('show_managers', array('id'=>$event->getId()));
             } else {
                 $this->addFlash('notice', "User is already a manager");

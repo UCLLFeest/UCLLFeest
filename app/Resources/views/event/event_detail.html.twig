@@ -7,16 +7,17 @@
 
 {% block body %}
         <div class="container content">
-            <div class="title"> {% if (app.user == event.creator or app.user in  event.managers) %}
-                    <a class="pull-right" href="{{ path('edit_event', {'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit"><i class="fa fa-pencil"></i></a>
-                {% endif %}
+            {% if (app.user == event.creator or app.user in  event.managers) %}
+                <a class="icon-margin pull-right" href="{{ path('edit_event', {'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit"><i class="fa fa-pencil"></i></a>
+            {% endif %}
 
-                {% if app.user == event.creator %}
-                <a class="pull-right" href="{{ path('show_managers', {'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Managers"><i class="fa fa-users"></i></a>
-                {% endif %}
-                {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false and event.tickets|length < event.capacity %}
-                    <a class="pull-right" href="{{ path('buy_ticket',{'id': event.id}) }} " data-toggle="tooltip" data-placement="left" title="Koop ticket"><i class="fa fa-ticket"></i></a>
-                {% endif %}Event</div>
+            {% if app.user == event.creator %}
+                <a class="icon-margin pull-right" href="{{ path('show_managers', {'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Managers"><i class="fa fa-users"></i></a>
+            {% endif %}
+            {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false and event.tickets|length < event.capacity %}
+                <a class="pull-right" href="{{ path('buy_ticket',{'id': event.id}) }} " data-toggle="tooltip" data-placement="left" title="Koop ticket"><i class="fa fa-ticket"></i></a>
+            {% endif %}
+            <div class="title">Event</div>
 
         </div>
 

@@ -414,3 +414,7 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
     color: #fff;
     cursor: pointer;
 }
+
+.icon-margin {
+    margin-right: 10px;
+}

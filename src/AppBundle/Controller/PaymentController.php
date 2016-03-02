@@ -42,6 +42,7 @@ class PaymentController extends Controller
 		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
+        //&& $event->getDate() > date("Y-m-d H:i:s")
         if($event->getSelling() && $event->getTickets()->count() < $event->getCapacity()) {
             $gatewayName = 'paypal';
             /**

@@ -11,10 +11,6 @@
         <div class="title">Venues</div>
 
         <table class="table">
-            <tr>
-                <td>Naam</td>
-                <td>Adres</td>
-            </tr>
             {% for venue in venues %}
                 <tr>
                     <td><a href="{{ path('venue_detail',{'id':venue.getId()}) }}">{{ venue.getName()}}</a></td>

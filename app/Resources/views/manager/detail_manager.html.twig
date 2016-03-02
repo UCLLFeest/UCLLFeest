@@ -7,16 +7,12 @@
 {% block body %}
     <div class="container content">
         {% if event.managers is not empty %}
-        <div class="title">Managers voor {{event.name}}</div>
+        <div class="title">Managers voor <a href="{{ path('event_detail',{'id':event.getId()}) }}">{{event.name}}</a></div>
         <table class="table">
-            <tr>
-                <td>Naam</td>
-                <td>Delete</td>
-            </tr>
             {% for manager in event.managers %}
                 <tr>
-                    <td>{{ manager.username }}</td>
-                    <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}">Delete</a></td>
+                    <td><a href="{{ path('accountview',{'id':manager.getId()}) }}">{{ manager.username }}</a></td>
+                    <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}" data-toggle="tooltip" data-placement="left" title="Delete manager"><i class="fa fa-times"></i></a></td>
                 </tr>
             {% endfor %}
         </table>

@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="container content">
-        <div class="title">Dashboard</div>
+        <div class="title">Dashboard voor <a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName() }}</a></div>
         <div class="row dashboard-stat">
             <div class="col-md-6">
                 <div class="col-md-12 dashboard-stats">

@@ -11,16 +11,11 @@
         <div class="title">Mijn Tickets</div>
         {% if tickets is not empty %}
         <table class="table">
-            <tr>
-                <td>Naam</td>
-                <td>Datum</td>
-                <td>Geldigheid</td>
-            </tr>
             {% for ticket in tickets %}
                 <tr>
                     <td><a href="{{ path('ticket_detail',{'id':ticket.getId()}) }}">{{ ticket.event.name }}</td>
                     <td>{{ ticket.event.getDateFormatted() }}</td>
-                    <td>{{ ticket.claimed ? 'Geldig':'Ongeldig' }}</td>
+                    <td>{{ ticket.claimed ? 'Ongeldig':'Geldig' }}</td>
                 </tr>
             {% endfor %}
         </table>

@@ -6,10 +6,16 @@
 
 {% block body %}
     <div class="container content">
-        {% block accountblock %}
-        {% endblock %}
 
-        <div class="title">Profile: {{ user.username }}</div>
+
+        {% if user == app.user %}
+            <a class="nav-icons pull-right" href="{{ path('editprofile') }}" data-toggle="tooltip" data-placement="left" title="Edit profile"><i class="fa fa-pencil"></i></a>
+            <a class="nav-icons pull-right" href="{{ path('editpassword') }}" data-toggle="tooltip" data-placement="left" title="Edit password"><i class="fa fa-key"></i></a>
+            <a class="nav-icons pull-right" href="{{ path('dashboard') }}" data-toggle="tooltip" data-placement="left" title="Dashboard"><i class="fa fa-tachometer"></i></a>
+
+        {% endif %}
+        <div class="title nav-icons ">Profile: <a href="{{ path('accountview',{'id':user.getId()}) }}">{{ user.username }}</a></div>
+
         <table class="table">
             <tr>
                 <td>Email address: </td>
@@ -34,62 +40,55 @@
         </table>
 
         {% if app.user == user %}
-            <div class="container content">
                 {% if(user.events is not empty) %}
                     <div class="title">Mijn events</div>
                     <table class="table">
-                        <tr>
-                            <td>Naam</td>
-                            <td>Adres</td>
-                            <td>Datum</td>
-                        </tr>
+                        <tbody>
                         {% for event in user.events %}
                             <tr>
                                 <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
                                 <td>{{ event.getFullAdress()}}</td>
                                 <td>{{ event.getDateFormatted() }}</td>
                                 <td>
-                                    <a href="{{ path('delete_event',{'id':event.getId()}) }}">
+                                    <a href="{{ path('delete_event',{'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Delete event">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}">
+                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit information">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ path('edit_event_venues',{'id':event.getId()}) }}">
+                                    <a href="{{ path('edit_event_venues',{'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit location">
                                         <i class="fa fa-map-marker"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <a  href="{{ path('edit_payment',{'id':event.getId()}) }}">
+                                    <a  href="{{ path('edit_payment',{'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit payment method">
                                         <i class="fa fa-credit-card-alt"></i>
                                     </a>
                                 </td>
                             </tr>
                         {% endfor %}
+                        </tbody>
                     </table>
                 {% endif %}
 
-                <a class="feest-button" href="{{ path('add_event') }}">Maak een nieuw evenement aan</a>
+            <div class="button">
+                <a class="feest-button" href="{{ path('add_event') }}">Maak een nieuw event aan</a>
+            </div>
 
                 {% if(user.managing is not empty) %}
                     <div class="title">Managed events</div>
                     <table class="table">
-                        <tr>
-                            <td>Naam</td>
-                            <td>Adres</td>
-                            <td>Datum</td>
-                        </tr>
                         {% for event in user.managing %}
                             <tr>
                                 <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
                                 <td>{{ event.getFullAdress()}}</td>
                                 <td>{{ event.getDateFormatted() }}</td>
                                 <td>
-                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}">
+                                    <a  href="{{ path('edit_event',{'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Edit event">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                 </td>
@@ -97,7 +96,6 @@
                         {% endfor %}
                     </table>
                 {% endif %}
-            </div>
         {% else %}
             {% if user.events is not empty %}
                 <div class="title">Events</div>

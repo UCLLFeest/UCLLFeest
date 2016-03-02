@@ -6,6 +6,7 @@
 
 {% block body %}
     <div class="container content">
+        <a class="pull-right print" href="" data-toggle="tooltip" data-placement="left" title="Print"><i class="fa fa-print"></i></a>
         <div class="title">Ticket</div>
         <div class="row">
             <div class="col-md-6">
@@ -29,8 +30,8 @@
                         <td>{{ ticket.owner.getFullName() }} ({{ticket.owner.username}})</td>
                     </tr>
                     <tr>
-                        <td>Claimed</td>
-                        <td>{{ ticket.claimed ? 'Geldig':'Ongeldig' }}</td>
+                        <td>Geldigheid</td>
+                        <td>{{ ticket.claimed ? 'Ongeldig':'Geldig' }}</td>
                     </tr>
 
                 </table>
@@ -41,3 +42,5 @@
         </div>
     </div>
 {% endblock %}
+
+

@@ -121,7 +121,6 @@ footer
 }
 
 .footer-nav ul li{
-    padding: 0 20px;
     margin-right: 5px;
     display: inline-block;
     list-style: none;
@@ -292,19 +291,39 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
 
 
 .feest-button {
+     text-decoration: none;
+     color: #fff;
+     background: #122b3f;
+     padding: 10px 15px;
+     -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+     border-radius: 5px;
+ }
 
-    font-weight: 800;
+.feest-button:hover {
+    color: #fff;
     text-decoration: none;
+    background: #38546B;
+}
+
+.buttons {
+    padding: 10px;
+    width: 100%;
+}
+
+
+.feest-buttons {
+    text-decoration: none;
+    width: 100%;
     color: #fff;
     background: #122b3f;
-    margin: 0px 10px;
     padding: 10px 15px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
 
-.feest-button:hover {
+.feest-buttons:hover {
     color: #fff;
     text-decoration: none;
     background: #38546B;
@@ -347,14 +366,8 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
     background: #38546B;
 }
 
-input[type=submit] {
-    color: #fff;
-    background: #38546B;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 6px 12px;
-    border: 1px solid #cccccc;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+.form-group {
+    padding: 20px 0px;
 }
 
 .table {
@@ -380,4 +393,28 @@ input[type=submit] {
 
 .dashboard-info {
     font-size: 30px;
+}
+
+.center {
+    text-align: center;
+}
+
+.nav-icons {
+    padding: 10px;
+}
+
+.nav-icons i {
+    font-size: 20px;
+}
+
+.button {
+    margin: 15px 0px;
+}
+
+.flash-notice {
+    text-align: center;
+    padding: 20px;
+    background: #132c40;
+    color: #fff;
+    cursor: pointer;
 }

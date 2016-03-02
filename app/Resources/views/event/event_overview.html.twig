@@ -7,10 +7,10 @@
 
 {% block body %}
     <div class="container content">
+        {% if app.user is not null %}
+            <a class="pull-right" href="{{ path('add_event') }}" data-toggle="tooltip" data-placement="left" title="Nieuw event"><i class="fa fa-plus"></i></a>
+        {% endif %}
         {% if events is not empty %}
-            {% if app.user is not null %}
-                <a class="feest-button pull-right" href="{{ path('add_event') }}">Maak een nieuw evenement aan</a>
-            {% endif %}
             <div class="title">Alle Events</div>
             <div class="row">
                 {% for event in events %}

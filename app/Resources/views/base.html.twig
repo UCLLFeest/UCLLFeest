@@ -80,14 +80,36 @@
             {% block body %}{% endblock %}
         </div>
 
-        {% block javascripts %}{% endblock %}
+
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+
+        <script type="text/javascript">
+            $('.flash-notice').on('click',function(){
+                $(".flash-notice").fadeOut("normal", function() {
+                    $(".flash-notice").remove();
+                });
+            });
+
+        </script>
+
+        <script type="text/javascript">
+            $('.print').on('click',function(){
+                window.print();
+            });
+
+        </script>
+
 
         <div class="container-fluid footer">
             <div class="container">
-                <div class="pull-right"><a href="#"><p class="dotted">UCLL 2016</p></a></div>
+                <div class="pull-right"><a href="#">UCLL 2016</a></div>
                 <div class="footer-nav">
                     <ul>
-                        <li><a href="#"><span class="logo">Feest</span></a></li>
+                        <li><a href="">Feest</span></li>
                     </ul>
                 </div>
             </div>

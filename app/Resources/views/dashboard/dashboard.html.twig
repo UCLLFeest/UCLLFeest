@@ -27,10 +27,6 @@
             <div class="col-md-6">
                 <div class="title">Event Dashboarden</div>
                 <table class="table">
-                    <tr>
-                        <td>Naam</td>
-                        <td>Datum</td>
-                    </tr>
                     {% for event in events %}
                         <tr>
                             <td><a href="{{ path('dashboard_event',{'id':event.getId()}) }}">{{ event.getName()}}</td>

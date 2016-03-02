@@ -57,9 +57,14 @@ class TicketController extends Controller
 
         //check ipv creator manager
         if ($ticket->getEvent()->getCreator() == $this->getUser() || $ticket->getEvent()->getManagers()->contains($this->getUser())) {
-            $ticket->setClaimed(true);
-            $em->persist($ticket);
-            $em->flush();
+            if($ticket->getClaimed()) {
+                $this->addFlash('notice', "Ticket was already claimed.");
+            } else {
+                $this->addFlash('notice', "Ticket has been claimed.");
+                $ticket->setClaimed(true);
+                $em->persist($ticket);
+                $em->flush();
+            }
         }
 
         if ($ticket->getOwner() === $this->getUser() || $ticket->getEvent()->getCreator() == $this->getUser() || $ticket->getEvent()->getManagers()->contains($this->getUser())) {

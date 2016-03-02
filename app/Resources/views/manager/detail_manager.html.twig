@@ -12,7 +12,7 @@
             {% for manager in event.managers %}
                 <tr>
                     <td><a href="{{ path('accountview',{'id':manager.getId()}) }}">{{ manager.username }}</a></td>
-                    <td><a href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}" data-toggle="tooltip" data-placement="left" title="Delete manager"><i class="fa fa-times"></i></a></td>
+                    <td><a class="pull-right" href="{{ path('delete_manager',{'event_id': event.getId(), 'username': manager.username}) }}" data-toggle="tooltip" data-placement="left" title="Delete manager"><i class="fa fa-times"></i></a></td>
                 </tr>
             {% endfor %}
         </table>

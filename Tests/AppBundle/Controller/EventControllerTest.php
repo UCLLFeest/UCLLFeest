@@ -108,7 +108,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$client->submit($form);
@@ -153,7 +153,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
         $crawler = $client->submit($form);
@@ -190,7 +190,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$crawler = $client->submit($form);
@@ -227,7 +227,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$crawler = $client->submit($form);
@@ -264,7 +264,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$crawler = $client->submit($form);
@@ -301,7 +301,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$crawler = $client->submit($form);
@@ -339,7 +339,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$crawler = $client->submit($form);
@@ -430,7 +430,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
         $client->submit($form);
@@ -470,7 +470,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
         $client->submit($form);
@@ -542,7 +542,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '10';
 		$form['event_information[date][time][hour]'] = '20';
 		$form['event_information[date][time][minute]'] = '30';
-		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla2";
 		$form['event_information[description]'] = 'aangepast';
 
         $client->submit($form);
@@ -579,7 +579,7 @@ class EventControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
         $client->submit($form);

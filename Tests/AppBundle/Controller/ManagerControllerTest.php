@@ -59,7 +59,7 @@ class ManagerControllerTest extends BaseWebTestCase
 		$form['event_information[date][date][day]'] = '1';
 		$form['event_information[date][time][hour]'] = '14';
 		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__;
+		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
 		$form['event_information[description]'] = 'test';
 
 		$client->submit($form);

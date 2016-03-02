@@ -6,7 +6,7 @@
 {% block body %}
     <div class="container-fluid">
         {% if not( app.user ) %}
-            <div id="home-head">
+            <div id="home-head" class="hidden-xs">
                 <h1 id="home-headline">
                     Feesten makkelijk gemaakt
                 </h1>
@@ -15,7 +15,7 @@
                 </h2>
             </div>
 
-            <div id="home-separator-bar">
+            <div id="home-separator-bar"  class="hidden-xs">
                 <div id="home-start-cto">
                     <b>Ben jij organisator?</b> In slechts enkele minuten kan je tickets beginnen verkopen! <a class="feest-button" href="{{ path('user_register') }}">Registreer</a>
                 </div>

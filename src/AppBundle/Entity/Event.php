@@ -267,7 +267,7 @@ class Event
     /**
      * Set Price
      *
-     * @param string $price
+     * @param float $price
      * @return Event
      */
     public function setPrice($price)
@@ -280,7 +280,7 @@ class Event
     /**
      * Get Price
      *
-     * @return string 
+     * @return float
      */
     public function getPrice()
     {

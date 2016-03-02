@@ -9,6 +9,9 @@
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Client;
+use Symfony\Component\DomCrawler\Crawler;
+
 class AdminControllerTest extends WebTestCase
 {
     private $user;
@@ -23,8 +26,7 @@ class AdminControllerTest extends WebTestCase
         $this->user2= Array('username'=>'test2','password'=>'test');
     }
 
-
-    public function login($client,$user)
+    public function login(Client $client, array $user)
     {
         $crawler = $client->request('GET','/login');
 
@@ -39,7 +41,7 @@ class AdminControllerTest extends WebTestCase
     public function testAdminPanelWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/admin');
+        $client->request('GET','/admin');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -49,8 +51,12 @@ class AdminControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client = $this->login($client,$this->user2);
-        $crawler = $client->request('GET','/admin');
+        $client->request('GET','/admin');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
+
+		/**
+		 * @var Crawler $crawler
+		 */
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
     }

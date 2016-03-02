@@ -9,14 +9,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
-
-use Doctrine\ORM\EntityManager;
-use Geocoder\Exception\NoResult;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends Controller
 {
@@ -33,6 +31,9 @@ class DashboardController extends Controller
         //$tickets = $em->createQuery("Select t from AppBundle:Event e inner join AppBundle:Ticket t where e.id = t.event and e.creator = :creator ")->setParameter('creator',  $user->getId())->getResult();
         //$sold = $em->createQuery("Select t from AppBundle:Event e inner join AppBundle:Ticket t where e.id = t.event and e.creator = :creator ")->setParameter('creator',  $user->getId())->getResult();
 
+        /**
+         * @var Event $event
+         */
         $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
 
         $tickets = new ArrayCollection();
@@ -54,6 +55,8 @@ class DashboardController extends Controller
 
     /**
      * @Route("dashboard/{id}", name="dashboard_event")
+     * @param integer $id
+     * @return RedirectResponse|Response
      */
     public function dashboardEvent($id)
     {

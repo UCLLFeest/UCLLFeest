@@ -30,8 +30,25 @@ class DefaultController extends Controller
          */
         $repo = $em->getRepository('AppBundle:Event');
 
-        //ik geef hem hier efkes 50 aan om te testen
+        //check of er events in de buurt zijn
         $events = $repo->sortEventByLocationDistance($adress->get(0)->getLatitude(),$adress->get(0)->getLongitude());
+
+
+        //zo niet geef aflopende datum events
+        if(empty($events)) {
+            //CURRENT_TIMESTAMP()
+            $events = $em->createQuery('Select e from AppBundle:Event as e where e.date > CURRENT_TIMESTAMP()')
+                ->setMaxResults(20)
+                ->getResult();
+        }
+
+        //WANNEER ER GEEN EVENTS ZIJN (mag niet gebeuren, gewoon events in het verleden tonen)
+        if (empty($events)) {
+            $events = $em->createQuery('Select e from AppBundle:Event as e')
+                ->setMaxResults(20)
+                ->getResult();
+        }
+
 
 
         return $this->render(

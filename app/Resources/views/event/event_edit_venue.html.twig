@@ -6,6 +6,7 @@
 
 {% block body %}
     <div class="container content">
+        <a class="pull-right" href="{{ path('profile') }}" data-toggle="tooltip" data-placement="left" title="Geen venue toevoegen"><i class="fa fa-arrow-right"></i></a>
         <div class="title">Zoek een venue</div>
         {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
@@ -24,7 +25,7 @@
                     <tr>
                         <td><a href="{# path('venue_detail',{'id':venue.getId()) #}">{{ venue.getName()}} ({{ venue.events|length}})</a></td>
                         <td>{{ venue.getFullAdress()}}</td>
-                        <td><a href="{{ path('edit_event_venue',{'id':event.getId(), 'venue':venue.getId()}) }}"><i class="fa fa-plus"></i></a></td>
+                        <td><a href="{{ path('edit_event_venue',{'id':event.getId(), 'venue':venue.getId()}) }}"  data-toggle="tooltip" data-placement="left" title="Venue toevoegen"><i class="fa fa-plus"></i></a></td>
                     </tr>
                 {% endfor %}
             </table>

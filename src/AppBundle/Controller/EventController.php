@@ -50,8 +50,25 @@ class EventController extends Controller
     public function showAllEvents()
     {
         $em =$this->getDoctrine()->getManager();
-        $event = $em->getRepository('AppBundle:Event')->findAll();
-        return $this->render('event/event_overview.html.twig',array('events'=>$event));
+
+        //zo niet geef aflopende datum events
+        if(empty($events)) {
+            //CURRENT_TIMESTAMP()
+            $events = $em->createQuery('Select e from AppBundle:Event as e where e.date > CURRENT_TIMESTAMP()')
+                ->getResult();
+        }
+
+        //WANNEER ER GEEN EVENTS ZIJN (mag niet gebeuren, gewoon events in het verleden tonen)
+        if (empty($events)) {
+            //zelfde als dit maar dan gelimit
+            //$events = $em->getRepository('AppBundle:Event')->findAll();
+            $events = $em->createQuery('Select e from AppBundle:Event as e')
+                ->setMaxResults(20)
+                ->getResult();
+        }
+
+
+        return $this->render('event/event_overview.html.twig',array('events'=>$events));
     }
 
 
@@ -422,13 +439,13 @@ class EventController extends Controller
 
         if (!$event) {
             $this->addFlash('notice', "Couldn't find the event");
-            return $this->redirectToRoute('show_events');
+            return $this->redirectToRoute('profile');
         }
 
         //creator GEEN MANAGERS
         if ($event->getCreator() != $this->getUser()) {
             $this->addFlash('notice', "You're not allowed to access this page");
-            return $this->redirectToRoute('show_events');
+            return $this->redirectToRoute('profile');
         }
 
         $user = $this->getUser();
@@ -437,7 +454,7 @@ class EventController extends Controller
         $em->flush();
 
         //return $this->showEvents();
-        return $this->redirectToRoute('show_events');
+        return $this->redirectToRoute('profile');
     }
 
     ////////////////////////////////EDITTING

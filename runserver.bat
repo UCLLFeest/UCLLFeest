@@ -1,1 +1,1 @@
-php app/console server:run
+C:\xampp\php\php.exe app/console server:run

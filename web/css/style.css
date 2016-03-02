@@ -366,10 +366,6 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
     background: #38546B;
 }
 
-.form-group {
-    padding: 20px 0px;
-}
-
 .table {
     margin-top: 15px;
     border-top: 1px solid #122b3f;

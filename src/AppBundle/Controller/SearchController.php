@@ -25,13 +25,8 @@ class SearchController extends Controller
     public function searchEventsOnName(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $events = $em->createQuery("Select e from AppBundle:Event as e where lower(e.name) LIKE lower(:search) or lower(e.city) LIKE lower(:search) or lower(e.adress) LIKE lower(:search)")->setParameter('search', '%' . $request->query->get('search') . '%')->getResult();
 
-        /**
-         * @var EventRepository $repo
-         */
-        $repo = $em->getRepository('AppBundle:Event');
-
-        $events = $repo->findEventByName($request->query->get('search'));
         return $this->render('search/Search_Events.html.twig', array('events' => $events));
     }
 }

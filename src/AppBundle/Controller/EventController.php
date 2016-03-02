@@ -489,7 +489,7 @@ class EventController extends Controller
 			 */
             $em = $this->getDoctrine()->getManager();
 
-            $user = $this->getUser();
+            //$user = $this->getUser();
             try{
             $event = $this->setAdress($event);
             }catch(NoResult $e) {

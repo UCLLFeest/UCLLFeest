@@ -34,7 +34,7 @@ class AccountControllerTest extends WebTestCase
     public function testViewAccountWhileNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/view/1');
+        $client->request('GET','/account/view/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         $crawler = $client->followRedirect();
@@ -44,7 +44,7 @@ class AccountControllerTest extends WebTestCase
     public function testViewAccountThatDoesNotExist()
     {
         $client =  $this->login();
-        $crawler = $client->request('GET','/account/view/0');
+        $client->request('GET','/account/view/0');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("That user does not exist")')->count());
@@ -70,7 +70,7 @@ class AccountControllerTest extends WebTestCase
     public function testViewAllWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/all');
+        $client->request('GET','/account/all');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -123,7 +123,7 @@ class AccountControllerTest extends WebTestCase
     public function testEditPasswordNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/account/editpassword');
+        $client->request('GET','/account/editpassword');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());

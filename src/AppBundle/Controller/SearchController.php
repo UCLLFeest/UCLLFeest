@@ -9,7 +9,6 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

@@ -9,6 +9,8 @@
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Client;
+
 class AdminUserControllerTest extends WebTestCase
 {
     private $user;
@@ -26,7 +28,7 @@ class AdminUserControllerTest extends WebTestCase
     }
 
 
-    public function login($client,$user)
+    public function login(Client $client, array $user)
     {
         $crawler = $client->request('GET','/login');
 
@@ -49,9 +51,12 @@ class AdminUserControllerTest extends WebTestCase
 
     public function testAdminUserOverviewWhenLoggedInAndNotAdminstrator()
     {
+        /**
+         * @var Client $client
+         */
         $client = static::createClient();
         $client = $this->login($client,$this->user2);
-        $crawler = $client->request('GET','/admin/user');
+        $client->request('GET','/admin/user');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -60,7 +65,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserOverviewWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/admin');
+        $client->request('GET','/admin');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -79,7 +84,7 @@ class AdminUserControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client = $this->login($client,$this->user2);
-        $crawler = $client->request('GET','/admin/user/view/1');
+        $client->request('GET','/admin/user/view/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -88,7 +93,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserProfileWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/admin/user/view/1');
+        $client->request('GET','/admin/user/view/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -98,7 +103,7 @@ class AdminUserControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client = $this->login($client,$this->user);
-        $crawler = $client->request('GET','/admin/user/view/0');
+        $client->request('GET','/admin/user/view/0');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("does not exist")')->count());

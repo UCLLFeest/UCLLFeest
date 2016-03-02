@@ -11,6 +11,11 @@
             "app/AppCache.php"
         ]
     },
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\": "Tests/"
+		}
+	},
     "require": {
         "php": ">=5.3.9",
         "symfony/symfony": "2.8.*",

@@ -46,7 +46,7 @@
                         <tbody>
                         {% for event in user.events %}
                             <tr>
-                                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</td>
+                                <td><a href="{{ path('event_detail',{'id':event.getId()}) }}">{{ event.getName()}}</a></td>
                                 <td>{{ event.getFullAdress()}}</td>
                                 <td>{{ event.getDateFormatted() }}</td>
                                 <td>
@@ -116,6 +116,9 @@
                 </div>
             {% endif %}
         {% endif %}
+
+        {% block accountblock %}
+        {% endblock %}
 
     </div>
 

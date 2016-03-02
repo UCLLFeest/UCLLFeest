@@ -29,7 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class EventController extends Controller
 {
     /**
-     * @Route("/events/", name="show_events")
+     * @Route("/events", name="show_events")
      */
     public function showEvents()
     {

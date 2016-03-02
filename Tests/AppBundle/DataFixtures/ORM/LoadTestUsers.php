@@ -65,6 +65,24 @@ class LoadTestUsers implements FixtureInterface, ContainerAwareInterface
         $manager->flush();
 
 		/**
+		 * @var User $user2
+		 */
+		$user2 = $userManager->createUser();
+		$user2->setFirstName("test");
+		$user2->setLastName("test");
+		$user2->setGender(0);
+		$user2->setBirthday(new \DateTime());
+		$user2->setUsername('user2');
+		$user2->setEmail('test4@gmail.com');
+		$user2->setPlainPassword('test');
+		$user2->setEnabled(true);
+
+		$userManager->updateUser($user2);
+
+		$manager->persist($user2);
+		$manager->flush();
+
+		/**
 		 * @var User $admin
 		 */
 		$admin = $userManager->createUser();

@@ -35,7 +35,7 @@
                     <table class="table">
                         <tr>
                             <td>Naam</td>
-                            <td>{{ event.name }}</td>
+                            <td id="name">{{ event.name }}</td>
                         </tr>
 
                         {% if event.managers is not empty %}
@@ -47,13 +47,13 @@
 
                         <tr>
                             <td>Adres</td>
-                            <td>{{ event.adress }}</td>
+                            <td id="address">{{ event.adress }}</td>
                         </tr>
 
                         {% if event.price is not null %}
                             <tr>
                                 <td>Inkom Prijs</td>
-                                <td>{{ event.price }}</td>
+                                <td id="price">{{ event.price }}</td>
                             </tr>
                         {% endif %}
 
@@ -65,14 +65,14 @@
                         {% if event.description is not null %}
                             <tr>
                                 <td>Beschrijving</td>
-                                <td>{{ event.description }}</td>
+                                <td id="description">{{ event.description }}</td>
                             </tr>
                         {% endif %}
 
                         {% if event.capacity is not null %}
                             <tr>
                                 <td>Capaciteit</td>
-                                <td>{{ event.capacity }}</td>
+                                <td id="capacity">{{ event.capacity }}</td>
                             </tr>
                         {% endif %}
                         <tr>

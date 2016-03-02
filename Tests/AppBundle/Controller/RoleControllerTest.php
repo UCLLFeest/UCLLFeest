@@ -190,7 +190,7 @@ class RoleControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/role/remove/0');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $crawler = $client->request('GET', '/admin/role');
-        $this->assertEquals($count-1, $crawler->filter('html:contains("No role with that id exists")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("No role with that id exists")')->count());
     }
 
 }

@@ -12,8 +12,18 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
+/**
+ * This class is a Doctrine repository class for Event.
+ *
+ * @package AppBundle\Entity
+ */
 class EventRepository extends EntityRepository
 {
+	/**
+	 * Finds an event by name. Searches case insensitively, performs partial matching.
+	 * @param string $event_name
+	 * @return array
+	 */
     public function findEventByName($event_name)
     {
         $parameters = array(
@@ -26,6 +36,12 @@ class EventRepository extends EntityRepository
 
     }
 
+	/**
+	 * Returns a list of events, sorted by distance from a given latitude and longitude.
+	 * @param float $lat
+	 * @param float $long
+	 * @return array
+	 */
     public function sortEventByLocationDistance($lat, $long)
     {
         $parameters = array(

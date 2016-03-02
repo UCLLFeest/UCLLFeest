@@ -7,6 +7,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * This class defines a role that users can have. It sets usage restrictions and can be set to disallow removal.
+ *
+ * @package AppBundle\Entity
+ *
  * @ORM\Entity(repositoryClass="AppBundle\Entity\RoleRepository")
  * @ORM\Table(name="app_roles")
  * @UniqueEntity("name", message="A role with that name already exists")
@@ -14,6 +18,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Role
 {
 	/**
+	 * @var integer id.
+	 *
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,28 +27,32 @@ class Role
 	private $id;
 
 	/**
+	 * @var string Name of this role.
+	 *
 	 * @ORM\Column(type="string")
 	 * @Assert\NotBlank()
-	 * @var string $name Name of this role.
 	 */
 	private $name;
 
 	/**
+	 * @var Role Optional. The role an admin must have to set this role on users.
+	 *
 	 * @ORM\ManyToOne(targetEntity="Role")
 	 * @ORM\JoinColumn(name="requiredRole_id", referencedColumnName="id", nullable=true)
-	 * @var Role $requiredRole Optional. The role an admin must have to set this role on users.
 	 */
 	private $requiredRole;
 
 	/**
+	 * @var boolean If true, this role cannot be used directly.
+	 *
 	 * @ORM\Column(type="boolean")
-	 * @var boolean $locked If true, this role cannot be used directly.
 	 */
 	private $locked = false;
 
 	/**
+	 * @var boolean Whether this role is mandatory. Mandatory roles cannot be removed.
+	 *
 	 * @ORM\Column(type="boolean")
-	 * @var bool $mandatory Whether this role is mandatory. Mandatory roles cannot be removed.
 	 */
 	private $mandatory = false;
 
@@ -78,7 +88,8 @@ class Role
 	}
 
 	/**
-	 * @return Role The role that an admin must have to set this role on users.
+	 * Gets the role that an admin must have to set this role on users.
+	 * @return Role
 	 */
 	public function getRequiredRole()
 	{
@@ -86,7 +97,8 @@ class Role
 	}
 
 	/**
-	 * @param mixed $role The role that an admin must have to set this role on users. Can be null. Cannot be this role.
+	 * Sets the role that an admin must have to set this role on users. Can be null. Cannot be this role.
+	 * @param mixed $role
 	 * @return Role $this
 	 */
 	public function setRequiredRole($role)
@@ -100,7 +112,8 @@ class Role
 	}
 
 	/**
-	 * @return bool $locked Whether this role is locked
+	 * Returns whether this role is locked or not.
+	 * @return bool
 	 */
 	public function isLocked()
 	{
@@ -108,7 +121,8 @@ class Role
 	}
 
 	/**
-	 * @param bool $locked Sets whether this role is locked.
+	 * Sets whether this role is locked.
+	 * @param bool $locked
 	 * @return Role $this
 	 */
 	public function setLocked($locked)
@@ -119,7 +133,8 @@ class Role
 	}
 
 	/**
-	 * @return bool $mandatory Whether this role is mandatory.
+	 * Whether this role is mandatory.
+	 * @return bool $mandatory
 	 */
 	public function isMandatory()
 	{
@@ -127,7 +142,8 @@ class Role
 	}
 
 	/**
-	 * @param bool $mandatory Whether this role is mandatory.
+	 * Whether this role is mandatory.
+	 * @param bool $mandatory
 	 * @return Role $this
 	 */
 	public function setMandatory($mandatory)

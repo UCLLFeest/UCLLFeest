@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Event;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -9,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
+ * This class represents a user. It contains information like the user name, password (encrypted), email address, and so forth.
+ *
+ * @package AppBundle\Entity
+ *
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  * @UniqueEntity("username")
@@ -17,11 +23,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
 class User extends BaseUser
 {
     /**
-     * string ROLE_ADMIN This constant is used to identify the admin role
+     * @var string This constant is used to identify the admin role.
      */
     const ROLE_ADMIN = 'ROLE_ADMIN';
 
     /**
+     * @var integer id.
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,41 +37,55 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @var string The user's first name.
+     *
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      */
     private $firstname;
 
     /**
+     * @var string The user's last name.
+     *
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      */
     private $lastname;
 
     /**
+     * @var integer The user's gender.
+     *
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank()
      */
     private $gender;
 
     /**
+     * @var \DateTime The user's birthday.
+     *
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      */
     private $birthday;
 
     /**
+     * @var ArrayCollection The list of events that this user can manage.
+     *
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="managers", indexBy="id")
      * @ORM\JoinTable(name="app_managers")
      */
     private $managing;
 
     /**
+     * @var ArrayCollection The list of events that this user has created.
+     *
      * @ORM\OneToMany(targetEntity="Event", mappedBy="creator")
      */
     private $events;
 
     /**
+     * @var ArrayCollection The list of tickets that this user has bought.
+     *
      * @ORM\OneToMany(targetEntity="Ticket", mappedBy="owner")
      */
     private $tickets;
@@ -77,8 +99,12 @@ class User extends BaseUser
         $this->managing = new ArrayCollection();
     }
 
+    /**
+     * Erases login credentials.
+     */
     public function eraseCredentials()
     {
+		parent::eraseCredentials();
     }
 
     /**
@@ -92,10 +118,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add event
+     * Adds an event to the list of events.
      *
      * @param Event $event
-     * @return User
+     * @return User $this
      */
     public function addEvent(Event $event)
     {
@@ -104,18 +130,21 @@ class User extends BaseUser
         return $this;
     }
 
-    /**
-     * Remove event
-     *
-     * @param Event $event
-     */
+	/**
+	 * Removes an event from the list of events.
+	 *
+	 * @param Event $event
+	 * @return User $this
+	 */
     public function removeEvent(Event $event)
     {
         $this->events->removeElement($event);
+
+		return $this;
     }
 
     /**
-     * Get events
+     * Gets the list of events.
      *
      * @return ArrayCollection
      */
@@ -125,7 +154,7 @@ class User extends BaseUser
     }
 
     /**
-     * Gets the user's first name
+     * Gets the user's first name.
      * @return string first name
      */
     public function getFirstName()
@@ -134,9 +163,9 @@ class User extends BaseUser
     }
 
     /**
-     * Sets the user's first name
+     * Sets the user's first name.
      * @param string $firstname The user's first name
-     * @return User
+     * @return User $this
      */
     public function setFirstName($firstname)
     {
@@ -146,7 +175,7 @@ class User extends BaseUser
     }
 
     /**
-     * Gets the user's last name
+     * Gets the user's last name.
      * @return string last name
      */
     public function getLastName()
@@ -154,6 +183,10 @@ class User extends BaseUser
         return $this->lastname;
     }
 
+	/**
+	 * Gets the user's full name.
+	 * @return string
+	 */
     public function getFullName()
     {
         $result = "";
@@ -174,9 +207,9 @@ class User extends BaseUser
 
 
     /**
-     * Sets the user's last name
+     * Sets the user's last name.
      * @param string $lastname The user's last name
-     * @return User
+     * @return User $this
      */
     public function setLastName($lastname)
     {
@@ -186,7 +219,7 @@ class User extends BaseUser
     }
 
     /**
-     * Gets the user's gender
+     * Gets the user's gender.
      * @return integer gender
      */
     public function getGender()
@@ -195,9 +228,9 @@ class User extends BaseUser
     }
 
     /**
-     * Sets the user's gender
+     * Sets the user's gender.
      * @param integer $gender the user's gender
-     * @return User
+     * @return User $this
      */
     public function setGender($gender)
     {
@@ -207,7 +240,7 @@ class User extends BaseUser
     }
 
     /**
-     * Returns the user's birthday
+     * Returns the user's birthday.
      * @return \DateTime birthday
      */
     public function getBirthday()
@@ -216,9 +249,9 @@ class User extends BaseUser
     }
 
     /**
-     * Sets the user's birthday
+     * Sets the user's birthday.
      * @param \DateTime $birthday
-     * @return User
+     * @return User $this
      */
     public function setBirthday(\DateTime $birthday)
     {
@@ -228,10 +261,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add ticket
+     * Adds a ticket to the list of tickets.
      *
      * @param Ticket $ticket
-     * @return User
+     * @return User $this
      */
     public function addTicket(Ticket $ticket)
     {
@@ -240,18 +273,21 @@ class User extends BaseUser
         return $this;
     }
 
-    /**
-     * Remove ticket
-     *
-     * @param Ticket $ticket
-     */
+	/**
+	 * Removes a ticket from the list of tickets.
+	 *
+	 * @param Ticket $ticket
+	 * @return User $this
+	 */
     public function removeTicket(Ticket $ticket)
     {
         $this->tickets->removeElement($ticket);
+
+		return $this;
     }
 
     /**
-     * Get tickets
+     * Gets the list of tickets.
      *
      * @return ArrayCollection
      */
@@ -261,11 +297,11 @@ class User extends BaseUser
     }
 
     /**
-     * Add managing
+     * Adds an event that the user can manage to the list of manageable events.
      *
-     * @param \AppBundle\Entity\Event $managing
+     * @param Event $managing
      *
-     * @return User
+     * @return User $this
      */
     public function addManaging(Event $managing)
     {
@@ -274,20 +310,23 @@ class User extends BaseUser
         return $this;
     }
 
-    /**
-     * Remove managing
-     *
-     * @param \AppBundle\Entity\Event $managing
-     */
+	/**
+	 * Removes an event that the user was managing from the list of manageable events.
+	 *
+	 * @param Event $managing
+	 * @return User $this
+	 */
     public function removeManaging(Event $managing)
     {
         $this->managing->removeElement($managing);
+
+		return $this;
     }
 
     /**
-     * Get managing
+     * Gets the list of manageable events.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getManaging()
     {

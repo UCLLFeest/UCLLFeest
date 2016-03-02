@@ -8,18 +8,27 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Event;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * This class represents an image that can be uploaded to the website. This image is stored on disk, with an entry in the database referring to its location.
+ *
+ * @package AppBundle\Entity
+ *
  * @ORM\Entity
  * @Vich\Uploadable
  */
 class Foto
 {
     /**
+     * @var integer id.
+     *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,6 +36,8 @@ class Foto
     private $id;
 
     /**
+     * @var string Name of this image.
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
@@ -34,6 +45,8 @@ class Foto
 
 
     /**
+     * @var File The actual file that was uploaded.
+     *
      * @Vich\UploadableField(mapping="event_image", fileNameProperty="name")
      * @Assert\File(maxSize="6000000")
      * @Assert\NotBlank()
@@ -41,23 +54,34 @@ class Foto
     private $file;
 
     /**
+     * @var DateTime Date and time at which this image was last updated.
      * @ORM\Column(type="datetime")
-     *
-     * @var \DateTime
      */
     private $updatedAt;
 
     /**
+     * @var Event The event that this was uploaded for.
+     *
      * @ORM\OneToOne(targetEntity="Event", inversedBy="foto")
      */
     private $event;
 
-    /**
-    * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
-    *
-    * @return Foto
-    */
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
+    /**
+	 * Sets the image that this object represents.
+	 *
+     * @param File|null $image
+     * @return Foto $this
+     */
     public function setFile(File $image = null)
     {
         $this->file = $image;
@@ -65,13 +89,15 @@ class Foto
         if ($image) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTime('now');
+            $this->updatedAt = new DateTime('now');
         }
 
         return $this;
     }
 
     /**
+	 * Gets the image that this object represents.
+	 *
      * @return File
      */
     public function getFile()
@@ -80,9 +106,10 @@ class Foto
     }
 
     /**
+	 * Sets the name of this image.
+	 *
      * @param string $imageName
-     *
-     * @return File
+     * @return File $this
      */
     public function setName($imageName)
     {
@@ -92,6 +119,8 @@ class Foto
     }
 
     /**
+	 * Gets the name of this string.
+	 *
      * @return string
      */
     public function getName()
@@ -99,22 +128,11 @@ class Foto
         return $this->name;
     }
 
-
     /**
-     * Get id
+     * Set the time and date that this image was last updated at.
      *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Foto
+     * @param DateTime $updatedAt
+     * @return Foto $this
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -124,9 +142,9 @@ class Foto
     }
 
     /**
-     * Get updatedAt
+     * Get the time and date that this image was last updated at.
      *
-     * @return \DateTime 
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -134,10 +152,10 @@ class Foto
     }
 
     /**
-     * Set event
+     * Set the event that this image belongs to.
      *
-     * @param \AppBundle\Entity\Event $event
-     * @return Foto
+     * @param Event $event
+     * @return Foto $this
      */
     public function setEvent(Event $event = null)
     {
@@ -147,9 +165,9 @@ class Foto
     }
 
     /**
-     * Get event
+     * Get the event that this image belongs to.
      *
-     * @return \AppBundle\Entity\Event 
+     * @return Event
      */
     public function getEvent()
     {

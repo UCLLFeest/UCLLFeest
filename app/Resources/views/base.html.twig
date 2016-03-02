@@ -42,8 +42,8 @@
                         <ul class="nav navbar-nav">
                             <li><a href="{{ path('show_all_events') }}">Events</a></li>
                             <li><a href="{{ path('show_venues') }}">Venues</a></li>
-                            <li><a href="{{ path('show_tickets') }}">Tickets</a></li>
                             {% if app.user %}
+                                <li><a href="{{ path('show_tickets') }}">Tickets</a></li>
                                 <li><a href="{{ path('profile') }}">Account</a></li>
                                 <li><a href="{{ path('user_logout') }}">Log Out</a></li>
                             {% else %}

@@ -47,7 +47,7 @@
 
                         <tr>
                             <td>Adres</td>
-                            <td>{{ event.adress }}</td>
+                            <td>{{ event.getFullAdress() }}</td>
                         </tr>
 
                         {% if event.price is not null %}

@@ -22,21 +22,18 @@ class AdminControllerTest extends WebTestCase
      */
     protected function setUp()
     {
-      $this->user = Array('username'=>'test','password'=>'test');
-        $this->user2= Array('username'=>'test2','password'=>'test');
+      $this->user = Array('username'=>'user','password'=>'test');
+        $this->user2= Array('username'=>'admin','password'=>'test');
     }
 
-    public function login(Client $client, array $user)
+        public function login($user)
     {
-        $crawler = $client->request('GET','/login');
-
-        $form = $crawler->selectButton('_submit')->form(array(
-            '_username'  => $user['username'],
-            '_password'  => $user['password'],
+        return static::createClient(array(), array(
+            'PHP_AUTH_USER' => $user['username'],
+            'PHP_AUTH_PW'   => $user['password'],
         ));
-        $client->submit($form);
-        return $client;
     }
+
 
     public function testAdminPanelWhenNotLoggedIn()
     {
@@ -49,9 +46,8 @@ class AdminControllerTest extends WebTestCase
 
     public function testAdminPanelWhenLoggedInButNotAdministrator()
     {
-        $client = static::createClient();
-        $client = $this->login($client,$this->user2);
-        $client->request('GET','/admin');
+        $client = $this->login($this->user);
+        $crawler = $client->request('GET','/admin');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
 		/**
@@ -63,8 +59,7 @@ class AdminControllerTest extends WebTestCase
 
     public function testAdminPanelWhenLoggedInAndAdminstrator()
     {
-        $client = static::createClient();
-        $client = $this->login($client,$this->user);
+        $client = $this->login($this->user2);
         $crawler = $client->request('GET','/admin');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin Overview")')->count());

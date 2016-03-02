@@ -17,7 +17,7 @@ class AccountControllerTest extends WebTestCase
     public function login()
     {
         return static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'test',
+            'PHP_AUTH_USER' => 'user',
             'PHP_AUTH_PW'   => 'test',
         ));
     }

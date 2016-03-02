@@ -132,11 +132,11 @@ class Event
         $this->managers = new ArrayCollection();
 
 
-        $this->setName("Leuk feestje in 3 stappen");
+        /*$this->setName("Leuk feestje in 3 stappen");
         $this->setAdress("Houwaartstraat 325");
         $this->setCity("Schoonderbuken");
         $this->setPostalCode("3270");
-        $this->setDescription("HEEL LEEUK FEEST WOOEHOOW");
+        $this->setDescription("HEEL LEEUK FEEST WOOEHOOW");*/
 
     }
 

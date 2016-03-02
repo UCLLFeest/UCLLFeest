@@ -19,7 +19,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        //$ip =  "193.190.138.250";
+        //$ip =  "193.190.138.251";
         $ip = $request->getClientIp();
         $curl     = new CurlHttpAdapter();
         $geocoder = new GeoPlugin($curl);

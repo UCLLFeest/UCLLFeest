@@ -29,23 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class EventController extends Controller
 {
     /**
-     * @Route("/events", name="show_events")
-     */
-    public function showEvents()
-    {
-        //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
-        $em =$this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
-
-        //managed events
-        $managing = $user->getManaging();
-
-        return $this->render('event/gebruiker_event_overview.html.twig',array('events'=>$events, 'managing'=>$managing, 'user'=>$user));
-    }
-
-    /**
-     * @Route("/events/all", name="show_all_events")
+     * @Route("/events", name="show_all_events")
      */
     public function showAllEvents()
     {

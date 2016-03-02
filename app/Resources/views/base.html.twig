@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
         <title>{% block title %}Welcome!{% endblock %}</title>
 
         <!-- Nodig voor Bootstrap 3 CSS in forms -->
@@ -80,39 +82,57 @@
             {% block body %}{% endblock %}
         </div>
 
-
-        <script>
-            $(document).ready(function(){
-                $('[data-toggle="tooltip"]').tooltip();
-            });
-        </script>
-
-        <script type="text/javascript">
-            $('.flash-notice').on('click',function(){
-                $(".flash-notice").fadeOut("normal", function() {
-                    $(".flash-notice").remove();
-                });
-            });
-
-        </script>
-
-        <script type="text/javascript">
-            $('.print').on('click',function(){
-                window.print();
-            });
-
-        </script>
-
-
-        <div class="container-fluid footer">
-            <div class="container">
-                <div class="pull-right"><a href="#">UCLL 2016</a></div>
-                <div class="footer-nav">
-                    <ul>
-                        <li><a href="">Feest</a></li>
-                    </ul>
+        <div class="footer">
+            <div class="container-fluid ">
+                <div class="container">
+                    <div class="pull-right"><a href="#">UCLL 2016</a></div>
+                    <div class="footer-nav">
+                        <ul>
+                            <li><a href="">Feest</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </body>
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('.flash-notice').on('click',function(){
+            $(".flash-notice").fadeOut("normal", function() {
+                $(".flash-notice").remove();
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $('.print').on('click',function(){
+            window.print();
+        });
+
+    </script>
+
+    <script>
+
+        $(document).ready(function() {
+
+            var docHeight = $(window).height();
+            var footerHeight = $('.footer').height();
+
+            var footerTop = $('.footer').position().top + footerHeight;
+
+            if (footerTop < docHeight) {
+                $('.footer').css('margin-top', (docHeight - footerTop)  + 'px');
+            }
+        });
+    </script>
+
 </html>

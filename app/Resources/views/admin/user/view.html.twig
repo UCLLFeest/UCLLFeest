@@ -1,37 +1,37 @@
 {% extends 'account/accountinfo.html.twig' %}
 
 {% block accountblock %}
+    <div class="container content">
+        <!-- TODO: open target user's settings -->
+        <p><a href="{{ path('editprofile') }}">Edit Profile</a></p>
+        <p><a href="{{ path('editpassword') }}">Edit Password</a></p>
 
-    <!-- TODO: open target user's settings -->
-    <p><a href="{{ path('editprofile') }}">Edit Profile</a></p>
-    <p><a href="{{ path('editpassword') }}">Edit Password</a></p>
+        <p>Roles:</p>
 
-    <p>Roles:</p>
-
-    {% if user.roles is not empty %}
-        <table>
-            <tr>
-                <th>Name</th>
-                <th></th>
-            </tr>
-            {% for role in user.roles %}
+        {% if user.roles is not empty %}
+            <table>
                 <tr>
-                    <td>{{ role }}</td>
-                    <td>
-                        {% if role != constant("AppBundle\\Entity\\User::ROLE_DEFAULT") %}
-                            <a href="{{ path('adminuserchangerole', {'id': user.id, 'role': role}) }}">Change Role</a>
-                            <a href="{{ path('adminuserremoverole', {'id': user.id, 'role': role}) }}">Remove Role</a>
-                        {% endif %}
-                    </td>
+                    <th>Name</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No roles defined for this user.</p>
-    {% endif %}
+                {% for role in user.roles %}
+                    <tr>
+                        <td>{{ role }}</td>
+                        <td>
+                            {% if role != constant("AppBundle\\Entity\\User::ROLE_DEFAULT") %}
+                                <a href="{{ path('adminuserchangerole', {'id': user.id, 'role': role}) }}">Change Role</a>
+                                <a href="{{ path('adminuserremoverole', {'id': user.id, 'role': role}) }}">Remove Role</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No roles defined for this user.</p>
+        {% endif %}
 
-    {% if rolesLeft %}
-        <a href="{{ path('adminuseraddrole', { 'id': user.id}) }}">Add Role</a>
-    {% endif %}
-
+        {% if rolesLeft %}
+            <a href="{{ path('adminuseraddrole', { 'id': user.id}) }}">Add Role</a>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -323,6 +323,8 @@ class EventController extends Controller
 		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
+        $foto = $event->getFoto();
+
         $form = $this->createForm(EventInformationType::class, $event);
 
         $form->handleRequest($request);
@@ -343,7 +345,13 @@ class EventController extends Controller
                 $this->addFlash('notice', "Couldn't find your adress, Please give a valid adress");
                 return $this->redirectToRoute("add_event");
             }
-            $event = $this->setFoto($event, $em);
+            if($event->getFoto()->getFile() == null)
+            {
+                $event->setFoto($foto);
+            }else
+            {
+                $event = $this->setFoto($event, $em);
+            }
 
 
            /* $user->addEvent($event);

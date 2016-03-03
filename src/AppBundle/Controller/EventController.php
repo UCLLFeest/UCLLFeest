@@ -21,16 +21,22 @@ use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Response;
 
-
-
+/**
+ * Controller for event management.
+ * @package AppBundle\Controller
+ */
 class EventController extends Controller
 {
-    /**
-     * @Route("/events", name="show_all_events")
-     */
+	/**
+	 * Show a list of all events.
+	 * @Route("/events", name="show_all_events")
+	 * @return Response
+	 */
     public function showAllEvents()
     {
         $em =$this->getDoctrine()->getManager();
@@ -55,158 +61,11 @@ class EventController extends Controller
         return $this->render('event/event_overview.html.twig',array('events'=>$events));
     }
 
-
-    /**
-     * @Route("/events/Add_Event", name="add_event")
-     */
-
-    //zonder venue
-//    public function addEvent(Request $request)
-//    {
-//        //Er wordt een form gemaakt in de vorm van EventType.
-//        //En wordt gekoppeld aan een Event object.
-//
-//
-//        $event = new Event();
-//        $form = $this->createForm(EventInformationType::class, $event);
-//
-//        $form->handleRequest($request);
-//
-//        // Als de form wordt gesubmit wordt er gekeken of alle values valid zijn
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // Als dit klopt wordt de event aangemaakt en op de DB gezet
-//            // En returnt de user naar de event overview.
-//            $em = $this->getDoctrine()->getManager();
-//
-//
-//
-//            $user = $this->getUser();
-//
-//            $event= $this->setAdress($event);
-//            $event = $this->setFoto($event,$em);
-//
-//            $user->addEvent($event); //MOET DIT DAN??????
-//            $user->addEvent($event);
-//            $event->setCreator($user);
-//
-//
-//            $em->persist($event);
-//            $em->flush();
-//
-//            //idk of dit moet (Dries & Sven denken van wel)
-//           /* $em->persist($user);
-//            $em->flush();*/
-//
-//            //return $this->showEvents();
-//            return $this->redirectToRoute('show_events');
-//        }
-//
-//        // De form wordt getoont
-//
-//        return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
-//        //return $this->redirectToRoute('show_tickets');
-//    }
-
-
-    /**
-     * @Route("/events/add/{venue_id}", name="add_event_from_venue")
-     */
-
-    //met venue
- //   public function addEventFromVenue(Request $request, $venue_id)
-  //  {
-//       $em = $this->getDoctrine()->getManager();
-//        $venue =  $em->getRepository('AppBundle:Venue')->find($venue_id);
-//
-//        if(!$venue) {
-//            $this->addFlash('notice', "This venue doesn't exist");
-//            return $this->redirectToRoute("add_event");
-//        }
-//
-//        $event = new Event();
-//        $event->setAdress($venue->getAdress());
-//        $event->setPostalCode($venue->getPostalCode());
-//        $event->setCity($venue->getCity());
-//        $event->setVenue($venue);
-//
-//        $form = $this->createForm(EventType::class, $event);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//              $user = $this->getUser();
-//        $event = $this->setFoto($event,$em);
-//
-//        $user->addEvent($event); //MOET IDT DAN???????????
-//        $event->setCreator($user);
-//
-//        $event= $this->setAdress($event);
-//
-//        $em->persist($event);
-//        $em->flush();
-//
-//            //idk of dit moet (Dries & Sven denken van wel)
-//            /*$em->persist($user);
-//            $em->flush(); */
-//
-//            //return $this->showEvents();
-//            return $this->redirectToRoute('show_events');
-//        }
-//
-//        // De form wordt getoont
-//
-//        //return $this->render('event/add_event.html.twig', array('form' => $form->createView()));
-//        return $this->redirectToRoute('homepage');
-//    }
-//
-//
-//    /**
-//     * @Route("events/update_event/{id}", name="update_event")
-//     */
-//
-//    public function updateEvent(Request $request, $id)
-//    {
-//
-//        //Form wordt gemaakt met event dat wordt opgehaald met id.
-//        $em = $this->getDoctrine()->getManager();
-//        $event = $em->getRepository('AppBundle:Event')->find($id);
-//
-//        if(!$event)
-//        {
-//            $this->addFlash('notice', "Couldn't find the event");
-//            return $this->redirectToRoute('show_events');
-//        }
-//
-//        if ($event->getCreator() == $this->getUser() || $event->getManagers()->contains($this->getUser())) {
-//            $form = $this->createForm(EventInformationType::class,$event);
-//            $form->handleRequest($request);
-//            if ($form->isSubmitted() && $form->isValid()) {
-//               $event = $this->setFoto($event,$em);
-//                $event = $this->setAdress($event);
-//
-//                $em->persist($event);
-//                $em->flush();
-//
-//                $em->flush();
-//                // return $this->showEvents();
-//                return $this->redirectToRoute('show_events');
-//            }
-//
-//            return $this->render('event/update_event.html.twig', array('form' => $form->createView()));
-//        } else {
-//            $this->addFlash('notice', "You're not allowed to access this page");
-//            return $this->redirectToRoute('show_events');
-//        }
-//    }
-
-
-
-    //////////ADDING
-
 	/**
+	 * Adds a new event.
 	 * @Route("/events/add", name="add_event")
 	 * @param Request $request
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @return RedirectResponse|Response
 	 */
      public function add(Request $request)
     {
@@ -259,12 +118,12 @@ class EventController extends Controller
 
 
     /**
+	 * Shows a list of all venues for adding to an event.
      * @Route("/events/venues/{id}", name="add_event_venues")
      * @param Request $request
-     * @param integer $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $id Event id.
+     * @return RedirectResponse|Response
      */
-
     public function venues(Request $request, $id)
     {
         //wat als event niet wordt meegegeven?
@@ -327,10 +186,11 @@ class EventController extends Controller
     }
 
 	/**
+	 * Adds a venue to an event.
 	 * @Route("/events/venue/{id}/{venue}", name="add_event_venue")
-	 * @param integer $id
-	 * @param integer $venue
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @param integer $id Event id.
+	 * @param integer $venue Venue id.
+	 * @return RedirectResponse
 	 */
     public function addVenue($id, $venue)
     {
@@ -367,10 +227,11 @@ class EventController extends Controller
     }
 
 	/**
+	 * Adds payment information to an event.
 	 * @Route("/events/add/payment/{id}", name="add_payment")
 	 * @param Request $request
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Event id.
+	 * @return RedirectResponse|Response
 	 */
     public function addPayment(Request $request, $id)
     {
@@ -407,9 +268,10 @@ class EventController extends Controller
     //DELETINGGG
 
 	/**
+	 * Removes an event.
 	 * @Route("events/delete/{id}", name="delete_event")
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @param integer $id Event id.
+	 * @return RedirectResponse
 	 */
     public function deleteEvent($id)
     {
@@ -444,10 +306,11 @@ class EventController extends Controller
     ////////////////////////////////EDITTING
 
 	/**
+	 * Edits an event.
 	 * @Route("/events/edit/{id}", name="edit_event")
 	 * @param Request $request
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Event id.
+	 * @return RedirectResponse|Response
 	 */
     public function edit(Request $request, $id)
     {
@@ -503,12 +366,12 @@ class EventController extends Controller
     }
 
     /**
+	 * Shows the list of venues to replace the existing venue set for an event.
      * @Route("/events/edit/venues/{id}", name="edit_event_venues")
      * @param Request $request
-     * @param integer $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $id Event id.
+     * @return RedirectResponse|Response
      */
-
     public function editVenues(Request $request, $id)
     {
 
@@ -547,10 +410,11 @@ class EventController extends Controller
     }
 
 	/**
+	 * Changes a venue set on an event.
 	 * @Route("/events/edit/venue/{id}/{venue}", name="edit_event_venue")
-	 * @param integer $id
-	 * @param integer $venueId
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Event id.
+	 * @param integer $venueId Venue id.
+	 * @return RedirectResponse|Response
 	 */
     public function editVenue($id, $venueId)
     {
@@ -585,16 +449,12 @@ class EventController extends Controller
         }
     }
 
-
-    /**
-         * @Route("/events/edit/payment/{id}", name="edit_payment")
-     */
-
 	/**
+	 * Edits payment information for an event.
 	 * @Route("/events/edit/payment/{id}", name="edit_payment")
 	 * @param Request $request
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Event id.
+	 * @return RedirectResponse|Response
 	 */
     public function editPayment(Request $request, $id)
     {
@@ -632,14 +492,15 @@ class EventController extends Controller
     //////////////////////////
 
 	/**
+	 * Helper function to set geo-location from an address on an event.
 	 * @param Event $event
-	 * @return Event|\Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return Event $event
 	 */
 	public function setAdress(Event $event)
     {
-            $curl     = new CurlHttpAdapter();
-            $geocoder = new GoogleMaps($curl);
-            $adress =   $geocoder->geocode($event->getFullAdress());
+		$curl     = new CurlHttpAdapter();
+		$geocoder = new GoogleMaps($curl);
+		$adress =   $geocoder->geocode($event->getFullAdress());
 
         $event->setLatitude($adress->get(0)->getLatitude());
         $event->setLongitude($adress->get(0)->getLongitude());
@@ -648,9 +509,10 @@ class EventController extends Controller
     }
 
 	/**
-	 * @param Event $event
-	 * @param EntityManager $em
-	 * @return Event
+	 * Helper function to persist an image set for an event.
+	 * @param Event $event Event that contains the image.
+	 * @param EntityManager $em Entity manager used to persist the image.
+	 * @return Event $event
 	 */
 	public function setFoto(Event $event, EntityManager $em)
     {
@@ -667,9 +529,10 @@ class EventController extends Controller
 
 
 	/**
+	 * Shows the event detail page.
 	 * @Route("events/{id}", name="event_detail")
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Event id.
+	 * @return RedirectResponse|Response
 	 */
     public function eventDetail($id)
     {

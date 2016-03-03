@@ -26,6 +26,6 @@ class SearchController extends Controller
         $em = $this->getDoctrine()->getManager();
         $events = $em->createQuery("Select e from AppBundle:Event as e where lower(e.name) LIKE lower(:search) or lower(e.city) LIKE lower(:search) or lower(e.adress) LIKE lower(:search)")->setParameter('search', '%' . $request->query->get('search') . '%')->getResult();
 
-        return $this->render('search/Search_Events.html.twig', array('events' => $events));
+        return $this->render('search/Search_Events.html.twig', array('events' => $events, 'search'=>$request->query->get('search')));
     }
 }

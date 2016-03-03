@@ -9,8 +9,7 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Role;
 
 /**
- * Class LoadRoleData
- * This class is a Doctrine fixture used to initialize the database with default roles
+ * This class is a Doctrine fixture used to initialize the database with default roles.
  * @package AppBundle\DataFixtures\ORM
  */
 class LoadRoleData implements FixtureInterface

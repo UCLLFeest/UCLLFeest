@@ -3,9 +3,10 @@
 namespace AppBundle\Util;
 
 /**
- * Class BasicEnum
- * A class that allows the definition of enums
+ * A class that allows the definition of enums.
  * Taken from http://stackoverflow.com/questions/254514/php-and-enumerations
+ *
+ * @package AppBundle\Util
  */
 abstract class BasicEnum {
     private static $constCacheArray = NULL;
@@ -49,7 +50,7 @@ abstract class BasicEnum {
     }
 
     /**
-     * Gets all constants as  a map
+     * Gets all constants as a map
      * @return array
      */
     public static function getAsMap()

@@ -40,7 +40,7 @@ class RoleControllerTest extends WebTestCase
     public function testShowRolesOverviewAsNormalUser()
     {
         $client = $this->loginAsUser();
-        $crawler = $client->request('GET','/admin/role');
+        $client->request('GET','/admin/role');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Homepagina")')->count());
@@ -49,7 +49,7 @@ class RoleControllerTest extends WebTestCase
     public function testShowRolesOverviewWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/admin/role');
+        $client->request('GET','/admin/role');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Login in")')->count());
@@ -178,7 +178,7 @@ class RoleControllerTest extends WebTestCase
     {
         $client = $this->loginAsUser();
         $count = $crawler->filter('a:contains("Remove")')->count();
-        $crawler = $client->request('GET', '/admin/role/remove/4');
+        $client->request('GET', '/admin/role/remove/4');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $crawler = $client->request('GET', '/admin/role');
         $this->assertEquals($count-1, $crawler->filter('html:contains("Remove")')->count());
@@ -187,7 +187,7 @@ class RoleControllerTest extends WebTestCase
     public function testRemoveRoleAsAdministratorButDoesntExist()
     {
         $client = $this->loginAsUser();
-        $crawler = $client->request('GET', '/admin/role/remove/0');
+        $client->request('GET', '/admin/role/remove/0');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $crawler = $client->request('GET', '/admin/role');
         $this->assertGreaterThan(0, $crawler->filter('html:contains("No role with that id exists")')->count());

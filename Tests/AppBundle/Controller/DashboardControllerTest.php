@@ -40,7 +40,7 @@ class DashboardControllerTest extends WebTestCase
     public function testGoToDashBoardWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/dashboard');
+        $client->request('GET','/dashboard');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
@@ -57,7 +57,7 @@ class DashboardControllerTest extends WebTestCase
     public function testGoToDashBoardWhenNotYourEvent()
     {
         $client =  $this->login2();
-        $crawler = $client->request('GET','/dashboard/1');
+        $client->request('GET','/dashboard/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Couldn\'t find that Dashboard!")')->count());
@@ -66,7 +66,7 @@ class DashboardControllerTest extends WebTestCase
     public function testGoToDashBoardEventWhenNotLoggedIn()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/dashboard/1');
+        $client->request('GET','/dashboard/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());

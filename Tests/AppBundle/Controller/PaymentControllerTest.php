@@ -9,6 +9,9 @@
 namespace Tests\AppBundle\Controller;
 
 
+use Symfony\Component\BrowserKit\Client;
+use Symfony\Component\DomCrawler\Crawler;
+
 class PaymentControllerTest extends \PHPUnit_Framework_TestCase
 {
     public function login()
@@ -21,7 +24,14 @@ class PaymentControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testShowEvents()
     {
+        /**
+         * @var Client $client
+         */
         $client = $this->login();
+
+		/**
+		 * @var Crawler $crawler
+		 */
         $crawler = $client->request('GET','/order/1');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Event Overview")')->count());

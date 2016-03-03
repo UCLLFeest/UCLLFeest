@@ -8,8 +8,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\User;
-use Doctrine\DBAL\Types\GuidType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

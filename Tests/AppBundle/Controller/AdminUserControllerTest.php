@@ -49,11 +49,10 @@ class AdminUserControllerTest extends WebTestCase
         /**
          * @var Client $client
          */
-        $client = static::createClient();
-        $client = $this->login($client,$this->user2);
+        $client = $this->login($this->user2);
         $client->request('GET','/admin/user');
         $client = $this->login($this->user);
-        $crawler = $client->request('GET','/admin/user');
+        $client->request('GET','/admin/user');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("LOG IN")')->count());
@@ -79,7 +78,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserProfileWhenLoggedInAndNotAdministrator()
     {
         $client = $this->login($this->user);
-        $crawler = $client->request('GET','/admin/user/view/1');
+        $client->request('GET','/admin/user/view/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("LOG IN")')->count());
@@ -97,7 +96,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserProfileWhenUserDoesNotExist()
     {
         $client = $this->login($this->admin);
-        $crawler = $client->request('GET','/admin/user/view/0');
+        $client->request('GET','/admin/user/view/0');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("does not exist")')->count());
@@ -118,7 +117,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserAddRollWhenLoggedInAndSuperAdministratorButUserDoesntExist()
     {
         $client = $this->login($this->super);
-        $crawler = $client->request('GET','/admin/user/addrole/0');
+        $client->request('GET','/admin/user/addrole/0');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("The user with id 0 does not exist")')->count());
@@ -127,7 +126,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserAddRollToUserThatHasAllRolls()
     {
         $client = $this->login($this->super);
-        $crawler = $client->request('GET','/admin/user/addrole/2');
+        $client->request('GET','/admin/user/addrole/2');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("There are no roles left to add to the user")')->count());
@@ -136,7 +135,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserAddRollWhenNoSuperAdmin()
     {
         $client = $this->login($this->admin);
-        $crawler = $client->request('GET','/admin/user/addrole/1');
+        $client->request('GET','/admin/user/addrole/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("")')->count());
@@ -145,7 +144,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserRemoveRollWhenLoggedInAndSuperAdministratorButUserDoesntExist()
     {
         $client = $this->login($this->super);
-        $crawler = $client->request('GET','/admin/user/removerole/0/ROLE_ADMIN');
+        $client->request('GET','/admin/user/removerole/0/ROLE_ADMIN');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("The user with id 0 does not exist")')->count());
@@ -154,7 +153,7 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserRemoveRollWhenNoSuperAdmin()
     {
         $client = $this->login($this->admin);
-        $crawler = $client->request('GET','/admin/user/removerole/1/ROLE_ADMIN');
+        $client->request('GET','/admin/user/removerole/1/ROLE_ADMIN');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("")')->count());

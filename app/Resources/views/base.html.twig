@@ -67,7 +67,7 @@
                             <i class="fa fa-search"></i>
                         </div>
                         <form method="get" action="{{ path('searchName')}}" class="search-form" role="search">
-                            <input placeholder="Zoek op een feest, iets leuk!" class="search-input" id="search" name="search" type="text" autocomplete="off" {% if search is not null %}value="{{ search }}"{% endif %}>
+                            <input placeholder="Zoek op een feest, iets leuk!" class="search-input" id="search" name="search" type="text" autocomplete="off" {% if search is not null %}value="{{ search }}"    {% endif %}>
                         </form>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
 
     </body>
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
@@ -119,7 +119,7 @@
 
     </script>
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
 
             var docHeight = $(window).height();

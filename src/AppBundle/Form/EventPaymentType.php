@@ -21,7 +21,7 @@ class EventPaymentType extends AbstractType
         $builder
             ->add('selling', CheckboxType::class, array('required' => false, 'label' => 'Selling Tickets?'))
             ->add('price', MoneyType::class, array('required' => false))
-            ->add('capacity', IntegerType::class, array('required' => false))
+            ->add('capacity', IntegerType::class, array('required' => false, 'label' => 'Capaciteit'))
             ->add('save', SubmitType::class);
     }
     public function configureOptions(OptionsResolver $resolver)

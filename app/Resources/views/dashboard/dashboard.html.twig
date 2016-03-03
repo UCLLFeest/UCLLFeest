@@ -6,7 +6,7 @@
         <div class="row dashboard-stat">
             <div class="col-md-6">
                 <div class="col-md-12 dashboard-stats">
-                    {{ totaalprijs }}
+                    {{ totaalprijs }}€
                 </div>
                 <div class="col-md-12 dashboard-info">
                     Totaal saldo
@@ -40,7 +40,7 @@
                 <table class="table">
                     {% for ticket in tickets %}
                         <tr>
-                            <td><a href="{{ path('accountview',{'id':ticket.owner.getId()}) }}">{{ ticket.owner.getFullName()}}</a> gaat naar <a href="{{ path('event_detail',{'id':ticket.owner.getId()}) }}">{{ ticket.event.name}}</a></td>
+                            <td><a href="{{ path('accountview',{'id':ticket.owner.getId()}) }}">{{ ticket.owner.getFullName()}}</a> gaat naar <a href="{{ path('event_detail',{'id':ticket.getId()}) }}">{{ ticket.event.name}}</a></td>
                         </tr>
                     {% endfor %}
                 </table>

@@ -29,7 +29,7 @@
                 <table class="table">
                     {% for ticket in tickets %}
                         <tr>
-                            <td>{{ ticket.owner.getFullName()}} gaat naar {{ ticket.event.name}}</td>
+                            <td><a href="{{ path('accountview',{'id':ticket.owner.getId()}) }}">{{ ticket.owner.getFullName()}}</a> gaat naar {{ ticket.event.name}}</td>
                         </tr>
                     {% endfor %}
                 </table>

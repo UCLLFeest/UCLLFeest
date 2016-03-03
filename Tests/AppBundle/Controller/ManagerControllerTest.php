@@ -80,7 +80,7 @@ class ManagerControllerTest extends BaseWebTestCase
 		 * @var Client $client
 		 * @var User $userToAdd
 		 */
-		list($client, $userToAdd) = $this->createAuthClient("user2");
+		list( , $userToAdd) = $this->createAuthClient("user2");
 
 		$this->assertNotNull($userToAdd);
 	}

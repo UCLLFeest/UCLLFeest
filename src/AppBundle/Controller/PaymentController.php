@@ -15,6 +15,7 @@ use Payum\Core\Gateway;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,17 +25,20 @@ use AppBundle\Entity\Ticket;
 //http://stackoverflow.com/questions/28148887/setting-up-payum-bundle-with-symfony2-giving-error
 //https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/examples/index.md
 
+/**
+ * Controller for payment actions.
+ * @package AppBundle\Controller
+ */
 class PaymentController extends Controller
 {
-
     /**
+	 * Prepares a payment operation. This will redirect the user to PayPal on success.
      * @Route("/order/{id}", name="buy_ticket")
-     * @param integer $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @param integer $id Event id.
+     * @return RedirectResponse
      */
     public function prepareAction($id)
     {
-
         $em = $this->getDoctrine()->getManager();
 
 		/**
@@ -84,9 +88,10 @@ class PaymentController extends Controller
     }
 
     /**
+	 * The action that PayPal returns to after payment completion.
      * @Route("/done", name="done")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function doneAction(Request $request)
     {

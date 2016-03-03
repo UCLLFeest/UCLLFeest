@@ -4,16 +4,23 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Form\RoleType;
 use AppBundle\Entity\Role;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for admin role management.
+ * @package AppBundle\Controller
+ */
 class RoleController  extends Controller
 {
 	/**
+	 * Shows a list of all available roles.
 	 * @Route("/admin/role", name="adminroleoverview")
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 */
 	public function overview()
 	{
@@ -30,9 +37,10 @@ class RoleController  extends Controller
 	}
 
 	/**
+	 * Adds a new role.
 	 * @Route("/admin/role/add", name="adminaddrole")
 	 * @param Request $request
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 */
 	public function add(Request $request)
 	{
@@ -72,10 +80,11 @@ class RoleController  extends Controller
 	}
 
 	/**
+	 * Edits a role.
 	 * @Route("/admin/role/edit/{id}", name="admineditrole")
 	 * @param Request $request
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Role id.
+	 * @return Response
 	 */
 	public function edit(Request $request, $id)
 	{
@@ -113,9 +122,10 @@ class RoleController  extends Controller
 	}
 
 	/**
+	 * Removes a role, if it is not a mandatory role.
 	 * @Route("/admin/role/remove/{id}", name="adminremoverole")
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @param integer $id Role id.
+	 * @return RedirectResponse
 	 */
 	public function remove($id)
 	{

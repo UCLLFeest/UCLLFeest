@@ -17,8 +17,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+/**
+ * Form type for Event information.
+ *
+ * @see AppBundle\Entity\Event Event
+ * @package AppBundle\Form
+ */
 class EventInformationType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -32,6 +43,10 @@ class EventInformationType extends AbstractType
             ->add('save', SubmitType::class);
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

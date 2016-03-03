@@ -10,8 +10,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Entity\Gender;
 
+/**
+ * Form type for User registration.
+ *
+ * @see AppBundle\Entity\User User
+ * @package AppBundle\Form
+ */
 class RegisterUserType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,6 +40,10 @@ class RegisterUserType extends AbstractType
             ->add('birthday', BirthdayType::class);
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -36,11 +51,19 @@ class RegisterUserType extends AbstractType
         ));
     }
 
+	/**
+	 * Returns the name of this type's parent.
+	 * @return string
+	 */
     public function getParent()
     {
         return 'fos_user_registration';
     }
 
+	/**
+	 * Returns the name of this type.
+	 * @return string
+	 */
     public function getName()
     {
         return 'app_user_registration';

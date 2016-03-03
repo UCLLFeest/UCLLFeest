@@ -9,7 +9,6 @@
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdminControllerTest extends WebTestCase
@@ -22,7 +21,7 @@ class AdminControllerTest extends WebTestCase
      */
     protected function setUp()
     {
-      $this->user = Array('username'=>'user','password'=>'test');
+		$this->user = Array('username'=>'user','password'=>'test');
         $this->user2= Array('username'=>'admin','password'=>'test');
     }
 
@@ -47,7 +46,7 @@ class AdminControllerTest extends WebTestCase
     public function testAdminPanelWhenLoggedInButNotAdministrator()
     {
         $client = $this->login($this->user);
-        $crawler = $client->request('GET','/admin');
+        $client->request('GET','/admin');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
 		/**

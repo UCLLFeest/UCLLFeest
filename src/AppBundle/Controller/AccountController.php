@@ -13,9 +13,14 @@ use AppBundle\Form\ChangePasswordType;
 use AppBundle\FormType\ChangePassword;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for account actions.
+ * @package AppBundle\Controller
+ */
 class AccountController extends Controller
 {
     /**
+	 * View a single user's profile
      * @Route("/account/view/{id}", name="accountview")
      * @param integer $id Target user id
      * @return Response|RedirectResponse
@@ -43,9 +48,11 @@ class AccountController extends Controller
         );
     }
 
-    /**
-     * @Route("/account/all", name="viewallusers")
-     */
+	/**
+	 * View all users in a list.
+	 * @Route("/account/all", name="viewallusers")
+	 * @return Response
+	 */
     public function viewall()
     {
         $em = $this->getDoctrine()->getManager();
@@ -63,9 +70,11 @@ class AccountController extends Controller
             ));
     }
 
-    /**
-     * @Route("/account/profile", name="profile")
-     */
+	/**
+	 * View the current user's profile.
+	 * @Route("/account/profile", name="profile")
+	 * @return RedirectResponse|Response
+	 */
     public function profile()
     {
         $user = $this->getUser();
@@ -84,6 +93,7 @@ class AccountController extends Controller
 
 
     /**
+	 * Edit the current user's password.
      * @Route("/account/editpassword", name="editpassword")
      * @param Request $request
      * @return RedirectResponse|Response
@@ -126,6 +136,7 @@ class AccountController extends Controller
     }
 
     /**
+	 * Edit the current user's profile.
      * @Route("/account/editprofile", name="editprofile")
      * @param Request $request
      * @return Response|RedirectResponse

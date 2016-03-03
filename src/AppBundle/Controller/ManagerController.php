@@ -15,14 +15,21 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for event manager actions.
+ * @package AppBundle\Controller
+ */
 class ManagerController extends Controller
 {
     /**
+	 * Shows the list of managers for an event.
      * @Route("/managers/{id}", name="show_managers")
-     * @param integer $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $id Event id.
+     * @return RedirectResponse|Response
      */
     public function showManagersForEvent($id)
     {
@@ -48,14 +55,15 @@ class ManagerController extends Controller
     }
 
     /**
+	 * Adds a user as a manager for an event.
      * @Route("/managers/add/{event_id}", name="add_manager")
      * @param Request $request
-     * @param integer $event_id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $event_id Event id.
+     * @return RedirectResponse|Response
      */
     public function addManager(Request $request, $event_id)
     {
-        //Alle evenementen worden opgezogt en in een array doorgegeven naar de view
+        //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
         $em =$this->getDoctrine()->getManager();
         $user = $this->getUser();
         /**
@@ -105,10 +113,11 @@ class ManagerController extends Controller
     }
 
     /**
+	 * Removes a manager from an event.
      * @Route("/managers/delete/{event_id}/{username}", name="delete_manager")
-     * @param integer $event_id
-     * @param string $username
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $event_id Event id.
+     * @param string $username Username.
+     * @return RedirectResponse|Response
      */
     public function deleteManager($event_id, $username)
     {

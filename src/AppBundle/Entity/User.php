@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\Event;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -90,6 +89,9 @@ class User extends BaseUser
      */
     private $tickets;
 
+	/**
+	 * User constructor.
+	 */
     public function __construct()
     {
         parent::__construct();

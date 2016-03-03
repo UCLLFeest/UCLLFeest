@@ -13,13 +13,20 @@ use AppBundle\Entity\Ticket;
 use AppBundle\Entity\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for ticket information.
+ * @package AppBundle\Controller
+ */
 class TicketController extends Controller
 {
-    /**
-     * @Route("/tickets", name="show_tickets")
-     */
-
+	/**
+	 * Shows the list of all tickets that the current user bought.
+	 * @Route("/tickets", name="show_tickets")
+	 * @return Response
+	 */
     public function showTickets()
     {
         //alle tickets worden opgezocht en in een array doorgegeven naar de view
@@ -36,13 +43,14 @@ class TicketController extends Controller
     }
 
 	/**
+	 * Shows information about a single ticket.
 	 * @Route("/ticket/{id}", name="ticket_detail")
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id Ticket id.
+	 * @return RedirectResponse|Response
 	 */
     public function ticketDetail($id)
     {
-        $em =$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         /**
          * @var Ticket $ticket
@@ -74,37 +82,5 @@ class TicketController extends Controller
             $this->addFlash('notice', "Couldn't find the Ticket");
             return $this->redirectToRoute("show_tickets");
         }
-        }
-
-    /**
-     * @Route("/tickets/buy/{id}", name="register_ticket")
-     */
-
-    /*public function register_ticket(Request $request, $id)
-    {
-        $ticket = new Ticket();
-
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getUser();
-
-        $user->addTicket($ticket);
-        $ticket->setOwner($user);
-
-        $event = $em->getRepository('AppBundle:Event')->find($id);
-
-        $ticket->setEvent($event);
-
-        if ($em->getRepository('AppBundle:Ticket')->findIfPersonHasTicket($event->getId(), $user->getId()) == null) {
-            //moet user ook niet gepersist worden?
-            $em->persist($ticket);
-            $em->flush();
-
-            $em->persist($user);
-            $em->flush();
-
-            //return $this->showTickets();
-        }
-        return $this->redirectToRoute('show_tickets');
-    }*/
+	}
 }

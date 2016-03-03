@@ -10,8 +10,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use AppBundle\Entity\Gender;
 
+/**
+ * Form type for Edit User.
+ *
+ * @see AppBundle\Entity\User User
+ * @package AppBundle\Form
+ */
 class EditUserType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,6 +40,10 @@ class EditUserType extends AbstractType
             ->add('birthday', BirthdayType::class);
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

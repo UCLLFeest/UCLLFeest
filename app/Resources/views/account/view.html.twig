@@ -1,10 +1,1 @@
 {% extends 'account/accountinfo.html.twig' %}
-
-{% block accountblock %}
-
-    {% if user == app.user %}
-        <a class="feest-button pull-right" href="{{ path('editprofile') }}">Edit Profile</a>
-        <a class="feest-button pull-right" href="{{ path('editpassword') }}">Edit Password</a>
-    {% endif %}
-
-{% endblock %}

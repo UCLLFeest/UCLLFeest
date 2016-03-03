@@ -9,9 +9,8 @@
 namespace Tests\AppBundle\Controller;
 
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AccountControllerTest extends WebTestCase
+class AccountControllerTest extends BaseWebTestCase
 {
 
     public function login()

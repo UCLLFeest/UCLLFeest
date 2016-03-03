@@ -8,10 +8,9 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
 
-class AdminUserControllerTest extends WebTestCase
+class AdminUserControllerTest extends BaseWebTestCase
 {
     private $user;
     private $admin;
@@ -49,13 +48,13 @@ class AdminUserControllerTest extends WebTestCase
         /**
          * @var Client $client
          */
-        $client = $this->login($this->user2);
+        $client = $this->login($this->user);
         $client->request('GET','/admin/user');
         $client = $this->login($this->user);
         $client->request('GET','/admin/user');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("LOG IN")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Homepagina")')->count());
     }
 
     public function testAdminUserOverviewWhenNotLoggedIn()
@@ -81,7 +80,7 @@ class AdminUserControllerTest extends WebTestCase
         $client->request('GET','/admin/user/view/1');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("LOG IN")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Homepagina")')->count());
     }
 
     public function testAdminUserProfileWhenNotLoggedIn()
@@ -123,15 +122,6 @@ class AdminUserControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("The user with id 0 does not exist")')->count());
     }
 
-    public function testAdminUserAddRollToUserThatHasAllRolls()
-    {
-        $client = $this->login($this->super);
-        $client->request('GET','/admin/user/addrole/2');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-        $crawler = $client->followRedirect();
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("There are no roles left to add to the user")')->count());
-    }
-
     public function testAdminUserAddRollWhenNoSuperAdmin()
     {
         $client = $this->login($this->admin);
@@ -163,13 +153,13 @@ class AdminUserControllerTest extends WebTestCase
     public function testAdminUserRemoveRollWhenLoggedInAndSuperAdministrator()
     {
         $client = $this->login($this->super);
-        $crawler = $client->request('GET','/admin/user/view/1');
+        $crawler = $client->request('GET','/admin/user/view/3');
         $link = $crawler
             ->filter('a:contains("Remove Role")')
             ->eq(0)
             ->link();
         $crawler = $client->click($link);
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Role ROLE_ADMIN removed")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("ROLE_ADMIN")')->count());
     }
 
 }

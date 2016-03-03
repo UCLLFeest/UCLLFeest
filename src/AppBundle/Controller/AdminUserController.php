@@ -16,11 +16,17 @@ use Doctrine\ORM\Query\Expr;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Role;
 
+/**
+ * Controller for administrative actions regarding users.
+ * @package AppBundle\Controller
+ */
 class AdminUserController extends Controller
 {
-    /**
-     * @Route("/admin/user", name="adminuseroverview")
-     */
+	/**
+	 * Gets a list of all users.
+	 * @Route("/admin/user", name="adminuseroverview")
+	 * @return Response
+	 */
     public function overview()
     {
         $em = $this->getDoctrine()->getManager();
@@ -39,9 +45,10 @@ class AdminUserController extends Controller
     }
 
 	/**
+	 * Views a single user's profile, with role information added.
 	 * @Route("/admin/user/view/{id}", name="adminuserview")
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id User id.
+	 * @return RedirectResponse|Response
 	 */
     public function view($id)
     {
@@ -86,10 +93,11 @@ class AdminUserController extends Controller
     }
 
 	/**
+	 * Adds a role to a given user.
 	 * @Route("/admin/user/addrole/{id}", name="adminuseraddrole")
 	 * @param Request $request
-	 * @param integer $id
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 * @param integer $id User id.
+	 * @return RedirectResponse|Response
 	 */
     public function addrole(Request $request, $id)
     {
@@ -181,10 +189,11 @@ class AdminUserController extends Controller
     }
 
 	/**
+	 * Removes a role from a user.
 	 * @Route("/admin/user/removerole/{id}/{role}", name="adminuserremoverole")
-	 * @param integer $id
-	 * @param string $role
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @param integer $id User id.
+	 * @param string $role Role to remove.
+	 * @return RedirectResponse
 	 */
     public function removerole($id, $role)
     {
@@ -227,10 +236,11 @@ class AdminUserController extends Controller
     }
 
 	/**
+	 * Changes a user's role.
 	 * @Route("/admin/user/changerole/{id}/{role}", name="adminuserchangerole")
 	 * @param Request $request
-	 * @param integer $id
-	 * @param string $role
+	 * @param integer $id User id.
+	 * @param string $role Role to change.
 	 * @return Response|RedirectResponse
 	 */
 	public function changeRole(Request $request, $id, $role)

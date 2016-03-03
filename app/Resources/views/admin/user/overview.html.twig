@@ -1,22 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Admin User Overview</h1>
+    <div class="container content">
+        <div class="title">Admin User Overview</div>
 
-    {% if users is not empty %}
-        <table>
-            <tr>
-                <th>Username</th>
-                <th></th>
-            </tr>
-            {% for user in users %}
+        {% if users is not empty %}
+            <table>
                 <tr>
-                    <td>{{ user.username }}</td>
-                    <td><a href="{{ path("adminuserview", {'id': user.id}) }}">View Profile</a></td>
+                    <th>Username</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No users to display</p>
-    {% endif %}
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td><a href="{{ path("adminuserview", {'id': user.id}) }}">View Profile</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No users to display</p>
+        {% endif %}
+    </div>
 {% endblock %}

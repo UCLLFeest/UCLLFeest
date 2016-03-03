@@ -40,7 +40,7 @@ class RoleControllerTest extends WebTestCase
     public function testShowRolesOverviewAsNormalUser()
     {
         $client = $this->loginAsUser();
-        $crawler = $client->request('GET','/admin/role');
+        $client->request('GET','/admin/role');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Homepagina")')->count());

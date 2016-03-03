@@ -234,8 +234,7 @@ class AccountControllerTest extends WebTestCase
     protected function tearDown()
     {
         parent::tearDown();
-        $client = static::createClient();
-        $client =  $this->login($client);
+        $client =  $this->login();
         $crawler = $client->request('GET','/account/editprofile');
         $form = $crawler->selectButton('Save Changes')->form(array(
             'edit_user[firstname]'  => 'test',

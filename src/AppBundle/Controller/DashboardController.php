@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: croewens
- * Date: 1/03/2016
- * Time: 17:06
- */
 
 namespace AppBundle\Controller;
 
@@ -16,12 +10,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Cntroller for the user's dashboard.
+ * @package AppBundle\Controller
+ */
 class DashboardController extends Controller
 {
-    /**
-     * @Route("/dashboard", name="dashboard")
-     *     */
-
+	/**
+	 * Displays the user's dashboard.
+	 * @Route("/dashboard", name="dashboard")
+	 * @return Response
+	 */
     public function dashboard()
     {
         //Alle evenementen worden opgezocht en in een array doorgegeven naar de view
@@ -54,13 +53,18 @@ class DashboardController extends Controller
     }
 
     /**
+	 * Displays information about an event to the user that created it.
      * @Route("dashboard/{id}", name="dashboard_event")
-     * @param integer $id
+     * @param integer $id Event id.
      * @return RedirectResponse|Response
      */
     public function dashboardEvent($id)
     {
         $em =$this->getDoctrine()->getManager();
+
+		/**
+		 * @var Event $event
+		 */
         $event = $em->getRepository('AppBundle:Event')->find($id);
 
         if ($event && $event->getCreator() == $this->getUser()) {

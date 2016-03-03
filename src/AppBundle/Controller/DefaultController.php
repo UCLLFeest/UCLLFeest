@@ -8,13 +8,19 @@ use Ivory\HttpAdapter\CurlHttpAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for the homepage.
+ * @package AppBundle\Controller
+ */
 class DefaultController extends Controller
 {
     /**
+	 * Displays the homepage.
      * @Route("/", name="homepage")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function indexAction(Request $request)
     {

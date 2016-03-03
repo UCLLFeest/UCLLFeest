@@ -11,15 +11,22 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Venue;
 use AppBundle\Form\VenueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for venue management.
+ * @package AppBundle\Controller
+ */
 class VenueController extends Controller
 {
-
-    /**
-     * @Route("/venues", name="show_venues")
-     */
+	/**
+	 * Shows a list of all venues.
+	 * @Route("/venues", name="show_venues")
+	 * @return Response
+	 */
     public function showVenues()
     {
         $em =$this->getDoctrine()->getManager();
@@ -30,9 +37,10 @@ class VenueController extends Controller
     }
 
     /**
+	 * Adds a venue.
      * @Route("/venues/add", name="add_venue")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function addVenue(Request $request)
     {
@@ -55,9 +63,10 @@ class VenueController extends Controller
     }
 
     /**
+	 * Shows information about a venue.
      * @Route("venue/{id}", name="venue_detail")
-     * @param integer $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param integer $id Venue id.
+     * @return RedirectResponse|Response
      */
     public function venueDetail($id)
     {

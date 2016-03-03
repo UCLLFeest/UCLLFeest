@@ -8,10 +8,9 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-class AdminControllerTest extends WebTestCase
+class AdminControllerTest extends BaseWebTestCase
 {
     private $user;
     private $user2;
@@ -53,7 +52,7 @@ class AdminControllerTest extends WebTestCase
 		 * @var Crawler $crawler
 		 */
         $crawler = $client->followRedirect();
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Log in")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Homepagina")')->count());
     }
 
     public function testAdminPanelWhenLoggedInAndAdminstrator()

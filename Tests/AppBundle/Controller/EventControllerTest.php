@@ -395,52 +395,8 @@ class EventControllerTest extends BaseWebTestCase
         $this->assertEquals(1, $crawler->filter('html:contains("Couldn\'t find the event")')->count());
     }
 
-	/*
-    public function testAddEventFromVenue()
-    {
-        $client =  $this->login();
 
-        $crawler = $client->request('GET','/');
-		$link = $crawler
-			->filter('a:contains("Account")')
-			->eq(0)
-			->link();
-
-		$crawler = $client->click($link);
-		$count = $crawler->filter('.fa-times')->count();
-
-        $crawler = $client->request('GET','/venues');
-        $link = $crawler
-            ->filter('td > a')
-            ->eq(0)
-            ->link();
-
-        $crawler = $client->click($link);
-
-        $link = $crawler->filter('a:contains("Registreer een event in deze Venue")')->link();
-        $crawler = $client->click($link);
-
-        $form = $crawler->selectButton('event_information[save]')->form();
-		$form['event_information[name]'] = 'test';
-		$form['event_information[adress]'] = 'test';
-		$form['event_information[city]'] = 'test';
-		$form['event_information[postalCode]'] = '1234';
-		$form['event_information[date][date][year]'] = '2011';
-		$form['event_information[date][date][month]'] = '11';
-		$form['event_information[date][date][day]'] = '1';
-		$form['event_information[date][time][hour]'] = '14';
-		$form['event_information[date][time][minute]'] = '5';
-		$form['event_information[foto][file][file]'] = __FILE__ . "bla";
-		$form['event_information[description]'] = 'test';
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-
-        $this->assertEquals($count+1, $crawler->filter('a:contains("Delete")')->count());
-    }
-	*/
-
-   public function testUpdateTitleEvent()
+	public function testUpdateTitleEvent()
     {
         $client =  $this->login();
         $crawler = $client->request('GET','/');

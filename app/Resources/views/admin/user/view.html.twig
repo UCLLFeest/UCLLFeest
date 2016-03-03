@@ -2,10 +2,6 @@
 
 {% block accountblock %}
     <div class="container content">
-        <!-- TODO: open target user's settings -->
-        <p><a href="{{ path('editprofile') }}">Edit Profile</a></p>
-        <p><a href="{{ path('editpassword') }}">Edit Password</a></p>
-
         <p>Roles:</p>
 
         {% if user.roles is not empty %}

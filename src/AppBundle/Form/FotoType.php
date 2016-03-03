@@ -12,8 +12,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Form type for Foto.
+ *
+ * @see AppBundle\Entity\Foto Foto
+ * @package AppBundle\Form
+ */
 class FotoType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,6 +36,10 @@ class FotoType extends AbstractType
             ->getForm();
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

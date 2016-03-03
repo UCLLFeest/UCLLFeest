@@ -6,8 +6,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Form type for ChangePassword.
+ *
+ * @see AppBundle\FormType\ChangePassword ChangePassword
+ * @package AppBundle\Form
+ */
 class ChangePasswordType extends AbstractType
 {
+	/**
+	 * Builds the form.
+	 * @param FormBuilderInterface $builder
+	 * @param array $options
+	 */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,6 +33,10 @@ class ChangePasswordType extends AbstractType
         );
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

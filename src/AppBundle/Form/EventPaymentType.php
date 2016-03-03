@@ -14,8 +14,19 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+/**
+ * Form type for Event payment.
+ *
+ * @see AppBundle\Entity\Event Event
+ * @package AppBundle\Form
+ */
 class EventPaymentType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -24,6 +35,11 @@ class EventPaymentType extends AbstractType
             ->add('capacity', IntegerType::class, array('required' => false, 'label' => 'Capaciteit'))
             ->add('save', SubmitType::class);
     }
+
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

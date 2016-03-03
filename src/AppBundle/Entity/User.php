@@ -89,6 +89,9 @@ class User extends BaseUser
      */
     private $tickets;
 
+	/**
+	 * User constructor.
+	 */
     public function __construct()
     {
         parent::__construct();

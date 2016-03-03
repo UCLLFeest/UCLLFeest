@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Ticket
 {
     /**
-     * @var string
+     * @var string Id.
      * @ORM\Column(type="guid")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")

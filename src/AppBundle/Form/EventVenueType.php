@@ -15,8 +15,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+/**
+ * Form type for Event venue.
+ *
+ * @see AppBundle\Entity\Event Event
+ * @package AppBundle\Form
+ */
 class EventVenueType extends AbstractType
 {
+    /**
+     * Builds the form.
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -24,6 +35,10 @@ class EventVenueType extends AbstractType
             ->add('search', SubmitType::class);
     }
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

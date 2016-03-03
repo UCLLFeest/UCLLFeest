@@ -9,8 +9,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
+/**
+ * Form type for Role.
+ *
+ * @see AppBundle\Entity\Role Role
+ * @package AppBundle\Form
+ */
 class RoleType extends AbstractType
 {
+	/**
+	 * Builds the form.
+	 * @param FormBuilderInterface $builder
+	 * @param array $options
+	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -29,6 +40,10 @@ class RoleType extends AbstractType
 				));
 	}
 
+	/**
+	 * Sets options.
+	 * @param OptionsResolver $resolver
+	 */
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(

@@ -6,14 +6,20 @@
  * Time: 16:46
  */
 
-//src/AppBundle/Entity/Event.php
 namespace AppBundle\Entity;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
+ * This class represents an event, organized by a user. The user that created the event is set as the creator.
+ * The creator can add managers that can update the event.
+ *
+ * @package AppBundle\Entity
+ *
  *@ORM\Entity
  *@ORM\Entity(repositoryClass="AppBundle\Entity\EventRepository")
  *@ORM\Table(name="app_events")
@@ -21,6 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Event
 {
     /**
+	 * @var integer id.
+	 *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -28,24 +36,31 @@ class Event
     private $id;
 
     /**
+	 * @var string Name of this event
+	 *
      * @ORM\Column(type="string",length=100)
      * @Assert\NotBlank
      */
     private $name;
 
     /**
+	 * @var string Address where the event takes place. This is the street and house number.
+	 *
      * @ORM\Column(type="string",length=60)
      * @Assert\NotBlank
      */
     private $adress;
 
     /**
+	 * @var string City where the event takes place.
      * @ORM\Column(type="string",length=50)
      * @Assert\NotBlank
      */
     private $city;
 
     /**
+	 * @var string Postal code of the city where the event takes place.
+	 *
      * @ORM\Column(type="string",length=4)
      * @Assert\Length(min = 4, max=4, minMessage = "The Postal code needs to be four numbers")
      * @Assert\NotBlank
@@ -53,71 +68,90 @@ class Event
      */
     private $postalCode;
 
-
-
     /**
+	 * @var DateTime Date and time when the event will begin.
+	 *
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
      */
     private $date;
 
     /**
+	 * @var string Optional description of the event.
+	 *
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
-
-
     /**
+	 * @var string Latitude of the event's location.
+	 *
      * @ORM\Column(type="string", nullable=true)
      */
     private $latitude;
 
     /**
+	 * @var string Longitude of the event's location.
+	 *
      * @ORM\Column(type="string",nullable=true)
      */
     private $longitude;
 
     /**
+	 * @var User The user that created this event.
+	 *
      * @ORM\ManyToOne(targetEntity="User",inversedBy="events")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
 
     /**
+	 * @var ArrayCollection List of users that can manage this event.
+	 *
      * @ORM\ManyToMany(targetEntity="User", mappedBy="managing")
      */
     private $managers;
 
     /**
+	 * @var Foto An optional image that can be attached to the event. Shown on the event page.
+	 *
      * @ORM\OneToOne(targetEntity="Foto", mappedBy="event")
      * @ORM\JoinColumn(name="foto_id", referencedColumnName="id", nullable=true)
      */
     private $foto;
 
-
     /**
+	 * @var Ticket ist of all tickets for this event that have been sold.
+	 *
      * @ORM\OneToMany(targetEntity="Ticket", mappedBy="event")
      */
     private $tickets;
 
     /**
+	 * @var Venue The venue that this event takes place at. Optional.
+	 *
      * @ORM\ManyToOne(targetEntity="Venue",inversedBy="events")
      * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
     private $venue;
 
     /**
+	 * @var boolean Whether this event is selling tickets or not.
+	 *
      * @ORM\Column(type="boolean")
      */
     private $selling = false;
 
     /**
+	 * @var integer The total capacity of this event. No more tickets than this can be sold.
+	 *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $capacity = 0;
 
     /**
+	 * @var float Price of a single ticket for this event.
+	 *
      * @ORM\Column(type="decimal",scale=2, nullable=true)
      */
     private $price;
@@ -128,7 +162,7 @@ class Event
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
-        $this->setDate(new \DateTime());
+        $this->setDate(new DateTime());
         $this->managers = new ArrayCollection();
 
 
@@ -174,7 +208,7 @@ class Event
     }
 
     /**
-     * Set Adress
+     * Set Address
      *
      * @param string $adress
      * @return Event
@@ -187,7 +221,7 @@ class Event
     }
 
     /**
-     * Get Adress
+     * Get Address
      *
      * @return string 
      */
@@ -242,6 +276,11 @@ class Event
         return $this->postalCode;
     }
 
+    /**
+	 * Gets the full address that this event takes place at
+	 *
+     * @return string full address
+     */
     public function getFullAdress()
     {
         $result = "";
@@ -260,6 +299,10 @@ class Event
         return $result;
     }
 
+	/**
+	 * Gets the date at which this event takes place as a formatted string.
+	 * @return string
+	 */
     public function getDateFormatted() {
         return date_format($this->getDate(), 'd/m');
     }
@@ -321,7 +364,6 @@ class Event
     {
         $this->creator = $creator;
 
-
         return $this;
     }
 
@@ -359,15 +401,13 @@ class Event
         return $this->foto;
     }
 
-
-
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param DateTime $date
      * @return Event
      */
-    public function setDate($date)
+    public function setDate(DateTime $date)
     {
         $this->date = $date;
 
@@ -377,7 +417,7 @@ class Event
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return DateTime
      */
     public function getDate()
     {
@@ -515,7 +555,7 @@ class Event
     /**
      * Add manager
      *
-     * @param \AppBundle\Entity\User $manager
+     * @param User $manager
      *
      * @return Event
      */
@@ -529,7 +569,7 @@ class Event
     /**
      * Remove manager
      *
-     * @param \AppBundle\Entity\User $manager
+     * @param User $manager
      */
     public function removeManager(User $manager)
     {
@@ -539,7 +579,7 @@ class Event
     /**
      * Get managers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getManagers()
     {

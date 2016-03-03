@@ -9,16 +9,23 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * This class represents a venue that events can take place at.
+ *
+ * @package AppBundle\Entity
+ *
  * @ORM\Entity
  * @ORM\Table(name="app_venues")
  */
 class Venue
 {
     /**
+     * @var integer id.
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,37 +33,48 @@ class Venue
     private $id;
 
     /**
+     * @var string Name of this venue.
+     *
      * @ORM\Column(type="string",length=100)
      * @Assert\NotBlank
      */
     private $name;
 
     /**
+     * @var string Address of this venue.
+     *
      * @ORM\Column(type="string",length=60)
      * @Assert\NotBlank
      */
     private $adress;
 
     /**
+     * @var string City that this venue is in.
+     *
      * @ORM\Column(type="string",length=50)
      * @Assert\NotBlank
      */
     private $city;
 
     /**
+     * @var string Postal code of the city that this venue is in.
      * @ORM\Column(type="string",length=4)
      * @Assert\Length(min = 4, max=4, minMessage = "The Postal code needs to be four numbers")
-     * @Assert\Type(type="integer")
      * @Assert\NotBlank
+     * @Assert\Regex(pattern="/^[0-9]\d*$/")
      */
     private $postalCode;
 
     /**
+     * @var string An optional description of this venue.
+     *
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
+     * @var ArrayCollection List of events that take place at this venue.
+     *
      * @ORM\OneToMany(targetEntity="Event", mappedBy="venue")
      */
     private $events;
@@ -80,10 +98,10 @@ class Venue
     }
 
     /**
-     * Set name
+     * Sets the name of the venue.
      *
      * @param string $name
-     * @return Venue
+     * @return Venue $this
      */
     public function setName($name)
     {
@@ -93,7 +111,7 @@ class Venue
     }
 
     /**
-     * Get name
+     * Gets the name of the venue.
      *
      * @return string 
      */
@@ -103,10 +121,10 @@ class Venue
     }
 
     /**
-     * Set adress
+     * Sets address of this venue.
      *
      * @param string $adress
-     * @return Venue
+     * @return Venue $this
      */
     public function setAdress($adress)
     {
@@ -116,7 +134,7 @@ class Venue
     }
 
     /**
-     * Get adress
+     * Gets the address of this venue.
      *
      * @return string 
      */
@@ -126,10 +144,10 @@ class Venue
     }
 
     /**
-     * Set city
+     * Sets the city that this venue is in.
      *
      * @param string $city
-     * @return Venue
+     * @return Venue $this
      */
     public function setCity($city)
     {
@@ -139,7 +157,7 @@ class Venue
     }
 
     /**
-     * Get city
+     * Gets the city that this venue is in.
      *
      * @return string 
      */
@@ -149,10 +167,10 @@ class Venue
     }
 
     /**
-     * Set postalCode
+     * Sets the postal code of the city that this venue is in.
      *
      * @param string $postalCode
-     * @return Venue
+     * @return Venue $this
      */
     public function setPostalCode($postalCode)
     {
@@ -162,7 +180,7 @@ class Venue
     }
 
     /**
-     * Get postalCode
+     * Gets the postal code of the city that this venue is in.
      *
      * @return string 
      */
@@ -172,10 +190,10 @@ class Venue
     }
 
     /**
-     * Set description
+     * Sets the description of this venue.
      *
      * @param string $description
-     * @return Venue
+     * @return Venue $this
      */
     public function setDescription($description)
     {
@@ -185,7 +203,7 @@ class Venue
     }
 
     /**
-     * Get description
+     * Gets the description of this venue.
      *
      * @return string 
      */
@@ -194,6 +212,11 @@ class Venue
         return $this->description;
     }
 
+    /**
+	 * Gets the full address of this venue as a string.
+	 *
+     * @return string
+     */
     public function getFullAdress()
     {
         $result = "";
@@ -213,10 +236,10 @@ class Venue
     }
 
     /**
-     * Add event
+     * Adds an event to the list of events that take place at this venue.
      *
      * @param Event $event
-     * @return Venue
+     * @return Venue $this
      */
     public function addEvent(Event $event)
     {
@@ -225,20 +248,23 @@ class Venue
         return $this;
     }
 
-    /**
-     * Remove event
-     *
-     * @param Event $event
-     */
+	/**
+	 * Removes an event from the list of events that take place at this venue.
+	 *
+	 * @param Event $event
+	 * @return Venue $this
+	 */
     public function removeEvent(Event $event)
     {
         $this->events->removeElement($event);
+
+		return $this;
     }
 
     /**
-     * Get events
+     * Get the list of events.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
     public function getEvents()
     {

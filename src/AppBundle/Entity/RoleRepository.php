@@ -4,11 +4,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 
 /**
- * UserRepository
+ * This class is a Doctrine repository class for Role.
  *
- * This class is a repository for the Role Entity
+ * @package AppBundle\Entity
  */
 class RoleRepository extends EntityRepository
 {
@@ -16,7 +17,7 @@ class RoleRepository extends EntityRepository
 	 * Creates a query builder whose query returns an array of roles that the user does not have and that the given admin can add.
 	 * @param User $admin
 	 * @param User $user
-	 * @return \Doctrine\ORM\QueryBuilder
+	 * @return QueryBuilder
 	 */
 	public function getUnassignedRolesQuery(User $admin, User $user)
 	{

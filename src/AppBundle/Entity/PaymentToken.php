@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Token;
 
 /**
+ * A Payum token that keeps track of payments.
+ *
+ * @package AppBundle\Entity
+ *
  * @ORM\Table
  * @ORM\Entity
  */

@@ -15,7 +15,7 @@
                 <a class="icon-margin pull-right" href="{{ path('show_managers', {'id':event.getId()}) }}" data-toggle="tooltip" data-placement="left" title="Managers"><i class="fa fa-users"></i></a>
             {% endif %}
             {% if event.selling and app.user is not null and event.creator.id != user.id and hasTicketAlready == false and event.tickets|length < event.capacity %}
-                <a class="pull-right" href="{{ path('buy_ticket',{'id': event.id}) }} " data-toggle="tooltip" data-placement="left" title="Koop ticket"><i class="fa fa-ticket"></i></a>
+                <a class="icon-margin pull-right" href="{{ path('buy_ticket',{'id': event.id}) }} " data-toggle="tooltip" data-placement="left" title="Koop ticket"><i class="fa fa-ticket"></i></a>
             {% endif %}
             <div class="title">Event</div>
 
@@ -38,13 +38,6 @@
                             <td>{{ event.name }}</td>
                         </tr>
 
-                        {% if event.managers is not empty %}
-                            <tr>
-                                <td>Managers</td>
-                                <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
-                            </tr>
-                        {% endif %}
-
                         <tr>
                             <td>Adres</td>
                             <td>{{ event.getFullAdress() }}</td>
@@ -62,13 +55,6 @@
                             <td>{{ event.getDate() | date('d/m/y') }} om {{ event.getDate() | date('H:i') }}</td>
                         </tr>
 
-                        {% if event.description is not null %}
-                            <tr>
-                                <td>Beschrijving</td>
-                                <td>{{ event.description|nl2br }}</td>
-                            </tr>
-                        {% endif %}
-
                         {% if event.capacity is not null %}
                             <tr>
                                 <td>Capaciteit</td>
@@ -79,6 +65,12 @@
                             <td>Aangemaakt door</td>
                             <td><a href="{{ path('accountview',{'id':event.creator.getId()}) }}">{{ event.creator.getFullName() }}</a></td>
                         </tr>
+                        {% if event.managers is not empty %}
+                            <tr>
+                                <td>Managers</td>
+                                <td>{% for manager in event.managers %}{{ manager.username }} {% endfor %}</td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div>
                 <div class="col-md-6">
@@ -91,20 +83,25 @@
                     </div>
                 </div>
             </div>
-
-                {% if event.tickets is not empty %}
-                    <table>
-                        <tr>
-                            <td>Attendees</td>
-                        </tr>
-                        {% for ticket in event.tickets %}
-                            <tr>
-                                <td>{{ ticket.owner.getFullName() }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+            <div class="row">
+                {% if event.description is not null %}
+                    <div class="col-md-6">
+                        <div class="title">Beschrijving</div>
+                        <div class="beschrijving">{{ event.description|nl2br }}</div>
+                    </div>
                 {% endif %}
 
+                {% if event.tickets is not empty %}
+                    <div class="col-md-6">
+                        <div class="title">Aanwezigen</div>
+                        <table class="table">
+                            {% for ticket in event.tickets %}
+                                <tr><td>{{ ticket.owner.getFullName() }}</td></tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
         </div>
 
 {% endblock %}

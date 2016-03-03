@@ -411,3 +411,6 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
     cursor: pointer;
 }
 
+.beschrijving {
+    margin-bottom: 15px;
+}

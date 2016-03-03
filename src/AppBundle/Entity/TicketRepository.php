@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class TicketRepository
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class DefaultController
+ */
+
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\EventRepository;

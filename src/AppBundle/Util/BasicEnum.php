@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class BasicEnum
+ */
+
 namespace AppBundle\Util;
 
 /**
@@ -9,8 +13,17 @@ namespace AppBundle\Util;
  * @package AppBundle\Util
  */
 abstract class BasicEnum {
+
+	/**
+	 * An array used to cache the list of constants for each enum type. This prevents expensive Reflection lookup every time the constants are retrieved.
+	 * @var array
+	 */
     private static $constCacheArray = NULL;
 
+	/**
+	 * Gets the list of constants
+	 * @return array
+	 */
     private static function getConstants() {
         if (self::$constCacheArray == NULL) {
             self::$constCacheArray = [];
@@ -23,6 +36,12 @@ abstract class BasicEnum {
         return self::$constCacheArray[$calledClass];
     }
 
+	/**
+	 * Returns whether the given name is a valid constant
+	 * @param string $name
+	 * @param bool $strict
+	 * @return bool
+	 */
     public static function isValidName($name, $strict = false) {
         $constants = self::getConstants();
 
@@ -34,14 +53,21 @@ abstract class BasicEnum {
         return in_array(strtolower($name), $keys);
     }
 
+	/**
+	 * Returns whether the given value is used by one of the constants
+	 * @param mixed $value
+	 * @param bool $strict
+	 * @return bool
+	 */
     public static function isValidValue($value, $strict = true) {
         $values = array_values(self::getConstants());
         return in_array($value, $values, $strict);
     }
 
-    /**
-     * Gets the names of all constants
-     */
+	/**
+	 * Gets the names of all constants
+	 * @return array
+	 */
     public static function getNames()
     {
         $constants = self::getConstants();
@@ -67,6 +93,11 @@ abstract class BasicEnum {
         return array_flip(self::getConstants());
     }
 
+	/**
+	 * Gets the name of a constant that has the given value, or null, if there is no constant with that value.
+	 * @param $value
+	 * @return string|null
+	 */
     public static function getName($value)
     {
         if(!self::isValidValue($value))

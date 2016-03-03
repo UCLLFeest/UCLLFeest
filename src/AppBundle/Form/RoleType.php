@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class RoleType
+ */
+
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

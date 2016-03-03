@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class LoadRoleData
+ */
+
 namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -14,6 +18,10 @@ use AppBundle\Entity\Role;
  */
 class LoadRoleData implements FixtureInterface
 {
+	/**
+	 * Loads data into the database
+	 * @param ObjectManager $manager
+	 */
 	public function load(ObjectManager $manager)
 	{
 		$superAdmin = new Role();

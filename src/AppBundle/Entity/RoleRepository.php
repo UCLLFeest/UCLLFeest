@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class RoleRepository
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class AccountController
+ */
+
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\UserRepository;

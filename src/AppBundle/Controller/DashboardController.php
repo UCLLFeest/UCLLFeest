@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * Class DashboardController
+ */
+
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
+use AppBundle\Entity\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,10 +35,15 @@ class DashboardController extends Controller
         //$tickets = $em->createQuery("Select t from AppBundle:Event e inner join AppBundle:Ticket t where e.id = t.event and e.creator = :creator ")->setParameter('creator',  $user->getId())->getResult();
         //$sold = $em->createQuery("Select t from AppBundle:Event e inner join AppBundle:Ticket t where e.id = t.event and e.creator = :creator ")->setParameter('creator',  $user->getId())->getResult();
 
+		/**
+		 * @var EventRepository $repo
+		 */
+		$repo = $em->getRepository('AppBundle:Event');
+
         /**
          * @var Event $event
          */
-        $events = $em->getRepository('AppBundle:Event')->findByCreator($user);
+        $events = $repo->findByCreator($user);
 
         $tickets = new ArrayCollection();
         $totaaltickets = 0;

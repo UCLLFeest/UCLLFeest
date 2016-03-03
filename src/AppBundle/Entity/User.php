@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class User
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;

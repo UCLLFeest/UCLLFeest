@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class EditUserType
+ */
+
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;

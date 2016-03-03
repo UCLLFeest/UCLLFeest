@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class UserRepository
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;

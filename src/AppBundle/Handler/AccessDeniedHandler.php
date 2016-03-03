@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class AccessDeniedHandler
+ */
+
 namespace AppBundle\Handler;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;

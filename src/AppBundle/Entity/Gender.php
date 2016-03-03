@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Gender
+ */
+
 namespace AppBundle\Entity;
 
 use AppBundle\Util\BasicEnum;

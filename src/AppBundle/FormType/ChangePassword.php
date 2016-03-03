@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class ChangePassword
+ */
+
 namespace AppBundle\FormType;
 
 use Symfony\Component\Validator\Constraints as Assert;

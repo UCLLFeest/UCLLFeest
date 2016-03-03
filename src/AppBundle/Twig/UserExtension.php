@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class UserExtension
+ */
+
 namespace AppBundle\Twig;
 
 use AppBundle\Entity\Gender;

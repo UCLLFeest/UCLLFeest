@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class AdminUserController
+ */
+
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\RoleRepository;

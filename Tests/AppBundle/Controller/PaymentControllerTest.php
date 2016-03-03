@@ -12,7 +12,9 @@ namespace Tests\AppBundle\Controller;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-class PaymentControllerTest extends \PHPUnit_Framework_TestCase
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class PaymentControllerTest extends WebTestCase
 {
     public function login()
     {

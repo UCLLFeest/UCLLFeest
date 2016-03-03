@@ -8,9 +8,6 @@
 
 namespace Tests\AppBundle\Controller;
 
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 class DashboardControllerTest extends BaseWebTestCase
 {
     public function login()
@@ -70,7 +67,7 @@ class DashboardControllerTest extends BaseWebTestCase
             ->eq(0)
             ->link();
 
-        $crawler = $client->click($link);
+        $client->click($link);
     }
 
     public function testGoToDashBoardWhenLoggedIn()

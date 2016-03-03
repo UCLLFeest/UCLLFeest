@@ -43,7 +43,8 @@ class DashboardController extends Controller
         /**
          * @var Event $event
          */
-        $events = $repo->findByCreator($user);
+		/** @noinspection PhpUndefinedMethodInspection */
+		$events = $repo->findByCreator($user);
 
         $tickets = new ArrayCollection();
         $totaaltickets = 0;

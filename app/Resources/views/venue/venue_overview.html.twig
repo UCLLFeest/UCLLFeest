@@ -19,6 +19,8 @@
             {% endfor %}
         </table>
             {% endif %}
-        <p> <a class="feest-button" href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a> </p>
+        {%  if app.user %}
+            <a class="feest-button" href="{{ path('add_venue') }}">Maak een nieuwe venue aan</a>
+        {% endif %}
     </div>
 {% endblock %}
